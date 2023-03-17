@@ -1,15 +1,15 @@
 <template>
     <div class="session-bg">
-        <div class="signup4-container">
+        <div class="signup4-container ">
             <base-card>
                 <v-row no-gutters>
                     <v-col cols="12" md="6" class="pa-10">
                         <img
                             class=""
-                            src="@/assets/images/illustrations/lighthouse.svg"
+                            src="@/assets/images/jtm/logojtm.png"
                         />
                     </v-col>
-                    <v-col cols="12" md="6" class="bg-gray-300">
+                    <v-col cols="12" md="6" class="bg-gray-300 pa-8">
                         <div class="pa-4 mt-3">
                             <v-text-field label="Username" />
                             <v-text-field
@@ -19,19 +19,19 @@
                                 label="Password"
                                 @click:append="show = !show"
                             ></v-text-field>
-                            <v-checkbox
+                            <!--<v-checkbox
                                 v-model="checkbox1"
                                 label="I agree with terms and conditions."
-                            ></v-checkbox>
+                            ></v-checkbox>-->
 
                             <div class="d-flex align-center">
-                                <v-btn depressed color="primary">Sign In</v-btn>
-                                <p class="mx-4 mb-0 text-18 font-weight-bold">
+                                <v-btn depressed block color="success">Entrar</v-btn>
+                                <!--<p class="mx-4 mb-0 text-18 font-weight-bold">
                                     or
                                 </p>
                                 <v-btn text depressed color="primary"
                                     >Sign Up</v-btn
-                                >
+                                >-->
                             </div>
                         </div>
                     </v-col>

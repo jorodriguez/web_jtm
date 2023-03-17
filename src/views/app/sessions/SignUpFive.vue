@@ -26,13 +26,13 @@
                             ></v-checkbox>
 
                             <div class="d-flex align-center">
-                                <v-btn depressed color="primary">Sign Up</v-btn>
+                                <v-btn depressed color="primary">Entrar</v-btn>
                                 <p class="mx-4 mb-0 text-18 font-weight-bold">
                                     or
                                 </p>
-                                <v-btn text depressed color="primary"
-                                    >Sign In</v-btn
-                                >
+                                <!--<v-btn text depressed color="primary"
+                                    >Crear </v-btn
+                                >-->
                             </div>
                         </div>
                     </v-col>

@@ -3,9 +3,9 @@
         <div class="session-form-hold">
             <base-card>
                 <v-card-text class="text-center">
-                    <v-avatar size="200" tile class="mb-4">
-                        <img
-                            src="@/assets/images/illustrations/breaking_barriers.svg"
+                    <v-avatar size="180" tile class="mb-4">
+                        <img                             
+                            src="@/assets/images/jtm/logojtm.png"
                             alt=""
                         />
                     </v-avatar>
