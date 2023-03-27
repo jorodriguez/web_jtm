@@ -46,7 +46,7 @@ export const themePreset = {
 
   theme: {
     // dark: mq.matches,
-    dark: false,
+    dark: false, //Aqui cambiar a true el modo dark
 
     default: "light",
     disable: false,

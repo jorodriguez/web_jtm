@@ -1192,7 +1192,7 @@ const router = new Router({
                     path: "sign-in-two",
                     name: "sign-in-two",
                     component: () =>
-                        import ("@/views/app/sessions/SignInFive"),
+                        import ("@/views/app/sessions/SignInTwo"),
                 },
                 {
                     path: "sign-in-three",

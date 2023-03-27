@@ -32,10 +32,10 @@
                 </v-avatar>
                 <div>
                     <a href="#" class="link-alt">
-                        <p class="font-weight-medium ma-0 ">Tim Clarkson</p>
+                        <p class="font-weight-medium ma-0 ">usuario sesion</p>
                     </a>
                     <p class="body-2 text--disabled mb-2">
-                        Front End Developer
+                        puesto
                     </p>
                     <v-btn small icon color="">
                         <v-icon small dense>mdi-google</v-icon>
@@ -49,7 +49,7 @@
                 </div>
             </div>
 
-            <div class="heading-label pa-0 mb-4">Skills</div>
+           <!-- <div class="heading-label pa-0 mb-4">Skills</div>
             <div class="mb-10">
                 <div v-for="(item, index) in items" :key="index" class="d-flex">
                     <v-avatar
@@ -79,8 +79,8 @@
                     </div>
                 </div>
             </div>
-
-            <div class="heading-label pa-0 mb-4">activity</div>
+        -->
+           <!-- <div class="heading-label pa-0 mb-4">últimas actividades</div>
             <div class="mb-10">
                 <div class="d-flex">
                     <v-avatar class="mr-2" color="primary" size="36">
@@ -120,6 +120,7 @@
                     </div>
                 </div>
             </div>
+        -->
         </div>
     </vue-perfect-scrollbar>
 </template>
