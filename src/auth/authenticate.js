@@ -1,11 +1,13 @@
+import { getUsuarioSesion, clearSesion } from  '../helper/Sesion';
+
 export default (to, from, next) => {
-  if (
-    localStorage.getItem('userInfo') != null &&
-    localStorage.getItem('userInfo').length > 0
-  ) {
+
+  const usuarioSesion = getUsuarioSesion();
+
+  if (usuarioSesion != null) {
     next()
   } else {
-    localStorage.removeItem('userInfo')
+    clearSesion();
     next('/app/sessions/sign-in-two')
   }
 }

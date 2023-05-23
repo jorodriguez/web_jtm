@@ -4,23 +4,33 @@
             <base-card>
                 <v-card-text class="text-center">
                     <div class="py-3">
-                        <h5 class="font-weight-bold">LETS GET STARTED!</h5>
+                        <h5 class="font-weight-bold">¡PONTE EN MARCHA!</h5>
                         <p class="text--disabled font-weight-medium">
-                            Create an account get unlimited access
+                            Solicita una cuenta de acceso 
                         </p>
                     </div>
                     <v-avatar tile size="200" class="mb-4">
-                        <img
-                            src="@/assets/images/illustrations/posting_photo.svg"
-                            alt=""
-                        />
+                      <img src="@/assets/images/jtm/logojtm.png" alt="" />
                     </v-avatar>
 
                     <h6 class="text--disabled font-weight-medium mb-10">
-                        Sign in to your account
+                        Llena los siguientes datos
                     </h6>
+
                     <v-text-field
-                        label="email"
+                        label="Nombre"
+                        v-model="nombre"                        
+                        required
+                    />
+
+                    <v-text-field
+                        label="Teléfono"
+                        v-model="telefono"                        
+                        required
+                    />
+
+                    <v-text-field
+                        label="Email"
                         v-model="email"
                         :rules="emailRules"
                         required
@@ -30,7 +40,7 @@
                         :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
                         :type="show ? 'text' : 'password'"
                         name="input-10-2"
-                        label="password"
+                        label="Password"
                         :counter="10"
                         :rules="nameRules"
                         v-model="ePassword"
@@ -45,34 +55,30 @@
             
             @click:append="show = !show"
           ></v-text-field> -->
-                    <v-checkbox
-                        v-model="checkbox1"
-                        label="Remember this computer"
-                    ></v-checkbox>
+                  <br/>
                     <v-btn
                         class="mb-4"
                         @click="submit"
                         block
                         color="primary"
                         dark
-                        >Sign Up</v-btn
+                        >Crear cuenta</v-btn
                     >
                     <div class="">
-                        Don't have an account ?
+                        ¿ya tienes cuenta?
                         <v-btn
                             text
                             small
                             color="primary"
                             to="/app/sessions/sign-in-two"
-                            >Sign In</v-btn
+                            >Ir a Login</v-btn
                         >
                     </div>
                 </v-card-text>
 
                 <!-- error password snackbar  -->
-                <v-snackbar v-model="snackbar" top color="danger">
-                    Email and Password must be required
-
+                <v-snackbar v-model="snackbar" top color="danger">                    
+                    Todos los campos son requeridos
                     <template v-slot:action="{attrs}">
                         <v-btn
                             color=""

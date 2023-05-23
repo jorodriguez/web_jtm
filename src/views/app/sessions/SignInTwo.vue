@@ -9,9 +9,9 @@
                     top
                     color="primary"
                 ></v-progress-linear>
-                <v-card-text class="text-center">
-                    <v-avatar size="60" class="mb-4">
-                        <img src="@/assets/images/logo.svg" alt="" />
+                <v-card-text class="text-center" >
+                    <v-avatar size="200" class="mb-4">
+                        <img src="@/assets/images/jtm/logojtm.png" alt="" />
                     </v-avatar>
 
                     <h6 class="text--disabled font-weight-medium mb-10">
@@ -19,7 +19,7 @@
                     </h6>
                     <v-form>
                         <v-text-field
-                            label="email"
+                            label="Email"
                             v-model="email"
                             :rules="emailRules"
                             required
@@ -29,16 +29,18 @@
                             :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
                             :type="show ? 'text' : 'password'"
                             name="input-10-2"
-                            label="password"
+                            label="Contraseña"
                             :counter="10"
                             :rules="nameRules"
                             v-model="ePassword"
                             @click:append="show = !show"
                         ></v-text-field>
-                        <v-checkbox
+                        <br/>
+                       <!-- <v-checkbox
                             v-model="checkbox1"
                             label="Remember this computer"
                         ></v-checkbox>
+                    -->
                         <v-btn
                             class="mb-4"
                             @click="formSubmit"
@@ -47,47 +49,51 @@
                             dark
                         >
                             <v-icon left>mdi-login</v-icon>
-                            Sign In</v-btn
+                            Entrar</v-btn
                         >
-                        <v-btn
-                            class="mb-4"
-                            @click="googleSignIn"
-                            block
-                            color="#DB4437"
-                            dark
-                        >
-                            <v-icon left>
-                                mdi-google
-                            </v-icon>
-
-                            Sign In
-                        </v-btn>
+                       
                         <div class="d-flex justify-around flex-wrap">
                             <v-btn text small color="primary" class="mb-2"
-                                >Forgot Password</v-btn
+                                >Olvide la contraseña</v-btn
                             >
                             <v-btn
                                 text
                                 small
                                 color="primary"
                                 to="/app/sessions/sign-up-2"
-                                >Create New Account</v-btn
+                                >Crear una cuenta</v-btn
                             >
                         </div>
                     </v-form>
                 </v-card-text>
             </base-card>
+               <v-snackbar v-model="snackbarError" top color="danger">                    
+                    Todos los campos son requeridos
+                    <template v-slot:action="{attrs}">
+                        <v-btn
+                            color=""
+                            text
+                            v-bind="attrs"
+                            @click="snackbar = false"
+                        >
+                            <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                    </template>
+                </v-snackbar>
         </div>
     </div>
 </template>
 <script>
 import firebase from 'firebase/app'
-import {mapGetters, mapActions} from 'vuex'
+import {mapGetters, mapActions} from 'vuex';
+import { setSession,setToken } from '../../../helper/Sesion';
+import { BRANCH}  from "../../../helper/Urls";
+
 export default {
     name: 'login',
     metaInfo: {
         // title will be injected into parent titleTemplate
-        title: 'SignIn Two'
+        title: 'JTM'
     },
     data() {
         return {
@@ -95,15 +101,16 @@ export default {
             password: 'Password',
             checkbox1: true,
             checkbox2: false,
-            email: 'admin@gmail.com',
-            ePassword: '123456',
+            email: '',
+            ePassword: '',
             loading: false,
+            snackbarError:false,
             emailRules: [
-                (v) => !!v || 'E-mail is required',
-                (v) => /.+@.+\..+/.test(v) || 'E-mail must be valid'
+                (v) => !!v || 'Correo requerido',
+                (v) => /.+@.+\..+/.test(v) || 'La dirección de correo no es válida'
             ],
             nameRules: [
-                (v) => !!v || 'Password is required',
+                (v) => !!v || 'Contraseña requerida',
                
             ]
         }

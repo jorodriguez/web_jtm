@@ -1,5 +1,6 @@
 import firebase from "firebase/app";
 import "firebase/auth";
+import { setSession,setToken } from '../../helper/Sesion';
 
 export default {
   state: {
@@ -44,7 +45,11 @@ export default {
     login({ commit }, data) {
       commit("clearError");
       commit("setLoading", true);
-      firebase
+
+      //aqui va el login al api
+
+
+    /*  firebase
         .auth()
         .signInWithEmailAndPassword(data.email, data.password)
         .then(user => {
@@ -61,7 +66,7 @@ export default {
           localStorage.removeItem("userInfo");
           commit("setError", error);
           // ...
-        });
+        });*/
     },
 
     signUserUp({ commit }, data) {
