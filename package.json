@@ -9,6 +9,7 @@
         "lint": "vue-cli-service lint",
         "heroku-postbuild": "npm install --only=dev --no-shrinkwrap && npm run build"
     },
+    "heroku-postinstall": "npm install && npm run build",
     "dependencies": {
         "apexcharts": "^3.26.0",
         "axios": "^0.21.1",
