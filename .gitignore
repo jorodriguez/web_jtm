@@ -1,6 +1,6 @@
 .DS_Store
 node_modules
-#/dist -- se quito para que se suba dist a produccion
+/dist 
 
 
 # local env files
