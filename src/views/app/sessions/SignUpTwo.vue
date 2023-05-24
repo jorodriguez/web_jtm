@@ -60,7 +60,7 @@
                         class="mb-4"
                         @click="submit"
                         block
-                        color="primary"
+                        color="success"
                         dark
                         >Crear cuenta</v-btn
                     >

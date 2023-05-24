@@ -21,7 +21,7 @@
           color="primary"
         />
 
-        <v-toolbar-title class="mb-0">Octavia</v-toolbar-title>
+        <v-toolbar-title class="mb-0">JTM</v-toolbar-title>
 
         <v-spacer />
 

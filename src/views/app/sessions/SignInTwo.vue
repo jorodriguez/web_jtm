@@ -15,11 +15,11 @@
                     </v-avatar>
 
                     <h6 class="text--disabled font-weight-medium mb-10">
-                        Sign in to your account
+                        ¡Entra a tu cuenta y ponte en marcha!
                     </h6>
                     <v-form>
                         <v-text-field
-                            label="Email"
+                            label="Correo"
                             v-model="email"
                             :rules="emailRules"
                             required
@@ -33,6 +33,7 @@
                             :counter="10"
                             :rules="nameRules"
                             v-model="ePassword"
+                            @click="formSubmit"
                             @click:append="show = !show"
                         ></v-text-field>
                         <br/>
@@ -45,7 +46,7 @@
                             class="mb-4"
                             @click="formSubmit"
                             block
-                            color="primary"
+                            color="success"
                             dark
                         >
                             <v-icon left>mdi-login</v-icon>
@@ -67,14 +68,14 @@
                     </v-form>
                 </v-card-text>
             </base-card>
-               <v-snackbar v-model="snackbarError" top color="danger">                    
-                    Todos los campos son requeridos
+               <v-snackbar v-model="snackbarError"  top color="danger">                    
+                    {{mensaje}}
                     <template v-slot:action="{attrs}">
                         <v-btn
                             color=""
                             text
                             v-bind="attrs"
-                            @click="snackbar = false"
+                            @click="snackbarError = false"
                         >
                             <v-icon>mdi-close</v-icon>
                         </v-btn>
@@ -105,6 +106,7 @@ export default {
             ePassword: '',
             loading: false,
             snackbarError:false,
+            mensaje:"",
             emailRules: [
                 (v) => !!v || 'Correo requerido',
                 (v) => /.+@.+\..+/.test(v) || 'La dirección de correo no es válida'
@@ -120,24 +122,27 @@ export default {
     },
     methods: {
         ...mapActions(['login']),
-        // login: function() {
-        //   firebase.auth().signInWithEmailAndPassword(this.email, this.ePassword)
-        //     .then(
-        //       user => {
-        //         // console.log(user);
-        //         this.loading = true;
-        //         this.$router.push('/');
+         async formSubmit() {
 
-        //       },
-        //       err => {
 
-        //         // alert(err);
+            if (!this.email || !this.ePassword) {               
+                   this.snackbarError = true
+                   this.mensaje = 'Escribe el usuario y la contraseña.';
+            }
 
-        //       }
-        //     )
-        // },
-        formSubmit() {
-            this.login({email: this.email, password: this.ePassword})
+           const loginResponse = await this.login({correo: this.email, password: this.ePassword});
+
+           console.log(loginResponse);
+           
+           if(loginResponse.auth){
+                this.$router.push('/');
+           }else{
+
+               this.snackbarError = true;
+               this.mensaje = 'El usuario o la contraseña son incorrectos.';
+               
+           }
+
         },
         googleSignIn() {
             const provider = new firebase.auth.GoogleAuthProvider()
@@ -156,12 +161,14 @@ export default {
         }
     },
     watch: {
+        
         // loading (val) {
         //   if (!val) return
         //   setTimeout(() => (this.loading = false), 2000)
         // },
         loggedInUser(val) {
-            if (val && val.uid && val.uid.length > 0) {
+            console.log('watch ')
+            if (val && val.id && val.id.length > 0) {
                 // this.makeToast("success", "Successfully Logged In");
                 console.log('logged in successfully ')
                 this.loading = true

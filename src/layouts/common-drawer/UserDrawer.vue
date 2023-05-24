@@ -13,14 +13,14 @@
                 flat
             >
                 <div class="d-flex justify-space-between align-center w-full">
-                    <h6 class="ma-0">My Account</h6>
+                    <h6 class="ma-0">Mi cuenta</h6>
                     <slot name="userDrawerCloseButton"></slot>
                 </div>
             </v-app-bar>
         </div>
 
         <div class="pa-5 mt-10">
-            <div class="heading-label pa-0 mb-4">Profile</div>
+            <div class="heading-label pa-0 mb-4">Perfil</div>
             <div class="d-flex align-center mb-10">
                 <v-avatar size="56" class="mr-2">
                     <img
@@ -32,12 +32,12 @@
                 </v-avatar>
                 <div>
                     <a href="#" class="link-alt">
-                        <p class="font-weight-medium ma-0 ">usuario sesion</p>
+                        <p class="font-weight-medium ma-0 ">{{usuarioSesion.nombre}}</p>
                     </a>
                     <p class="body-2 text--disabled mb-2">
-                        puesto
+                        en sesión
                     </p>
-                    <v-btn small icon color="">
+                    <!--<v-btn small icon color="">
                         <v-icon small dense>mdi-google</v-icon>
                     </v-btn>
                     <v-btn small icon color="">
@@ -45,7 +45,7 @@
                     </v-btn>
                     <v-btn small icon color="">
                         <v-icon small dense>mdi-facebook</v-icon>
-                    </v-btn>
+                    </v-btn>-->
                 </div>
             </div>
 
@@ -126,11 +126,14 @@
 </template>
 
 <script>
+import { getUsuarioSesion, clearSesion } from "../../helper/Sesion";
+
 export default {
     name: 'UserDrawer',
     props: {},
     data() {
         return {
+            usuarioSesion: {}      ,
             items: [
                 {
                     letter: 'A',
@@ -168,7 +171,19 @@ export default {
         }
     },
     computed: {},
-    methods: {}
+    mounted() {
+        console.log("##### pagina bienvenido ####");
+            this.usuarioSesion = getUsuarioSesion();    
+    },
+    methods: {
+         signout() {
+            console.log("Signout ");
+            //this.$session.clear();
+            clearSesion();
+      
+            
+        }
+    }
 }
 </script>
 

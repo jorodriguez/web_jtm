@@ -36,7 +36,7 @@
           </v-list-item-avatar>
 
           <v-list-item-title class="text-20 text-default"
-            >Octavia</v-list-item-title
+            >JTM</v-list-item-title
           >
           <v-scroll-x-transition>
             <v-btn icon @click.stop="toggleSidebar">
@@ -96,7 +96,7 @@
                 <v-icon small>mdi-email</v-icon>
               </v-btn>
               <v-btn small icon class="mr-2">
-                <v-icon small>mdi-logout-variant</v-icon>
+                <v-icon small>mdi--variant</v-icon>
               </v-btn>
               <!-- <v-icon class="text-18 mr-2">mdi-inbox-multiple-outline</v-icon> -->
               <!-- <v-icon class="text-18 mr-2">mdi-home-edit-outline</v-icon> -->

@@ -19,7 +19,7 @@
                 color="primary"
             />
 
-            <v-toolbar-title>Octavia</v-toolbar-title>
+            <v-toolbar-title>JTM</v-toolbar-title>
 
             <v-spacer />
 

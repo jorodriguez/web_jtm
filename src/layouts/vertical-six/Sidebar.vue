@@ -35,7 +35,7 @@
             "
           >
             <div class="flex-1">
-              <p class="subtitle-1 mb-0 text-capitalize">Octavia Inc</p>
+              <p class="subtitle-1 mb-0 text-capitalize">JTM</p>
               <p class="text-subtitle-2 mb-0 grey--text text--lighten-1">
                 Your tier: Premium
               </p>
@@ -80,7 +80,7 @@
       </v-list>
       <v-divider></v-divider>
       <div class="mx-6 my-4 white--text">
-        <p class="subtitle-1 mb-0 text-capitalize">Octavia Inc</p>
+        <p class="subtitle-1 mb-0 text-capitalize">JTM</p>
         <p class="text-subtitle-2 mb-0 grey--text">Your tier: Premium</p>
       </div>
       <div class="px-6 mb-6">
@@ -100,7 +100,7 @@ export default {
       selectedItem: 0,
       group: null,
       items: items,
-      dropdownItem: [{ title: "Octavia Inc" }, { title: "Egret Inc" }],
+      dropdownItem: [{ title: "JTM" }, { title: "Egret Inc" }],
       showMenu: false,
     };
   },

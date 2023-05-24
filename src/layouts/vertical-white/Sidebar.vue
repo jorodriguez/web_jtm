@@ -36,7 +36,7 @@
           </v-list-item-avatar>
 
           <v-list-item-title class="text-18 text-uppercase text-default"
-            >Octavia</v-list-item-title
+            >JTM</v-list-item-title
           >
           <v-scroll-x-transition>
             <v-btn icon @click.stop="toggleSidebar">
