@@ -18,8 +18,8 @@ export const getToken = () => {
 export const getUsuarioSesion = () => {
 
     let sesion = JSON.parse(localStorage.getItem("usuario_sesion"));
-    //console.log(sesion);
-    return sesion.usuario || null;
+    console.log('usuario en sesion ' + ((sesion && sesion.usuario) || ' XX SIN SESION XX'));
+    return (sesion && sesion.usuario) || null;
 };
 
 export const getSesion = () => {

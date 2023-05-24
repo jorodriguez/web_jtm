@@ -58,9 +58,9 @@ export const themePreset = {
         },
         themes: {
             light: {
-                primary: colors.blue,
+                primary: "#274374", //colors.blue,
                 secondary: "#304156",
-                success: colors.green,
+                success: '#88b04b', //colors.green,
                 danger: colors.red,
                 warning: colors.deepOrange,
                 info: colors.indigo,
@@ -70,7 +70,7 @@ export const themePreset = {
                 background: "#f2f3f8",
             },
             dark: {
-                primary: colors.blue,
+                primary: "#88b04b", // "#274374", //colors.blue,
                 secondary: "#304156",
                 success: colors.green,
                 danger: colors.red,

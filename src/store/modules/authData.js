@@ -61,8 +61,6 @@ export default {
 
                 const loginResponse = response.data;
 
-
-
                 if (loginResponse && loginResponse.auth) {
 
                     setSession(loginResponse);
@@ -110,7 +108,8 @@ export default {
         signUserUp({ commit }, data) {
             commit("setLoading", true);
             commit("clearError");
-            firebase
+            //cuando se crea una cuenta de usuario
+            /*firebase
                 .auth()
                 .createUserWithEmailAndPassword(data.email, data.password)
                 .then(user => {
@@ -128,7 +127,7 @@ export default {
                     commit("setError", error);
                     localStorage.removeItem("userInfo");
                     console.log(error);
-                });
+                });*/
         },
         signOut({ commit }) {
 

@@ -1,13 +1,15 @@
-import { getUsuarioSesion, clearSesion } from  '../helper/Sesion';
+import { getUsuarioSesion, clearSesion } from '../helper/Sesion';
 
-export default (to, from, next) => {
+export default async(to, from, next) => {
 
-  const usuarioSesion = getUsuarioSesion();
+    const usuarioSesion = await getUsuarioSesion();
 
-  if (usuarioSesion != null) {
-    next()
-  } else {
-    clearSesion();
-    next('/app/sessions/sign-in-two')
-  }
+    console.log("reconociendo usuario en sesion " + usuarioSesion);
+
+    if (usuarioSesion != null) {
+        next()
+    } else {
+        clearSesion();
+        next('/app/sessions/sign-in-two')
+    }
 }

@@ -10,8 +10,9 @@
                     color="primary"
                 ></v-progress-linear>
                 <v-card-text class="text-center" >
-                    <v-avatar size="200" class="mb-4">
-                        <img src="@/assets/images/jtm/logojtm.png" alt="" />
+                    <v-avatar size="150" class="mb-4" color="#373836">
+                        <!--<img src="@/assets/images/jtm/logojtm.png" alt="" />-->
+                        <img src="@/assets/images/arctic-circle-logo.svg" alt="" />
                     </v-avatar>
 
                     <h6 class="text--disabled font-weight-medium mb-10">
