@@ -3,15 +3,12 @@
     <v-row>
       <v-col cols="12" md="6" lg="3" sm="6">
         <analytic-one-card
-          main-icon-name="mdi-account-plus"
-          floating-button-icon-name="mdi-plus"
-          floating-button-icon-text-color="white--text"
-          floating-button-background-color="info"
-          main-icon-background-color-class="info lighten-5"
-          main-icon-text-color="info--text"
-          sub-heading-text="Cuentas"
-          heading-text="0"
-          bottom-button-text=""
+          main-icon-name="mdi-hand-pointing-up"
+          main-icon-background-color-class="primary lighten-5"
+          main-icon-text-color="primary--text"
+          sub-heading-text="Impressions"
+          heading-text="1"
+          bottom-button-text="usuario%"
           bottom-button-icon="mdi-arrow-down-drop-circle-outline"
           bottom-button-hover-class="hover:bg-primary"
         />
@@ -20,13 +17,13 @@
         <analytic-one-card
           floating-button-icon-name="mdi-plus"
           floating-button-icon-text-color="white--text"
-          floating-button-background-color="success"
-          main-icon-name="mdi-weight-lifter"
+          floating-button-background-color="success "
+          main-icon-name="mdi-hand-pointing-up"
           main-icon-background-color-class="success lighten-5"
           main-icon-text-color="success--text"
-          sub-heading-text="Rutinas"
-          heading-text="0"
-          bottom-button-text="0%"
+          sub-heading-text="Impressions"
+          heading-text="9.2k"
+          bottom-button-text="10.4%"
           bottom-button-icon="mdi-arrow-down-drop-circle-outline"
           bottom-button-hover-class="hover:bg-success"
         />
@@ -36,30 +33,33 @@
           floating-button-icon-name="mdi-plus"
           floating-button-icon-text-color="white--text"
           floating-button-background-color="info"
-          main-icon-name="mdi-calendar"
+          main-icon-name="mdi-hand-pointing-up"
           main-icon-background-color-class="info lighten-5"
           main-icon-text-color="info--text"
-          sub-heading-text="Eventos"
-          heading-text="0"
-          bottom-button-text="0%"
+          sub-heading-text="Visitors"
+          heading-text="4.2k"
+          bottom-button-text="20.4%"
           bottom-button-icon="mdi-arrow-down-drop-circle-outline"
           bottom-button-hover-class="hover:bg-info"
         />
       </v-col>
       <v-col cols="12" md="6" lg="3" sm="6">
-        <analytic-one-card          
-          main-icon-name="mdi-currency-usd"
+        <analytic-one-card
+          floating-button-icon-name="mdi-plus"
+          floating-button-icon-text-color="white--text"
+          floating-button-background-color="warning"
+          main-icon-name="mdi-hand-pointing-up"
           main-icon-background-color-class="warning lighten-5"
           main-icon-text-color="warning--text"
-          sub-heading-text="Cuotas mensuales"
-          heading-text="$0.00"
-          bottom-button-text="0%"
+          sub-heading-text="Visitors"
+          heading-text="4.2k"
+          bottom-button-text="20.4%"
           bottom-button-icon="mdi-arrow-down-drop-circle-outline"
           bottom-button-hover-class="hover:bg-warning"
         />
       </v-col>
     </v-row>
-<!--
+
     <v-row>
       <v-col cols="12">
         <base-card class>
@@ -386,7 +386,7 @@
           </v-card-text>
         </base-card>
       </v-col>
-    </v-row>-->
+    </v-row>
   </div>
 </template>
 <script>

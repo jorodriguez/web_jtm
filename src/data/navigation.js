@@ -1,4 +1,38 @@
-export const items = [
+export const items = [{
+        divider: 'Ponte en marcha',
+        title: 'TU ENTRENAMIENTO',
+        icon: 'mdi-google-analytics',
+        to: 'analytic',
+    },
+    {
+        title: 'ANALISIS',
+        icon: 'mdi-view-dashboard',
+        to: 'learning-management',
+    },
+    {
+        title: 'EVENTOS',
+        icon: 'mdi-account-network',
+        to: 'job-management',
+    },
+    {
+        title: 'BLOG',
+        icon: 'mdi-bitcoin',
+        to: 'crypto-currency',
+    },
+    {
+        title: 'NOTAS',
+        icon: 'mdi-gift-open',
+        to: 'donation',
+    },
+    {
+        title: 'COBRANZA',
+        icon: 'mdi-sale',
+        to: 'sales',
+    },
+];
+
+
+/*export const items = [
   {
     title: "Dashboards",
     icon: "mdi-desktop-mac-dashboard",
@@ -883,3 +917,4 @@ export const items = [
     ],
   },
 ];
+*/

@@ -23,6 +23,7 @@
                             label="Correo"
                             v-model="email"
                             :rules="emailRules"
+                            error="snackbarError"
                             required
                         />
 
@@ -30,11 +31,12 @@
                             :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
                             :type="show ? 'text' : 'password'"
                             name="input-10-2"
-                            label="Contraseña"
+                            label="PIN"
                             :counter="10"
                             :rules="nameRules"
+                            error="snackbarError"
                             v-model="ePassword"
-                            @click="formSubmit"
+                            @click="formSubmit"                            
                             @click:append="show = !show"
                         ></v-text-field>
                         <br/>
@@ -135,7 +137,7 @@ export default {
 
            console.log(loginResponse);
            
-           if(loginResponse.auth){
+           if((loginResponse && loginResponse.auth)){
                 this.$router.push('/');
            }else{
 
