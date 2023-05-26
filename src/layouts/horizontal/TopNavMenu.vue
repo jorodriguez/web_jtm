@@ -19,7 +19,7 @@ export default {
         menuOptionsLeft: [
           {
             type: "link",
-            text: "Dashboard",
+            text: "Dashboardss",
             iconLeft: '<i class="mdi mdi-view-dashboard"></i>',
             subMenuOptions: [
               {

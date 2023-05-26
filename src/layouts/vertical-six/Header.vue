@@ -13,7 +13,9 @@
         v-ripple="{ class: 'primary--text' }"
         @click="toggleVerticalSidebarDrawer"
       />
-      <vue-navigation-bar class="mt-0" :options="navbarOptions" />
+      
+      <!--<vue-navigation-bar class="mt-0" :options="navbarOptions" /> Boton Dashboard es como un submenu -->
+
       <v-progress-linear
         :active="getThemeMode.isLoading"
         :indeterminate="getThemeMode.isLoading"
@@ -48,7 +50,7 @@
         class="transparent rounded-pill py-6"
         @click="userDrawer = !userDrawer"
       >
-        Hi, Watson
+        Hola, {{usuarioSesion.nombre}}
         <v-avatar class="ml-2">
           <v-img src="@/assets/images/faces/1.jpg"></v-img>
         </v-avatar>
@@ -141,6 +143,8 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
+import { getUsuarioSesion } from '../../helper/Sesion';
+
 export default {
   name: "VerticallAppBar",
   components: {
@@ -154,6 +158,7 @@ export default {
   data() {
     return {
       userDrawer: false,
+      usuarioSesion:{},
       notificationDrawer: false,
       searchDrawer: false,
       navbarOptions: {
@@ -170,7 +175,7 @@ export default {
         menuOptionsLeft: [
           {
             type: "link",
-            text: "Dashboard",
+            text: "Dashboard2",
             iconLeft: '<i class="mdi mdi-view-dashboard"></i>',
             subMenuOptions: [
               {
@@ -216,6 +221,10 @@ export default {
       },
     };
   },
+    mounted() {
+        console.log("##### pagina bienvenido ####");
+            this.usuarioSesion = getUsuarioSesion();    
+    },
   methods: {
     ...mapActions([
       "changeVerticalSidebarDrawer",

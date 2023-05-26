@@ -43,7 +43,7 @@
       </v-btn>
 
       <v-chip pill class="transparent py-5" @click="userDrawer = !userDrawer">
-        Hi, Watson asd
+        Hola,{{usuarioSesion.nombre}}
         <v-avatar class="ml-2">
           <v-img src="@/assets/images/faces/1.jpg"></v-img>
         </v-avatar>
@@ -136,6 +136,8 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 
+import { getUsuarioSesion } from '../../helper/Sesion';
+
 export default {
   name: "VerticallAppBar",
   components: {
@@ -149,6 +151,7 @@ export default {
   data() {
     return {
       userDrawer: false,
+      usuarioSesion:{},
       notificationDrawer: false,
       searchDrawer: false,
       navbarOptions: {
@@ -165,7 +168,7 @@ export default {
         menuOptionsLeft: [
           {
             type: "link",
-            text: "Dashboard",
+            text: "Dashboard1",
             iconLeft: '<i class="mdi mdi-view-dashboard"></i>',
             subMenuOptions: [
               {
@@ -210,6 +213,10 @@ export default {
         ],
       },
     };
+  },
+  mounted() {
+        console.log("##### pagina appBar ####");
+            this.usuarioSesion = getUsuarioSesion();    
   },
   methods: {
     ...mapActions([

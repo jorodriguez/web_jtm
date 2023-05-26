@@ -2,7 +2,7 @@
 // import { en } from '../../locale'
 import colors from "vuetify/lib/util/colors";
 export const themeConfig = {
-    disableCustomizer: false, // options[Boolean] : true, false(default)
+    disableCustomizer: true, // options[Boolean] : true, false(default) /// HABILITAR PARA OTROS SISTEMAS PARA JTM NO
 
     rtl: false, // options[Boolean] : true, false(default)
     verticalSidebarMini: false, // options[Boolean] : true, false(default)
@@ -11,11 +11,11 @@ export const themeConfig = {
     verticalSaasSidebarDrawer: true, // options[Boolean] : true, false(default)
     showBreadcrumb: true, // options[Boolean] : true, false(default)
 
-    layout: "VerticalSix", //VerticalCompactSidebar,VerticalSaasLayout,VerticalSidebar,HorizontalBar,VerticalSix
+    layout: "VerticalSix", //VerticalCompactSidebar,VerticalSaasLayout,VerticalSidebar,HorizontalBar,VerticalSix    
     isLoading: false,
-    isDark: false,
-    verticalSidebarDrawerColor: "white", // primary,white,sucsess,warning,etc
-    appBarColor: "white", // primary,white,sucsess,warning,etc
+    isDark: true,
+    verticalSidebarDrawerColor: "success", // primary,white,sucsess,warning,etc
+    appBarColor: "success", // primary,white,sucsess,warning,etc
 };
 
 const mq = window.matchMedia("(prefers-color-scheme: light)");

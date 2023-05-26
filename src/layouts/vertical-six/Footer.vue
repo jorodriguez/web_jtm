@@ -9,7 +9,7 @@
   >
     <v-col class="text-left" cols="12">
       <div class="d-flex flex-row justify-space-between align-center">
-        <div>
+        <!--<div>
           <v-btn
             
             target="_blank"
@@ -17,7 +17,7 @@
             color="warning"
             >JTM</v-btn
           >
-        </div>
+        </div>-->
         <div>
           <strong class="text--disabled">
             © Softlineas {{ new Date().getFullYear() }}-{{

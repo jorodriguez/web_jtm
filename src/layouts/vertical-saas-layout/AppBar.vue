@@ -43,7 +43,7 @@
         </v-btn>
 
         <v-chip pill class="transparent py-5" @click="userDrawer = !userDrawer">
-          Hi, Watson
+          Hola, {{usuarioSesion.nombre}}
           <v-avatar class="ml-2">
             <v-img src="@/assets/images/faces/1.jpg"></v-img>
           </v-avatar>
@@ -139,6 +139,9 @@ import { mapGetters, mapActions } from "vuex";
 import UserDrawer from "../common-drawer/UserDrawer.vue";
 import NotificationDrawer from "../common-drawer/NotificationDrawer.vue";
 import SearchDrawer from "../common-drawer/SearchDrawer.vue";
+
+import { getUsuarioSesion } from '../../helper/Sesion';
+
 export default {
   name: "VerticallAppBar",
   components: {
@@ -151,11 +154,16 @@ export default {
   },
   data() {
     return {
+      usuarioSesion:{},
       userDrawer: false,
       notificationDrawer: false,
       searchDrawer: false,
     };
   },
+    mounted() {
+        console.log("##### pagina bienvenido ####");
+            this.usuarioSesion = getUsuarioSesion();    
+    },
   methods: {
     ...mapActions(["changeVerticalSaasSidebarDrawer"]),
     toggleVerticalSaasSidebarDrawer() {

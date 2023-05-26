@@ -41,7 +41,7 @@
             </v-btn>
 
             <v-chip pill class="transparent py-5">
-                Hi, Watson
+                Hola, {{usuarioSesion.nombre}}
                 <v-avatar class="ml-2">
                     <v-img src="@/assets/images/faces/1.jpg"></v-img>
                 </v-avatar>
@@ -52,6 +52,7 @@
 
 <script>
 import {mapGetters, mapActions} from 'vuex'
+import { getUsuarioSesion } from '../../helper/Sesion';
 
 export default {
     name: 'VerticallAppBar',
@@ -65,6 +66,10 @@ export default {
             notificationDrawer: false,
             searchDrawer: false
         }
+    },
+    mounted() {
+        console.log("##### pagina bienvenido ####");
+            this.usuarioSesion = getUsuarioSesion();    
     },
     methods: {
         ...mapActions(['changeCompactVerticalSidebarDrawer']),

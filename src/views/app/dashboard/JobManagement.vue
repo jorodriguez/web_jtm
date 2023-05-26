@@ -11,7 +11,7 @@
                             <template v-slot:default>
                                 <thead>
                                     <tr>
-                                        <th class="text-left">Job Post</th>
+                                        <th class="text-left"></th>
                                         <th class="text-left">Posted at</th>
                                         <th class="text-left">Applicants</th>
                                         <th class="text-left">Actions</th>
