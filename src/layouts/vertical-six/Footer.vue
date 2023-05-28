@@ -20,7 +20,7 @@
         </div>-->
         <div>
           <strong class="text--disabled">
-            © Softlineas {{ new Date().getFullYear() }}-{{
+            © Jorge Tello Multitrainer - Soflineas {{ new Date().getFullYear() }}-{{
               new Date().getFullYear() + 1
             }}
           </strong>

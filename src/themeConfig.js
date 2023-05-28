@@ -12,10 +12,10 @@ export const themeConfig = {
     showBreadcrumb: true, // options[Boolean] : true, false(default)
 
     layout: "VerticalSix", //VerticalCompactSidebar,VerticalSaasLayout,VerticalSidebar,HorizontalBar,VerticalSix    
-    isLoading: false,
-    isDark: true,
+    isLoading: true,
+    isDark: false,
     verticalSidebarDrawerColor: "success", // primary,white,sucsess,warning,etc
-    appBarColor: "success", // primary,white,sucsess,warning,etc
+    appBarColor: "#88b04b", // primary,white,sucsess,warning,etc
 };
 
 const mq = window.matchMedia("(prefers-color-scheme: light)");
@@ -46,9 +46,9 @@ export const themePreset = {
 
     theme: {
         // dark: mq.matches,
-        dark: true, //Aqui cambiar a true el modo dark
+        dark: false, //Aqui cambiar a true el modo dark
 
-        default: "dark",
+        default: "light",
         disable: false,
         options: {
             cspNonce: undefined,
@@ -58,9 +58,9 @@ export const themePreset = {
         },
         themes: {
             light: {
-                primary: "#274374", //colors.blue,
+                primary: "#88b04b", //colors.blue,
                 secondary: "#304156",
-                success: '#88b04b', //colors.green,
+                success: colors.green,
                 danger: colors.red,
                 warning: colors.deepOrange,
                 info: colors.indigo,
