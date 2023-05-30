@@ -3,7 +3,8 @@
     v-model="getThemeMode.verticalSidebarDrawer"
     class="sidebar-six"
     dark
-    height="100%"
+    color="#464646"
+    height="100%"    
     width="280px"
     :mobile-breakpoint="960"
     :floating="true"
@@ -16,7 +17,7 @@
     >
       <div class="mb-4 pa-4 top-toolbar">
         <v-avatar size="36">
-          <v-img src="@/assets/images/arctic-circle-logo.svg"></v-img>
+          <v-img src="@/assets/images/jtm/logo_fondo_azul.png"></v-img>
         </v-avatar>
       </div>
       <v-menu v-model="showMenu" absolute offset-y>

@@ -1,14 +1,17 @@
 <template>
-  <div>
+  <div >    
     <v-sheet class="header-backup"></v-sheet>
+    <!--  :color="$vuetify.theme.dark ? 'dark' : getThemeMode.appBarColor" -->    
     <v-app-bar
-      :color="$vuetify.theme.dark ? 'dark' : getThemeMode.appBarColor"
+      color="#88b04b"      
       :dark="getThemeMode.appBarColor != 'white' ? true : false"
       app
       class="px-sm text-left shadow-sm ma-4 rounded-lg"
       flat
+      src="@/assets/images/barra.png"
       height="75"
-    >
+      
+    >    
       <v-app-bar-nav-icon
         v-ripple="{ class: 'primary--text' }"
         @click="toggleVerticalSidebarDrawer"
@@ -136,8 +139,8 @@
           </v-btn>
         </template>
       </search-drawer>
-    </v-navigation-drawer>
-  </div>
+    </v-navigation-drawer>        
+  </div>  
 </template>
 
 <script>

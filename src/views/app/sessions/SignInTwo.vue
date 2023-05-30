@@ -10,14 +10,14 @@
                     color="primary"
                 ></v-progress-linear>
                 <v-card-text class="text-center" >
-                    <v-avatar size="150" class="mb-4" color="#373836">
-                        <!--<img src="@/assets/images/jtm/logojtm.png" alt="" />-->
+                    <img src="@/assets/images/jtm/logojtm.png" alt="" />
+                    <!--<v-avatar size="150" class="mb-4" color="#373836">                   
                         <img src="@/assets/images/arctic-circle-logo.svg" alt="" />
                     </v-avatar>
 
                     <h6 class="text--disabled font-weight-medium mb-10">
                         ¡Entra a tu cuenta y ponte en marcha!
-                    </h6>
+                    </h6>-->
                     <v-form>
                         <v-text-field
                             label="Correo"
@@ -51,6 +51,7 @@
                             block
                             color="success"
                             dark
+                            :loading="loading"
                         >
                             <v-icon left>mdi-login</v-icon>
                             Entrar</v-btn
@@ -133,6 +134,8 @@ export default {
                    this.mensaje = 'Escribe el usuario y la contraseña.';
             }
 
+            this.loading = true;
+
            const loginResponse = await this.login({correo: this.email, password: this.ePassword});
 
            console.log(loginResponse);
@@ -145,6 +148,7 @@ export default {
                this.mensaje = 'El usuario o la contraseña son incorrectos.';
                
            }
+           this.loading = false;
 
         },
         googleSignIn() {
@@ -190,7 +194,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .page-wrap {
-    background-color: #242939 !important;
+    //background-color: #242939 !important;    
+    background-color: #151720 !important;        
     display: flex;
     align-items: center;
     padding: 40px 1rem;
