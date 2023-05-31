@@ -7,11 +7,11 @@
             </v-avatar>
             <div class="error-title">
                 <h1 class="font-weight-bold mb-0">ACCESO</h1>
-                <div class="text-18 font-weight-bold">Solicita los permisos!</div>
+                <div class="text-18 grey--text font-weight-bold ">Solicita los permisos!</div>
             </div>
         </div>
         <div class="d-flex justify-center flex-wrap">
-            <v-btn small class="ma-2" outlined color="primary"
+            <v-btn small class="ma-2"  outlined color="primary"
                 >Login</v-btn
             >            
         </div>
@@ -24,6 +24,11 @@ export default {
     metaInfo: {
         // title will be injected into parent titleTemplate
         title: 'NoDisponible'
+    },
+    methods:{
+           async goToLogin() {
+                this.$router.push('/');
+        },
     }
 }
 </script>
