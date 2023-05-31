@@ -186,7 +186,7 @@ export default {
               },
               {
                 type: "link",
-                text: "Analytic",
+                text: "entrenamiento",
                 path: { name: "analytic" },
                 iconLeft: '<i class="mdi mdi-circle-medium"></i>',
               },

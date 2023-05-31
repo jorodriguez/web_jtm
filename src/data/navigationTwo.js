@@ -2,7 +2,7 @@ export const items = [{
         divider: 'Ponte en marcha',
         title: 'TU ENTRENAMIENTO',
         icon: 'mdi-google-analytics',
-        to: 'analytic',
+        to: 'entrenamiento',
     },
     {
         title: 'ANALISIS',

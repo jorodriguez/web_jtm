@@ -36,7 +36,7 @@
                             :rules="nameRules"
                             error="snackbarError"
                             v-model="ePassword"
-                            @click="formSubmit"                            
+                            v-on:keyup.enter="formSubmit"
                             @click:append="show = !show"
                         ></v-text-field>
                         <br/>
@@ -106,7 +106,7 @@ export default {
             password: 'Password',
             checkbox1: true,
             checkbox2: false,
-            email: '',
+            email: 'pixelra@gmail.com',
             ePassword: '',
             loading: false,
             snackbarError:false,

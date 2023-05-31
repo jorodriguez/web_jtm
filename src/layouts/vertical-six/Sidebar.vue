@@ -17,8 +17,10 @@
     >
       <div class="mb-4 pa-4 top-toolbar">
         <v-avatar size="36">
-          <v-img src="@/assets/images/jtm/logo_fondo_azul.png"></v-img>
+          <!--<v-img src="@/assets/images/jtm/logo_fondo_azul.png"></v-img>-->
+          <v-img :src="usuarioSesion.logotipo_sucursal"></v-img>          
         </v-avatar>
+        <span class="pl-2 h6 grey--text " >{{usuarioSesion.nombre_empresa}}</span>         
       </div>
       <v-menu v-model="showMenu" absolute offset-y>
         <!--  <template v-slot:activator="{ on, attrs }">
@@ -95,9 +97,12 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { items } from '../../data/navigationThree'
+import { getUsuarioSesion } from '../../helper/Sesion';
+
 export default {
   data() {
     return {
+      usuarioSesion:{},
       selectedItem: 0,
       group: null,
       items: items,
@@ -121,6 +126,10 @@ export default {
       // console.log(this.items);
       // return this.items;
     },
+  },
+  mounted() {
+        console.log("##### SIDEBAR - MENU ####");
+        this.usuarioSesion = getUsuarioSesion();    
   },
   methods: {
     ...mapActions(['changeVerticalSidebarDrawer']),

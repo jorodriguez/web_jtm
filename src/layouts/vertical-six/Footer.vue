@@ -20,7 +20,7 @@
         </div>-->
         <div>
           <strong class="text--disabled">
-            © Jorge Tello Multitrainer - Soflineas {{ new Date().getFullYear() }}-{{
+            © {{usuarioSesion.nombre_empresa}} - Soflineas {{ new Date().getFullYear() }}-{{
               new Date().getFullYear() + 1
             }}
           </strong>
@@ -32,9 +32,20 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { getUsuarioSesion } from '../../helper/Sesion';
+
 export default {
   computed: {
     ...mapGetters(["getThemeMode"]),
+  },
+  data() {
+    return {      
+      usuarioSesion:{}
+    }
+  },
+  mounted() {
+        console.log("##### SIDEBAR - MENU ####");
+        this.usuarioSesion = getUsuarioSesion();    
   },
 };
 </script>

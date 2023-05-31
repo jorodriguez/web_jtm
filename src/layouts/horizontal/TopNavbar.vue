@@ -70,7 +70,7 @@ export default {
           content: [
             {
               title: "news 1",
-              link: "analytic",
+              link: "entrenamiento",
             },
             {
               title: "news 1",

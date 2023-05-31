@@ -2,8 +2,7 @@
   <div >    
     <v-sheet class="header-backup"></v-sheet>
     <!--  :color="$vuetify.theme.dark ? 'dark' : getThemeMode.appBarColor" -->    
-    <v-app-bar
-      color="#88b04b"      
+    <v-app-bar           
       :dark="getThemeMode.appBarColor != 'white' ? true : false"
       app
       class="px-sm text-left shadow-sm ma-4 rounded-lg"
@@ -32,10 +31,10 @@
       <v-spacer />
 
       <v-badge
-        bordered
+        bordered                
         overlap
-        content="3"
-        color="red"
+        content="0"
+        color="orange"
         offset-x="22"
         offset-y="22"
       >
@@ -163,65 +162,7 @@ export default {
       userDrawer: false,
       usuarioSesion:{},
       notificationDrawer: false,
-      searchDrawer: false,
-      navbarOptions: {
-        elementId: "main-navbar",
-        isUsingVueRouter: true,
-        mobileBreakpoint: 992,
-        brandImagePath: "./",
-        brandImageAltText: "brand-image",
-        collapseButtonOpenColor: "#661c23",
-        collapseButtonCloseColor: "#661c23",
-        showBrandImageInMobilePopup: true,
-        ariaLabelMainNav: "Main Navigation",
-        tooltipAnimationType: "shift-away",
-        menuOptionsLeft: [
-          {
-            type: "link",
-            text: "Dashboard2",
-            iconLeft: '<i class="mdi mdi-view-dashboard"></i>',
-            subMenuOptions: [
-              {
-                type: "link",
-                text: "Learning Management",
-                path: { name: "learning-management" },
-                iconLeft: '<i class="mdi mdi-circle-medium"></i>',
-              },
-
-              {
-                type: "link",
-                text: "Job Management",
-                path: { name: "job-management" },
-                iconLeft: '<i class="mdi mdi-circle-medium"></i>',
-              },
-              {
-                type: "link",
-                text: "Analytic",
-                path: { name: "analytic" },
-                iconLeft: '<i class="mdi mdi-circle-medium"></i>',
-              },
-              {
-                type: "link",
-                text: "Cryptocurrency",
-                path: { name: "crypto-currency" },
-                iconLeft: '<i class="mdi mdi-circle-medium"></i>',
-              },
-              {
-                type: "link",
-                text: "Sales",
-                path: { name: "sales" },
-                iconLeft: '<i class="mdi mdi-circle-medium"></i>',
-              },
-              {
-                type: "link",
-                text: "Subscription",
-                path: { name: "donation" },
-                iconLeft: '<i class="mdi mdi-circle-medium"></i>',
-              },
-            ],
-          },
-        ],
-      },
+      searchDrawer: false,     
     };
   },
     mounted() {
