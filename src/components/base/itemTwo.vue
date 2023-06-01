@@ -6,10 +6,10 @@
 
     <v-list-item
       :to="{ name: item.to }"
-      :active-class="` ${isDark ? 'primary--text ' : 'primary--text'}`"
+      :active-class="` ${isDark ? 'primary--text ' : 'primary-text'}`"
       :height="48"
       class="text-18 base-item mb-2"
-      v-ripple="{ class: 'primary--text' }"
+      v-ripple="{ class: 'secondary--text' }"
     >
       <v-list-item-icon
         v-if="text"

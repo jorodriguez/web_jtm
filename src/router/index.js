@@ -33,14 +33,13 @@ const router = new Router({
                             name: "sales",
                             component: () =>
                                 import ("@/views/app/dashboard/Sales"),
+                            meta: { requiresAuth: true, validar: true },
                         },
                         {
                             path: "eventos",
                             beforeEnter: authenticate,
                             name: "job-management",
-                            meta: {
-                                breadcrumb: [{ name: "Dashboard" }, { name: "Job Management" }],
-                            },
+                            meta: { requiresAuth: true, validar: true },
                             component: () =>
                                 import ("@/views/app/dashboard/JobManagement"),
                         },
@@ -49,40 +48,31 @@ const router = new Router({
                             beforeEnter: authenticate,
                             component: () =>
                                 import ("@/views/app/dashboard/AnalyticExtra"),
+                            meta: { requiresAuth: true, validar: true },
                         },
                         {
                             path: "entrenamiento",
                             name: "entrenamiento",
                             beforeEnter: authenticate,
-                            meta: {
-                                breadcrumb: [{ name: "Dashboard" }, { name: "Entrenamiento" }],
-                            },
                             component: () =>
                                 import ("@/views/app/dashboard/Entrenamiento"),
+                            meta: { requiresAuth: true, validar: true },
                         },
                         {
-                            path: "analisis",
-                            name: "learning-management",
+                            path: "administrar",
+                            //name: "learning-management",
+                            name: "administrar",
                             beforeEnter: authenticate,
                             component: () =>
-                                import ("@/views/app/dashboard/LearningManagement"),
-                            meta: {
-                                breadcrumb: [
-                                    { name: "Dashboard" },
-                                    { name: "Learning Management" },
-                                ],
-                            },
+                                import ("@/views/app/dashboard/CatalogoEjericios"),
+                            meta: { requiresAuth: true, validar: true },
                         },
                         {
-                            path: "blog",
-                            name: "crypto-currency",
+                            path: "cobranza",
+                            //name: "crypto-currency",
+                            name: "cobranza",
                             beforeEnter: authenticate,
-                            meta: {
-                                breadcrumb: [
-                                    { name: "Dashboard" },
-                                    { name: "crypto-currency" },
-                                ],
-                            },
+                            meta: { requiresAuth: true, validar: true },
                             component: () =>
                                 import ("@/views/app/dashboard/CryptoCurrency"),
                         },
@@ -90,9 +80,7 @@ const router = new Router({
                             path: "notas",
                             name: "donation",
                             beforeEnter: authenticate,
-                            meta: {
-                                breadcrumb: [{ name: "Dashboard" }, { name: "Donation" }],
-                            },
+                            meta: { requiresAuth: true, validar: true },
                             component: () =>
                                 import ("@/views/app/dashboard/Donation"),
                         },

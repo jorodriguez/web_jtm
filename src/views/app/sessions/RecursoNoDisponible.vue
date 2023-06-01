@@ -7,13 +7,18 @@
             </v-avatar>
             <div class="error-title">
                 <h1 class="font-weight-bold mb-0">ACCESO</h1>
-                <div class="text-18 grey--text font-weight-bold ">Solicita los permisos!</div>
+                <div class="text-18 grey--text font-weight-bold ">¡Solicita los permisos!</div>
             </div>
         </div>
         <div class="d-flex justify-center flex-wrap">
-            <v-btn small class="ma-2"  outlined color="primary"
-                >Login</v-btn
+            <v-btn small class="ma-2" rounded  @click="goBack()"   outlined color="primary"
+                >
+                <v-icon class="caption">mdi-arrow-left</v-icon>
+                Volver</v-btn
             >            
+            <v-btn small  class="ma-2" rounded @click="goToLogin()"   outlined color="grey"
+                >Login</v-btn>            
+            
         </div>
     </div>
 </div>
@@ -26,9 +31,19 @@ export default {
         title: 'NoDisponible'
     },
     methods:{
-           async goToLogin() {
-                this.$router.push('/');
-        },
+           goToLogin() {
+                
+                this.$router.push('/app/sessions/sign-in-two');  
+
+            },
+
+            goToPrincipal() {
+                this.$router.push('/app/dashboard/entrenamiento');
+            },
+            goBack() {
+                this.$router.back();
+            }
+            
     }
 }
 </script>

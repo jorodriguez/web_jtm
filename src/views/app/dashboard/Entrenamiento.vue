@@ -1,5 +1,11 @@
 <template>
   <div class="pt-4">
+  <h4>
+    Entrenamiento
+  </h4>
+
+<!--
+
     <v-row>
       <v-col cols="12" md="6" lg="3" sm="6">
         <analytic-one-card
@@ -59,7 +65,8 @@
         />
       </v-col>
     </v-row>
-<!--
+        
+
     <v-row>
       <v-col cols="12">
         <base-card class>
@@ -392,6 +399,9 @@
 <script>
 import analyticOneCard from "@/components/card/AnalyticCardVersionOne";
 import analyticTwoCard from "@/components/card/AnalyticCardVersionTwo";
+
+import { getUsuarioSesion } from '../../../helper/Sesion';
+
 import {
   analyticOne,
   analyticTwo,
@@ -411,6 +421,7 @@ export default {
   },
   data() {
     return {
+      usuarioSesion:{},
       analyticOne,
       analyticTwo,
       analyticThree,
@@ -418,5 +429,8 @@ export default {
       analyticFive,
     };
   },
+  mounted(){
+     this.usuarioSesion =  getUsuarioSesion();
+  }
 };
 </script>

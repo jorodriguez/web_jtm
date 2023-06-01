@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col cols="12" md="12" lg="8">
+    <!--<v-col cols="12" md="12" lg="8">
       <v-row>
         <v-col cols="12">
           <base-card class="px-4 pt-4">
@@ -29,17 +29,15 @@
               </v-col>
             </v-row>
           </base-card>
-        </v-col>              
-             
+        </v-col>             
       </v-row>
-    </v-col>
+    </v-col>-->
 
-    <v-col cols="12" md="12" lg="4" class="mt-3">
+    <!--<v-col cols="12" md="12" lg="12" class="mt-1">
       <base-card>
-        <v-card-text class>     
-
-          <div class="mb-10">
-            <h6 class="caption text--disabled tracking-widest">ACHIEVEMENTS</h6>
+        <v-card-text class>    
+         <div class="mb-1">
+            <h6 class="caption text--disabled tracking-widest">INSIGNIAS JTM</h6>
             <div class="d-flex align-center">
               <v-tooltip top>
                 <template v-slot:activator="{ on, attrs }">
@@ -84,13 +82,103 @@
                 <span>Won a competition</span>
               </v-tooltip>
             </div>
-          </div>
-
-          
-          
+          </div>         
         </v-card-text>
       </base-card>
     </v-col>
+-->
+
+  <!-- catalogo -->
+  <v-row>
+      <v-col cols="12">
+        <div class="d-flex pr-1 justify-space-between">
+          <div class="d-flex align-center">
+            <!--<h5 class="mb-0 mr-2 font-weight-medium">Ejercicios</h5>            -->
+            <v-btn color="info">
+                   <v-icon class="caption">mdi-plus</v-icon>
+                  Agregar                            
+            </v-btn>
+          </div>
+          <div>            
+            <v-menu left bottom>            
+              <template v-slot:activator="{ on }">
+                <v-btn icon v-on="on">
+                  <v-icon>mdi-dots-horizontal</v-icon>
+                </v-btn>
+              </template>
+
+              <v-list>
+                <v-list-item v-for="n in 4" :key="n" @click="() => {}">
+                  <v-list-item-title>Option {{ n }}</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </div>
+        </div>
+      </v-col>
+
+
+
+      <v-col cols="12" md="6" lg="3" sm="6">
+        <base-card class="overflow-hidden">
+          <v-img cover src="https://paper.dropbox.com/ep/redirect/image?url=https%3A%2F%2Fpaper-attachments.dropboxusercontent.com%2Fs_C2538D8D81318EB60083B45F05FDA7345279615B3E4F3BC2BA6C2C37A66B7E8C_1681270890476_EscaleraDesdeCrawl.gif&hmac=VFGTv0FCrHMcnXcKh09I%2FNzNBrHQKiTFo%2BPPNIQVcmI%3D" />
+          <v-card-actions class="pa-4 d-flex justify-space-between">
+            <div class="d-flex align-center">
+              <v-icon class="body-1 mr-1">mdi-cards-heart</v-icon>
+              <v-card-subtitle class="pa-0 mr-2">2.3k</v-card-subtitle>
+              <!--<v-icon class="body-1 mr-1">mdi-comment-text</v-icon>
+              <v-card-subtitle class="pa-0">900</v-card-subtitle>-->
+            </div>
+            <v-card-subtitle class="pa-0">Escalera desde crawl</v-card-subtitle>
+          </v-card-actions>
+        </base-card>
+      </v-col>
+      <v-col cols="12" md="6" lg="3" sm="6">
+        <base-card class="overflow-hidden">
+          <v-img cover 
+                  max-height="150"
+                  max-width="250" 
+                  src="https://paper.dropbox.com/ep/redirect/image?url=https%3A%2F%2Fpaper-attachments.dropboxusercontent.com%2Fs_C2538D8D81318EB60083B45F05FDA7345279615B3E4F3BC2BA6C2C37A66B7E8C_1681270887998_MountainClimbing.gif&hmac=1Hy1agZWgOzhceY%2FJCHFl%2BfdBUJBC3twDD2Jt7fhEQU%3D&width=484" />
+          <v-card-actions class="pa-4 d-flex justify-space-between">
+            <div class="d-flex align-center">
+              <v-icon class="body-1 mr-1">mdi-cards-heart</v-icon>
+              <v-card-subtitle class="pa-0 mr-2">0k</v-card-subtitle>
+              <!--<v-icon class="body-1 mr-1">mdi-comment-text</v-icon>
+              <v-card-subtitle class="pa-0">900</v-card-subtitle>-->
+            </div>
+            <v-card-subtitle class="pa-0">Mountain Climbing</v-card-subtitle>
+          </v-card-actions>
+        </base-card>
+      </v-col>
+      <v-col cols="12" md="6" lg="3" sm="6">
+        <base-card class="overflow-hidden">
+          <v-img cover max-height="150"
+                  max-width="250"  src="https://paper.dropbox.com/ep/redirect/image?url=https%3A%2F%2Fpaper-attachments.dropboxusercontent.com%2Fs_C2538D8D81318EB60083B45F05FDA7345279615B3E4F3BC2BA6C2C37A66B7E8C_1681270887517_Yogi.jpg&hmac=XuZRH%2F3BZ3NNOZ9Vl9g1xSGpTPEUeWwWe%2FyfA%2Fjj6b8%3D" />
+          <v-card-actions class="pa-4 d-flex justify-space-between">
+            <div class="d-flex align-center">
+              <v-icon class="body-1 mr-1">mdi-cards-heart</v-icon>
+              <v-card-subtitle class="pa-0 mr-2">0k</v-card-subtitle>
+              
+            </div>
+            <v-card-subtitle class="pa-0 ">Yogui</v-card-subtitle>
+          </v-card-actions>
+        </base-card>
+      </v-col>
+      <v-col cols="12" md="6" lg="3" sm="6">
+        <base-card class="overflow-hidden">
+          <v-img cover max-height="150"
+                  max-width="250"  src="https://paper.dropbox.com/ep/redirect/image?url=https%3A%2F%2Fpaper-attachments.dropboxusercontent.com%2Fs_C2538D8D81318EB60083B45F05FDA7345279615B3E4F3BC2BA6C2C37A66B7E8C_1681270887608_MedioBurpee.gif&hmac=Zl8%2FeomzaFG0OdJVRPHphL%2FjtJQVmP8qXMoXgzONtVg%3D&width=484" />
+          <v-card-actions class="pa-4 d-flex justify-space-between">
+            <div class="d-flex align-center">
+              <v-icon class="body-1 mr-1">mdi-cards-heart</v-icon>
+              <v-card-subtitle class="pa-0 mr-2">0k</v-card-subtitle>              
+            </div>
+            <v-card-subtitle class="pa-0">Medio Burpee</v-card-subtitle>
+          </v-card-actions>
+        </base-card>
+      </v-col>
+    </v-row>
+
   </v-row>
 </template>
 <script>
