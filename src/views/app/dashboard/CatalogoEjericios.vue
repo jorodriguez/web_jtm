@@ -88,19 +88,46 @@
     </v-col>
 -->
 
-  <!-- catalogo -->
-  <v-row>
+     <v-row   align="center">
+      <v-col cols="6">
+        <v-file-input
+          show-size
+          label="Imagen de Ejercicio"
+          accept="image/*"          
+          @change="selectFile"
+        ></v-file-input>
+      </v-col>
+
+      <v-col cols="4" class="pl-2">
+        <v-btn color="success" dark small @click="subir">
+          Guardar
+          <v-icon right dark>mdi-cloud-upload</v-icon>
+        </v-btn>
+      </v-col>
+    </v-row>
+
+    <v-alert v-if="message" border="left" color="blue-grey" dark>
+      {{ message }}
+    </v-alert>
+
+
+
+    <!-- catalogo -->
+    <v-row>
+
+  
+
       <v-col cols="12">
         <div class="d-flex pr-1 justify-space-between">
           <div class="d-flex align-center">
             <!--<h5 class="mb-0 mr-2 font-weight-medium">Ejercicios</h5>            -->
             <v-btn color="info">
-                   <v-icon class="caption">mdi-plus</v-icon>
-                  Agregar                            
+              <v-icon class="caption">mdi-plus</v-icon>
+              Agregar
             </v-btn>
           </div>
-          <div>            
-            <v-menu left bottom>            
+          <div>
+            <v-menu left bottom>
               <template v-slot:activator="{ on }">
                 <v-btn icon v-on="on">
                   <v-icon>mdi-dots-horizontal</v-icon>
@@ -117,11 +144,12 @@
         </div>
       </v-col>
 
-
-
       <v-col cols="12" md="6" lg="3" sm="6">
         <base-card class="overflow-hidden">
-          <v-img cover src="https://paper.dropbox.com/ep/redirect/image?url=https%3A%2F%2Fpaper-attachments.dropboxusercontent.com%2Fs_C2538D8D81318EB60083B45F05FDA7345279615B3E4F3BC2BA6C2C37A66B7E8C_1681270890476_EscaleraDesdeCrawl.gif&hmac=VFGTv0FCrHMcnXcKh09I%2FNzNBrHQKiTFo%2BPPNIQVcmI%3D" />
+          <v-img
+            cover
+            src="https://paper.dropbox.com/ep/redirect/image?url=https%3A%2F%2Fpaper-attachments.dropboxusercontent.com%2Fs_C2538D8D81318EB60083B45F05FDA7345279615B3E4F3BC2BA6C2C37A66B7E8C_1681270890476_EscaleraDesdeCrawl.gif&hmac=VFGTv0FCrHMcnXcKh09I%2FNzNBrHQKiTFo%2BPPNIQVcmI%3D"
+          />
           <v-card-actions class="pa-4 d-flex justify-space-between">
             <div class="d-flex align-center">
               <v-icon class="body-1 mr-1">mdi-cards-heart</v-icon>
@@ -135,10 +163,12 @@
       </v-col>
       <v-col cols="12" md="6" lg="3" sm="6">
         <base-card class="overflow-hidden">
-          <v-img cover 
-                  max-height="150"
-                  max-width="250" 
-                  src="https://paper.dropbox.com/ep/redirect/image?url=https%3A%2F%2Fpaper-attachments.dropboxusercontent.com%2Fs_C2538D8D81318EB60083B45F05FDA7345279615B3E4F3BC2BA6C2C37A66B7E8C_1681270887998_MountainClimbing.gif&hmac=1Hy1agZWgOzhceY%2FJCHFl%2BfdBUJBC3twDD2Jt7fhEQU%3D&width=484" />
+          <v-img
+            cover
+            max-height="150"
+            max-width="250"
+            src="https://paper.dropbox.com/ep/redirect/image?url=https%3A%2F%2Fpaper-attachments.dropboxusercontent.com%2Fs_C2538D8D81318EB60083B45F05FDA7345279615B3E4F3BC2BA6C2C37A66B7E8C_1681270887998_MountainClimbing.gif&hmac=1Hy1agZWgOzhceY%2FJCHFl%2BfdBUJBC3twDD2Jt7fhEQU%3D&width=484"
+          />
           <v-card-actions class="pa-4 d-flex justify-space-between">
             <div class="d-flex align-center">
               <v-icon class="body-1 mr-1">mdi-cards-heart</v-icon>
@@ -152,145 +182,117 @@
       </v-col>
       <v-col cols="12" md="6" lg="3" sm="6">
         <base-card class="overflow-hidden">
-          <v-img cover max-height="150"
-                  max-width="250"  src="https://paper.dropbox.com/ep/redirect/image?url=https%3A%2F%2Fpaper-attachments.dropboxusercontent.com%2Fs_C2538D8D81318EB60083B45F05FDA7345279615B3E4F3BC2BA6C2C37A66B7E8C_1681270887517_Yogi.jpg&hmac=XuZRH%2F3BZ3NNOZ9Vl9g1xSGpTPEUeWwWe%2FyfA%2Fjj6b8%3D" />
+          <v-img
+            cover
+            max-height="150"
+            max-width="250"
+            src="https://paper.dropbox.com/ep/redirect/image?url=https%3A%2F%2Fpaper-attachments.dropboxusercontent.com%2Fs_C2538D8D81318EB60083B45F05FDA7345279615B3E4F3BC2BA6C2C37A66B7E8C_1681270887517_Yogi.jpg&hmac=XuZRH%2F3BZ3NNOZ9Vl9g1xSGpTPEUeWwWe%2FyfA%2Fjj6b8%3D"
+          />
           <v-card-actions class="pa-4 d-flex justify-space-between">
             <div class="d-flex align-center">
               <v-icon class="body-1 mr-1">mdi-cards-heart</v-icon>
               <v-card-subtitle class="pa-0 mr-2">0k</v-card-subtitle>
-              
             </div>
-            <v-card-subtitle class="pa-0 ">Yogui</v-card-subtitle>
+            <v-card-subtitle class="pa-0">Yogui</v-card-subtitle>
           </v-card-actions>
         </base-card>
       </v-col>
       <v-col cols="12" md="6" lg="3" sm="6">
         <base-card class="overflow-hidden">
-          <v-img cover max-height="150"
-                  max-width="250"  src="https://paper.dropbox.com/ep/redirect/image?url=https%3A%2F%2Fpaper-attachments.dropboxusercontent.com%2Fs_C2538D8D81318EB60083B45F05FDA7345279615B3E4F3BC2BA6C2C37A66B7E8C_1681270887608_MedioBurpee.gif&hmac=Zl8%2FeomzaFG0OdJVRPHphL%2FjtJQVmP8qXMoXgzONtVg%3D&width=484" />
+          <v-img
+            cover
+            max-height="150"
+            max-width="250"
+            src="https://paper.dropbox.com/ep/redirect/image?url=https%3A%2F%2Fpaper-attachments.dropboxusercontent.com%2Fs_C2538D8D81318EB60083B45F05FDA7345279615B3E4F3BC2BA6C2C37A66B7E8C_1681270887608_MedioBurpee.gif&hmac=Zl8%2FeomzaFG0OdJVRPHphL%2FjtJQVmP8qXMoXgzONtVg%3D&width=484"
+          />
           <v-card-actions class="pa-4 d-flex justify-space-between">
             <div class="d-flex align-center">
               <v-icon class="body-1 mr-1">mdi-cards-heart</v-icon>
-              <v-card-subtitle class="pa-0 mr-2">0k</v-card-subtitle>              
+              <v-card-subtitle class="pa-0 mr-2">0k</v-card-subtitle>
             </div>
             <v-card-subtitle class="pa-0">Medio Burpee</v-card-subtitle>
           </v-card-actions>
         </base-card>
       </v-col>
     </v-row>
-
   </v-row>
 </template>
 <script>
-import lmCard from "@/components/card/LmsCard";
-import { welcomeProgressChart, studyChart } from "@/data/learningManagement";
-import { getUsuarioSesion } from '../../../helper/Sesion';
+import lmCard from '@/components/card/LmsCard'
+import { welcomeProgressChart, studyChart } from '@/data/learningManagement'
+import { getUsuarioSesion } from '../../../helper/Sesion'
+import { operacionesApi } from '../../../helper/OperacionesApi'
+import URL from '../../../helper/Urls'
 
 export default {
-  name: "LearningManagement",
+  name: 'CatalogoEjercicios',
   metaInfo: {
     // title will be injected into parent titleTemplate
-    title: "Learning Management",
+    title: 'Ejercicios',
   },
   components: {
     lmCard,
   },
+  mixins: [operacionesApi],
   data() {
     return {
-      usuarioSesion:{},
-      welcomeProgressChart,
-      studyChart,
-      valueDeterminate: 50,
-      valueDeterminate2: 80,
-      desserts: [
-        {
-          logo: require("@/assets/images/Angular_Icon.png"),
-          started: "20 May, 2020",
-          course: "Angular Beyond The Basics",
-          progress: 50,
-        },
-        {
-          logo: require("@/assets/images/react.png"),
-          started: "20 May, 2020",
-          course: "React Development Course",
-          progress: 30,
-        },
-        {
-          logo: require("@/assets/images/webpack.png"),
-          started: "20 May, 2020",
-          course: "Webpack For Busy Developer",
-          progress: 50,
-        },
-        {
-          logo: require("@/assets/images/Sass_icon.png"),
-          started: "20 May, 2020",
-          course: "Bootstrap For Everyone",
-          progress: 70,
-        },
-        {
-          logo: require("@/assets/images/bootstrap-logo.png"),
-          started: "20 May, 2020",
-          course: "React Development Course",
-          progress: 20,
-        },
-      ],
-      items: [
-        {
-          icon: "mdi-view-column",
-          iconClass: "dark--text text--lighten-4 grey lighten-5",
-          title: "Data structure test",
-          subtitle: "23 Dec 2020",
-        },
-        {
-          icon: "mdi-book-open-variant",
-          iconClass: "dark--text text--lighten-4 grey lighten-5",
-          title: "Design Pattern Test",
-          subtitle: "23 Dec 2020",
-        },
-        {
-          icon: "mdi-gamepad",
-          iconClass: "dark--text text--lighten-4 grey lighten-5",
-          title: "Algorithm Test",
-          subtitle: "23 Dec 2020",
-        },
-        {
-          icon: "mdi-calendar-text",
-          iconClass: "dark--text text--lighten-4 grey lighten-5",
-          title: "Spanish 201",
-          subtitle: "23 Dec 2020",
-        },
-      ],
-      itemsTwo: [
-        {
-          icon: "mdi-web",
-          iconClass: "dark--text text--lighten-4 grey lighten-5",
-          title: "Create Simple Wrbsite",
-          subtitle: "23 Dec 2020",
-        },
-        {
-          icon: "mdi-view-list-outline",
-          iconClass: "dark--text text--lighten-4 grey lighten-5",
-          title: "Simple Todo App",
-          subtitle: "23 Dec 2020",
-        },
-        {
-          icon: "mdi-apps-box",
-          iconClass: "dark--text text--lighten-4 grey lighten-5",
-          title: "Invoice App",
-          subtitle: "23 Dec 2020",
-        },
-        {
-          icon: "mdi-order-bool-ascending-variant",
-          iconClass: "dark--text text--lighten-4 grey lighten-5",
-          title: "Order management app",
-          subtitle: "23 Dec 2020",
-        },
-      ],
-    };
+      usuarioSesion: {},
+      currentFile: undefined,
+      progress: 0,
+      message: '',
+      fileInfos: [],
+    }
   },
   mounted() {
-        console.log("##### pagina bienvenido ####");
-            this.usuarioSesion = getUsuarioSesion();    
+    console.log('##### pagina bienvenido ####')
+    this.usuarioSesion = getUsuarioSesion()
   },
-};
+  methods: {
+    selectFile(file) {      
+      this.progress = 0
+      this.currentFile = file
+    },
+    upload() {      
+      if (!this.currentFile) {        
+        this.message = 'Please select a file!'
+        return        
+      }
+
+    
+    },
+    async subir() {
+      if (!this.currentFile) {
+        this.message = 'Please select a file!'
+        return
+      }
+
+      try {
+
+      console.log(`nombre ${this.currentFile.name}`);
+      console.log(`size ${this.currentFile.size}`);
+      console.log(`type ${this.currentFile.type}`);
+      console.log(`type ${this.currentFile.buffer}`);
+
+        let data = new FormData()
+
+        data.append('name', 'image')
+        data.append('image', this.currentFile)
+        data.append('co_sucursal', this.usuarioSesion.co_sucursal);
+        data.append('co_empresa', this.usuarioSesion.id_empresa);
+        data.append('cat_categoria', 1);
+        data.append('genero', this.usuarioSesion.id)
+
+        this.loadingUpload = true
+
+        const result = await  this.postFile(URL.EJERCICIOS, data)
+
+        console.log(result);
+
+        this.loadingUpload = false
+      } catch (e) {
+        console.log('ERROR al subir ' + e)
+      }
+    },
+  },
+}
 </script>

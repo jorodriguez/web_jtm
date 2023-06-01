@@ -11,6 +11,7 @@ const URL = {
     LOGIN: BASE + '/auth/login',
     CURSO: BASE + '/curso',
     ALUMNOS_BASE: BASE + '/alumnos',
+    EJERCICIOS: BASE + '/ejercicios',
 }
 
 export default URL;

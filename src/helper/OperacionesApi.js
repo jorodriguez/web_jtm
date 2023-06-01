@@ -32,6 +32,23 @@ const getAsync = async url => {
         lanzarAvisoExpiracionSesion(error);
     }
 };
+
+const postFile = async(url, params) => {
+
+    try {
+        const response = await axios.post(url, params, {
+            headers: { "x-access-token": getToken(), 'Content-Type': 'multipart/form-data' }
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        console.log("Revisando la sesion " + JSON.stringify(error));
+        lanzarAvisoExpiracionSesion(error);
+    }
+
+
+}
+
 /*
 const post = function (url, params, handler) {
   this.$http
@@ -167,10 +184,7 @@ const lanzarAvisoExpiracionSesion = function(error) {
 
 const operacionesApi = {
     methods: {
-        get,
-        post,
-        put,
-        remove,
+        postFile,
         getAsync,
         postAsync,
         putAsync,
