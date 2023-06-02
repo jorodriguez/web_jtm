@@ -8,41 +8,67 @@
       max-width="600"
     >
       <template v-slot:activator="{ on, attrs }">
-        <v-btn color="primary" v-bind="attrs" v-on="on">
+        <v-btn @click="iniciarCarga" color="primary" v-bind="attrs" v-on="on">
           <v-icon class="caption">mdi-plus</v-icon>
           Nuevo
         </v-btn>
       </template>
+
       <template v-slot:default="dialog">
         <v-card>
           <v-toolbar color="primary" dark>Agregar nuevo ejercicio</v-toolbar>
           <v-card-text>
             <v-container>
               <v-card class="mx-auto" elevation="0">
+                <v-card class="mx-auto pt-2" elevation="0" color="#D6E5E5">
+                  <label for="fileUpload">
+                    <v-img
+                      :src="
+                        urlPreviewImage
+                          ? urlPreviewImage
+                          : 'https://res.cloudinary.com/dyw8zqyyt/image/upload/v1685734502/jtm-static/photo_1_ildswz.png'
+                      "
+                      max-height="200"
+                      contain
+                    ></v-img>
+                  </label>
 
-                <v-file-input
-                  show-size
-                  label="Imagen de Ejercicio"
-                  accept="image/*"
-                  @change="selectFile"
-                  v-if="!currentFile"
-                ></v-file-input>
-<!--https://cdn-icons-png.flaticon.com/512/1206/1206451.png?w=740&t=st=1685665297~exp=1685665897~hmac=896c6e31bc0520ef6ff64fb679d4fb25c4cc12abf386c0bb707dda62a85803b3-->
-                <v-img
-                  v-else
-                  :src="currentFile.file.name"
-                  max-height="250"
-                  contain
-                ></v-img>
-
-                {{currentFile}}
+                  <v-file-input
+                    id="fileUpload"
+                    show-size
+                    accept="image/*"
+                    @change="selectFile"
+                    truncate-length="50"
+                    prepend-icon="mdi-image-area"
+                    hide-details=""
+                    required
+                    
+                    :error="errorFileInput"
+                    :error-messages="errorMessageFileInput"
+                  >
+                    <template v-slot:selection="{ index, text }">
+                      <small v-if="index < 2" style="color: #196464;">
+                        {{ text }}
+                      </small>
+                    </template>
+                  </v-file-input>
+                </v-card>
 
                 <v-card-title>
-                  <v-text-field label="Nombre *" required></v-text-field>
+                  <v-text-field
+                    v-model="nombre"
+                    :error="errorNombre"
+                    :error-messages="errorMessageNombre"
+                    label="Nombre *"
+                    required
+                  ></v-text-field>
                 </v-card-title>
 
                 <v-card-subtitle>
-                  <v-text-field label="Descripción" required></v-text-field>
+                  <v-text-field
+                    v-model="descripcion"
+                    label="Descripción"
+                  ></v-text-field>
                 </v-card-subtitle>
                 <!--
                 <v-card-text>
@@ -79,34 +105,11 @@
           </v-card-text>
           <v-card-actions class="justify-end">
             <v-btn @click="dialog.value = false">Cerrar</v-btn>
-            <v-btn color="primary" @click="dialog.value = false">Guardar</v-btn>
+            <v-btn color="primary" @click="subir">Guardar</v-btn>
           </v-card-actions>
         </v-card>
       </template>
     </v-dialog>
-
-    <!---<v-row align="center">
-      <v-col cols="6">
-        <v-file-input
-          show-size
-          label="Imagen de Ejercicio"
-          accept="image/*"
-          @change="selectFile"
-        ></v-file-input>
-      </v-col>
-
-      <v-col cols="4" class="pl-2">
-        <v-btn color="success" dark small @click="subir">
-          Guardar
-          <v-icon right dark>mdi-cloud-upload</v-icon>
-        </v-btn>
-      </v-col>
-    </v-row>
-
-    <v-alert v-if="message" border="left" color="blue-grey" dark>
-      {{ message }}
-    </v-alert>
-    -->
 
     <!-- catalogo -->
     <v-row>
@@ -130,75 +133,20 @@
           </div>
         </div>
       </v-col>
-
-      <v-col cols="12" md="6" lg="3" sm="6">
+    </v-row>
+    
+    <v-row>
+      <v-col cols="12" md="6" lg="3" sm="6" v-for="row in lista" :key="row.id">
         <base-card class="overflow-hidden">
-          <v-img
-            cover
-            src="https://paper.dropbox.com/ep/redirect/image?url=https%3A%2F%2Fpaper-attachments.dropboxusercontent.com%2Fs_C2538D8D81318EB60083B45F05FDA7345279615B3E4F3BC2BA6C2C37A66B7E8C_1681270890476_EscaleraDesdeCrawl.gif&hmac=VFGTv0FCrHMcnXcKh09I%2FNzNBrHQKiTFo%2BPPNIQVcmI%3D"
-          />
+          <v-img cover max-height="240" min-height="240" :src="row.url" />
           <v-card-actions class="pa-4 d-flex justify-space-between">
-            <div class="d-flex align-center">
-              <v-icon class="body-1 mr-1">mdi-cards-heart</v-icon>
-              <v-card-subtitle class="pa-0 mr-2">2.3k</v-card-subtitle>
-              <!--<v-icon class="body-1 mr-1">mdi-comment-text</v-icon>
-              <v-card-subtitle class="pa-0">900</v-card-subtitle>-->
-            </div>
-            <v-card-subtitle class="pa-0">Escalera desde crawl</v-card-subtitle>
-          </v-card-actions>
-        </base-card>
-      </v-col>
-      <v-col cols="12" md="6" lg="3" sm="6">
-        <base-card class="overflow-hidden">
-          <v-img
-            cover
-            max-height="150"
-            max-width="250"
-            src="https://paper.dropbox.com/ep/redirect/image?url=https%3A%2F%2Fpaper-attachments.dropboxusercontent.com%2Fs_C2538D8D81318EB60083B45F05FDA7345279615B3E4F3BC2BA6C2C37A66B7E8C_1681270887998_MountainClimbing.gif&hmac=1Hy1agZWgOzhceY%2FJCHFl%2BfdBUJBC3twDD2Jt7fhEQU%3D&width=484"
-          />
-          <v-card-actions class="pa-4 d-flex justify-space-between">
-            <div class="d-flex align-center">
+            <v-card-subtitle class="pa-0">{{ row.nombre }}</v-card-subtitle>
+            <div class="d-flex align-center" v-if="row.count_like > 0">
               <v-icon class="body-1 mr-1">mdi-cards-heart</v-icon>
               <v-card-subtitle class="pa-0 mr-2">0k</v-card-subtitle>
               <!--<v-icon class="body-1 mr-1">mdi-comment-text</v-icon>
               <v-card-subtitle class="pa-0">900</v-card-subtitle>-->
             </div>
-            <v-card-subtitle class="pa-0">Mountain Climbing</v-card-subtitle>
-          </v-card-actions>
-        </base-card>
-      </v-col>
-      <v-col cols="12" md="6" lg="3" sm="6">
-        <base-card class="overflow-hidden">
-          <v-img
-            cover
-            max-height="150"
-            max-width="250"
-            src="https://paper.dropbox.com/ep/redirect/image?url=https%3A%2F%2Fpaper-attachments.dropboxusercontent.com%2Fs_C2538D8D81318EB60083B45F05FDA7345279615B3E4F3BC2BA6C2C37A66B7E8C_1681270887517_Yogi.jpg&hmac=XuZRH%2F3BZ3NNOZ9Vl9g1xSGpTPEUeWwWe%2FyfA%2Fjj6b8%3D"
-          />
-          <v-card-actions class="pa-4 d-flex justify-space-between">
-            <div class="d-flex align-center">
-              <v-icon class="body-1 mr-1">mdi-cards-heart</v-icon>
-              <v-card-subtitle class="pa-0 mr-2">0k</v-card-subtitle>
-            </div>
-            <v-card-subtitle class="pa-0">Yogui</v-card-subtitle>
-          </v-card-actions>
-        </base-card>
-      </v-col>
-      <v-col cols="12" md="6" lg="3" sm="6">
-        <base-card class="overflow-hidden">
-        <!-- https://paper.dropbox.com/ep/redirect/image?url=https%3A%2F%2Fpaper-attachments.dropboxusercontent.com%2Fs_C2538D8D81318EB60083B45F05FDA7345279615B3E4F3BC2BA6C2C37A66B7E8C_1681270887608_MedioBurpee.gif&hmac=Zl8%2FeomzaFG0OdJVRPHphL%2FjtJQVmP8qXMoXgzONtVg%3D&width=484-->
-          <v-img
-            cover
-            max-height="150"
-            max-width="250"
-            :src="currentFile"
-          />
-          <v-card-actions class="pa-4 d-flex justify-space-between">
-            <div class="d-flex align-center">
-              <v-icon class="body-1 mr-1">mdi-cards-heart</v-icon>
-              <v-card-subtitle class="pa-0 mr-2">0k</v-card-subtitle>
-            </div>
-            <v-card-subtitle class="pa-0">Medio Burpee</v-card-subtitle>
           </v-card-actions>
         </base-card>
       </v-col>
@@ -210,7 +158,7 @@ import lmCard from '@/components/card/LmsCard'
 import { welcomeProgressChart, studyChart } from '@/data/learningManagement'
 import { getUsuarioSesion } from '../../../helper/Sesion'
 import { operacionesApi } from '../../../helper/OperacionesApi'
-import URL from '../../../helper/Urls'
+import URL_API from '../../../helper/Urls'
 
 export default {
   name: 'CatalogoEjercicios',
@@ -227,30 +175,69 @@ export default {
       usuarioSesion: {},
       dialog: false,
       currentFile: undefined,
+
+      nombre: '',
+      descripcion: '',
+      errorNombre: false,
+      errorMessageNombre: [],
+      errorFileInput: false,
+      errorMessageFileInput: [],
       progress: 0,
       message: '',
       fileInfos: [],
+      lista: [],
+      urlPreviewImage: null,
+      loading: false,
     }
   },
   mounted() {
     console.log('##### pagina bienvenido ####')
     this.usuarioSesion = getUsuarioSesion()
+    this.cargarCatalogo()
   },
   methods: {
+    iniciarCarga() {
+      this.urlPreviewImage = null
+      this.currentFile = undefined
+      this.message = ''
+      this.errorFileInput = false
+      this.errorNombre = false
+      this.errorMessageNombre = ''
+      this.errorMessageFileInput = ''
+      this.nombre = ''
+      this.descripcion = ''
+    },
+    async cargarCatalogo() {
+      this.loading = true
+
+      this.lista = await this.getAsync(
+        `${URL_API.EJERCICIOS}/${this.usuarioSesion.co_sucursal}`,
+      )
+
+      this.loading = true
+    },
     selectFile(file) {
-        console.log(file)
+      console.log(file)
       this.progress = 0
       this.currentFile = file
+      this.urlPreviewImage = URL.createObjectURL(this.currentFile)
     },
-    upload() {
-      if (!this.currentFile) {
-        this.message = 'Please select a file!'
-        return
-      }
-    },
+
     async subir() {
+      console.log('@subir')
+
       if (!this.currentFile) {
-        this.message = 'Please select a file!'
+        this.errorFileInput = true
+        this.errorMessageFileInput = ['Selecciona la imagen']
+      }
+
+      if (!this.nombre) {
+        console.log('error nomrbe')
+        this.errorNombre = true
+        this.errorMessajeNombre = ['Escribe el nombre']
+      }
+
+      if (this.errorFileInput || this.errorNombre) {
         return
       }
 
@@ -266,18 +253,21 @@ export default {
         data.append('co_sucursal', this.usuarioSesion.co_sucursal)
         data.append('co_empresa', this.usuarioSesion.id_empresa)
         data.append('cat_categoria', 1)
-        data.append('nombre', 'ejerciico 1')
-        data.append('descripcion', 'descripcion ejejcjcjcj')
+        data.append('nombre', this.nombre)
+        data.append('descripcion', this.descripcion)
 
         data.append('genero', this.usuarioSesion.id)
 
         this.loadingUpload = true
 
-        const result = await this.postFile(URL.EJERCICIOS, data)
+        const result = await this.postFile(URL_API.EJERCICIOS, data)
 
         console.log(result)
 
         this.loadingUpload = false
+        this.dialog = false
+
+        await this.cargarCatalogo()
       } catch (e) {
         console.log('ERROR al subir ' + e)
       }
