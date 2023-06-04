@@ -1,4 +1,4 @@
-import { getToken } from "./Sesion";
+import { getToken, clearSesion} from "./Sesion";
 import axios from "axios";
 /*
 const get = function(url, handler) {
@@ -124,10 +124,11 @@ const remove = function(url, handler) {
         );
 };
 
-const removeAsync = async(url) => {
+const removeAsync = async(url,params) => {
     try {
         const response = await axios.delete(url, {
-            headers: { "x-access-token": getToken() }
+            headers: { "x-access-token": getToken() },
+            params
         });
         return response.data;
     } catch (error) {
@@ -169,6 +170,7 @@ const lanzarAvisoExpiracionSesion = function(error) {
         $("#id_icono_popup_expiracion_sesion").attr(
             "class", "fas fa-user-clock fa-5x"
         );
+        clearSesion();
     } else {
         mensaje = "Ocurrió un error.";
         $("#id_header_popup_expiracion_sesion").text("Ups");

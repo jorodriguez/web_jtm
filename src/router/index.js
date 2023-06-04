@@ -20,7 +20,6 @@ const router = new Router({
                 import ("@/views/app/Index"),
             beforeEnter: authenticate,
             redirect: "/app/dashboard/entrenamiento",
-
             children: [{
                     path: "/app/dashboard",
                     beforeEnter: authenticate,
@@ -86,6 +85,13 @@ const router = new Router({
                         },
                     ],
                 },
+               /* {
+                    path: '/:catchAll(.*)*',
+                    name: "PageNotFound",
+                    beforeEnter: authenticate,
+                    meta: { requiresAuth: false, validar: false },
+                    component:  import ("@/views/app/sessions/RecursoNoDisponible"),
+                  },*/
 
             ],
         },
