@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" max-width="290">
+  <v-dialog v-model="dialog" :max-width="maxWidth" persistent>
       <v-card>
         <v-card-title class="text-h5">
           {{ title }}
@@ -12,11 +12,11 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn color="green darken-1" text @click="onClickClose">
+          <v-btn color="grey darken-1" text @click="onClickClose">
             {{ labelButtonClose }}
           </v-btn>
 
-          <v-btn color="green darken-1" text @click="onClickOk">
+          <v-btn :color="color" text @click="onClickOk">
             {{ labelButtonOk }}
           </v-btn>
         </v-card-actions>
@@ -55,8 +55,12 @@ export default {
     },
     color: {
       type: String,
-      default: "white",
+      default: "green darken-3",
     },    
+    maxWidth: {
+      type: Number,
+      default: 300,
+    },  
     onClickOk: {
       type: Function,
       default: ()=> this.dialog = false,

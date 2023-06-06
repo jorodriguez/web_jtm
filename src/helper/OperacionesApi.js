@@ -1,5 +1,8 @@
-import { getToken, clearSesion} from "./Sesion";
+import { getToken, clearSesion } from "./Sesion";
 import axios from "axios";
+import { mapGetters, mapActions } from "vuex";
+
+
 /*
 const get = function(url, handler) {
   this.$http
@@ -124,7 +127,7 @@ const remove = function(url, handler) {
         );
 };
 
-const removeAsync = async(url,params) => {
+const removeAsync = async(url, params) => {
     try {
         const response = await axios.delete(url, {
             headers: { "x-access-token": getToken() },
@@ -165,12 +168,21 @@ const lanzarAvisoExpiracionSesion = function(error) {
     //if (error.ok == false && error.status == 401) {
     if (isExpiredToken) {
         console.log("@Sesion expirada ");
+
         mensaje = "Su sesión ha expirado, por razones de seguridas es necesario que vuelva a iniciar sesión.";
-        $("#id_header_popup_expiracion_sesion").text("Sesión");
+        /*$("#id_header_popup_expiracion_sesion").text("Sesión");
         $("#id_icono_popup_expiracion_sesion").attr(
             "class", "fas fa-user-clock fa-5x"
-        );
+        );*/
+
+        const signOut = mapGetters(['signOut']);
+
+        console.log(signOut);
+
+
         clearSesion();
+
+        signOut();
     } else {
         mensaje = "Ocurrió un error.";
         $("#id_header_popup_expiracion_sesion").text("Ups");

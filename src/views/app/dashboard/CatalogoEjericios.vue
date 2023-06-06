@@ -2,7 +2,12 @@
   <v-container>
     <v-row>
       <!-- Alta de ejercicio -->
-      <v-dialog persistent v-model="dialog" transition="dialog-top-transition" max-width="600">
+      <v-dialog
+        persistent
+        v-model="dialog"
+        transition="dialog-top-transition"
+        max-width="600"
+      >
         <template v-slot:activator="{ on, attrs }">
           <v-btn @click="iniciarCarga" color="primary" v-bind="attrs" v-on="on">
             <v-icon class="caption">mdi-plus</v-icon>
@@ -18,15 +23,31 @@
                 <v-card class="mx-auto" elevation="0">
                   <v-card class="mx-auto pt-2" elevation="0" color="#D6E5E5">
                     <label for="fileUpload">
-                      <v-img :src="urlPreviewImage
-                          ? urlPreviewImage
-                          : 'https://res.cloudinary.com/dyw8zqyyt/image/upload/v1685734502/jtm-static/photo_1_ildswz.png'
-                        " max-height="200" contain></v-img>
+                      <v-img
+                        :src="
+                          urlPreviewImage
+                            ? urlPreviewImage
+                            : 'https://res.cloudinary.com/dyw8zqyyt/image/upload/v1685734502/jtm-static/photo_1_ildswz.png'
+                        "
+                        max-height="150"
+                        :style="`${operacion == 'EDIT' ? 'opacity:0.4':''}`"
+                        contain
+                      ></v-img>
                     </label>
 
-                    <v-file-input id="fileUpload" show-size accept="image/*" @change="selectFile" truncate-length="50"
-                      prepend-icon="mdi-image-area" hide-details="" required :error="errorFileInput"
-                      :error-messages="errorMessageFileInput">
+                    <v-file-input
+                      id="fileUpload"
+                      show-size
+                      accept="image/*"
+                      @change="selectFile"
+                      truncate-length="50"
+                      prepend-icon="mdi-image-area"
+                      hide-details=""
+                      required
+                      :error="errorFileInput"
+                      :error-messages="errorMessageFileInput"
+                      :disabled="operacion == 'EDIT'"
+                    >
                       <template v-slot:selection="{ index, text }">
                         <small v-if="index < 2" style="color: #196464;">
                           {{ text }}
@@ -35,24 +56,68 @@
                     </v-file-input>
                   </v-card>
 
-                  <v-card-title>
-                    <v-text-field v-model="nombre" :error="errorNombre" :error-messages="errorMessageNombre"
-                      label="Nombre *" required></v-text-field>
-                  </v-card-title>
-
-                  <v-card-subtitle>
-                    <v-text-field v-model="descripcion" label="Descripción"></v-text-field>
-                  </v-card-subtitle>
-                  <!--
-                <v-card-text>
-                  <v-combobox dense filled outlined></v-combobox>
-                </v-card-text>
-                -->
                   <v-card-text>
+                    <v-row>
+                      <v-combobox
+                        v-model="cat_categoria"
+                        :items="categorias"
+                        :search-input.sync="search"
+                        hide-selected
+                        label="Categoria *"
+                        small-chips
+                        item-value="id"
+                        item-text="nombre"
+                        :error="errorCategoria"
+                        :error-messages="errorMessageCategoria"
+                        required
+                      >
+                        <template v-slot:no-data>
+                          <v-list-item>
+                            <v-list-item-content>
+                              <v-list-item-title>
+                                No hay resultados "
+                                <strong>{{ search }}</strong>
+                                "
+                              </v-list-item-title>
+                            </v-list-item-content>
+                          </v-list-item>
+                        </template>
+                      </v-combobox>
+                    </v-row>
+                    <v-row>
+                      <v-text-field
+                        v-model="nombre"
+                        :error="errorNombre"
+                        :error-messages="errorMessageNombre"
+                        label="Nombre *"
+                        required
+                      ></v-text-field>
+                    </v-row>
+                    <v-row>
+                      <v-text-field
+                        v-model="descripcion"
+                        label="Descripción"
+                      ></v-text-field>
+                    </v-row>
                     <v-row align="center" justify="space-around">
-                      <v-switch label="BASIC" color="red" value="red" hide-details></v-switch>
-                      <v-switch label="INTERMEDIO" color="red darken-3" value="red darken-3" hide-details></v-switch>
-                      <v-switch label="AVANZADO" color="red" value="red" hide-details></v-switch>
+                      <v-switch
+                        v-model="basico"
+                        label="BASIC"
+                        color="red"
+                        hide-details
+                      ></v-switch>
+                      <v-switch
+                        v-model="intermedio"
+                        label="INTERMEDIO"
+                        color="red darken-3"
+                        hide-details
+                      ></v-switch>
+                      <v-switch
+                        v-model="avanzado"
+                        label="AVANZADO"
+                        color="red"
+                        hide-details
+                      ></v-switch>
                     </v-row>
                   </v-card-text>
                 </v-card>
@@ -60,8 +125,23 @@
             </v-card-text>
             <v-card-actions class="justify-end">
               <v-btn @click="dialog.value = false">Cerrar</v-btn>
-              <v-btn color="primary" @click="subir" :loading="loadingUpload">
+
+              <v-btn
+                v-if="operacion == 'INSERT'"
+                color="primary"
+                @click="subir"
+                :loading="loadingUpload"
+              >
                 Guardar
+              </v-btn>
+
+              <v-btn
+                v-if="operacion == 'EDIT'"
+                color="info"
+                @click="modificar"
+                :loading="loadingUpload"
+              >
+                Modificar
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -82,7 +162,7 @@
                 </template>
 
                 <v-list>
-                  <v-list-item v-for="n in 4" :key="n" @click="() => { }">
+                  <v-list-item v-for="n in 4" :key="n" @click="() => {}">
                     <v-list-item-title>Option {{ n }}</v-list-item-title>
                   </v-list-item>
                 </v-list>
@@ -96,85 +176,63 @@
     <v-container v-if="loading">
       <v-row>
         <v-col cols="12" md="6" lg="3" sm="6">
-          <v-skeleton-loader class="mx-auto" max-width="300" type="card"></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto"
+            max-width="300"
+            type="card"
+          ></v-skeleton-loader>
         </v-col>
         <v-col cols="12" md="6" lg="3" sm="6">
-          <v-skeleton-loader class="mx-auto" max-width="300" type="card"></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto"
+            max-width="300"
+            type="card"
+          ></v-skeleton-loader>
         </v-col>
         <v-col cols="12" md="6" lg="3" sm="6">
-          <v-skeleton-loader class="mx-auto" max-width="300" type="card"></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto"
+            max-width="300"
+            type="card"
+          ></v-skeleton-loader>
         </v-col>
         <v-col cols="12" md="6" lg="3" sm="6">
-          <v-skeleton-loader class="mx-auto" max-width="300" type="card"></v-skeleton-loader>
+          <v-skeleton-loader
+            class="mx-auto"
+            max-width="300"
+            type="card"
+          ></v-skeleton-loader>
         </v-col>
       </v-row>
     </v-container>
 
-    <!-- <v-row v-else>
-      <template v-for="(item, i) in lista">
-        <v-col cols="12" md="6" lg="3" sm="6" :key="i">
-          <v-hover v-slot="{ hover }">
-            <v-card :elevation="hover ? 12 : 2" :class="{ 'on-hover': hover }">
-              <v-img :src="item.url" height="225px">
-                <v-card-title class="text-h6 white--text">
-                  <v-row
-                    class="fill-height flex-column"
-                    justify="space-between"
-                  >
-                    <p class="mt-1 subheading  text-left">
-                      {{ item.nombre }}
-                    </p>
-
-                    <div>
-                      <p
-                        class="ma-0 text-body-1 font-weight-bold font-italic text-left"
-                      >
-                        {{ item.nombre }}
-                      </p>
-                      <p
-                        class="text-caption font-weight-medium font-italic text-left"
-                      >
-                        {{ item.nombre }}
-                      </p>
-                    </div>
-
-                    <div class="align-self-center">
-                      <v-btn
-                        v-for="(icon, index) in icons"
-                        :key="index"
-                        :class="{ 'show-btns': hover }"
-                        :color="transparent"
-                        icon
-                      >
-                        <v-icon
-                          :class="{ 'show-btns': hover }"
-                          :color="transparent"
-                        >
-                          {{ icon }}
-                        </v-icon>
-                      </v-btn>
-                    </div>
-                  </v-row>
-                </v-card-title>
-              </v-img>
-            </v-card>
-          </v-hover>
-          -->
-
-
     <v-row v-else>
       <template v-for="(row, i) in lista">
-
-        <v-hover v-slot="{ hover }"  open-delay="200">
+        <v-hover v-slot="{ hover }" open-delay="200">
           <v-col cols="12" md="6" lg="3" sm="6" :key="i">
             <base-card class="overflow-hidden" color="white">
+              <v-card-text class="pt-0 pl-2 pb-0 d-flex justify-center">
+                <small class="grey--text">{{ row.categoria }}</small>
+              </v-card-text>
               <v-img cover max-height="240" min-height="240" :src="row.url" />
-              <v-divider class="mx-4 " color="#91D8DF"></v-divider>
-              <v-card-actions class="pa-4 d-flex justify-space-between">
-                <v-card-subtitle class="pa-0">{{ row.nombre }}</v-card-subtitle>
+              <v-divider class="mx-4" color="#91D8DF"></v-divider>
+
+              <v-card-actions class="pa-3 d-flex justify-space-between">
+                <v-card-subtitle
+                  class="pa-0"
+                  @click="() => iniciarModificar(row)"
+                >
+                  {{ row.nombre }}
+                </v-card-subtitle>
                 <div class="d-flex align-center">
-                  <v-icon  @click="()=> iniciarEliminar(row)" :class="`body-1 mr-1`" :color="hover ? 'red':''" >mdi-delete</v-icon>
-                  <!--<v-card-subtitle class="pa-0 mr-2" >0k</v-card-subtitle>-->                  
+                  <v-icon
+                    @click="() => iniciarEliminar(row)"
+                    :class="`body-1 mr-1`"
+                    :color="hover ? 'red' : ''"
+                  >
+                    mdi-delete
+                  </v-icon>
+                  <!--<v-card-subtitle class="pa-0 mr-2" >0k</v-card-subtitle>-->
                 </div>
               </v-card-actions>
             </base-card>
@@ -183,12 +241,15 @@
       </template>
     </v-row>
 
-   
-    <Confirm :dialog="dialogEliminar" 
-             title="Eliminar ejercicio"
-             text="¿Esta seguro de elimnar el ejercicio seleccionado?"
-             :onClickOk="confirmarEliminar" />
-
+    <Confirm
+      :dialog="dialogEliminar"
+      :maxWidth="350"
+      :title="`Eliminar ${seleccion ? seleccion.nombre : ''}`"
+      text="`¿Esta seguro de elimnar el ejercicio?`"
+      :onClickOk="confirmarEliminar"
+      :onClickClose="() => (dialogEliminar = false)"
+      color="red"
+    />
   </v-container>
 </template>
 <script>
@@ -202,11 +263,11 @@ import URL_API from '../../../helper/Urls'
 export default {
   name: 'CatalogoEjercicios',
   metaInfo: {
-    // title will be injected into parent titleTemplate
     title: 'Ejercicios',
   },
   components: {
-    lmCard,Confirm
+    lmCard,
+    Confirm,
   },
   mixins: [operacionesApi],
   data() {
@@ -216,7 +277,8 @@ export default {
       dialogEliminar: false,
       currentFile: undefined,
       icons: ['mdi-rewind', 'mdi-pencil'],
-      seleccion:undefined,
+      seleccion: undefined,
+      cat_categoria: null,
       nombre: '',
       descripcion: '',
       errorNombre: false,
@@ -227,9 +289,12 @@ export default {
       message: '',
       fileInfos: [],
       lista: [],
+      categorias: [],
       urlPreviewImage: null,
       loading: false,
       loadingUpload: false,
+      search: null,
+      operacion: 'INSERT',
     }
   },
   mounted() {
@@ -238,16 +303,28 @@ export default {
     this.cargarCatalogo()
   },
   methods: {
-    iniciarCarga() {
+    async iniciarCarga() {
       this.urlPreviewImage = null
       this.currentFile = undefined
       this.message = ''
       this.errorFileInput = false
+      this.errorCategoria = false
+      this.errorMessageCategoria = ''
       this.errorNombre = false
       this.errorMessageNombre = ''
       this.errorMessageFileInput = ''
       this.nombre = ''
+      this.cat_categoria = null
       this.descripcion = ''
+      this.basico = false
+      this.intermedio = false
+      this.avanzado = false
+      this.operacion = 'INSERT'
+
+      await this.cargarCategorias()
+    },
+    async cargarCategorias() {
+      this.categorias = await this.getAsync(`${URL_API.CATEGORIAS}`)
     },
     async cargarCatalogo() {
       this.loading = true
@@ -259,13 +336,28 @@ export default {
         this.loading = false
       }, 700)
     },
+
     selectFile(file) {
       console.log(file)
       this.progress = 0
       this.currentFile = file
       this.urlPreviewImage = URL.createObjectURL(this.currentFile)
     },
+    validar() {
+      if (!this.cat_categoria) {
+        this.errorCategoria = true
+        this.errorMessajeCategoria = ['Selecciona una categoria']
+      }
 
+      if (!this.nombre) {
+        this.errorNombre = true
+        this.errorMessajeNombre = ['Escribe el nombre']
+      }
+
+      return this.errorFileInput || this.errorNombre || this.errorCategoria;
+
+        
+    },
     async subir() {
       console.log('@subir')
 
@@ -274,15 +366,10 @@ export default {
         this.errorMessageFileInput = ['Selecciona la imagen']
       }
 
-      if (!this.nombre) {
-        console.log('error nomrbe')
-        this.errorNombre = true
-        this.errorMessajeNombre = ['Escribe el nombre']
+      if(this.validar()){
+        return;
       }
 
-      if (this.errorFileInput || this.errorNombre) {
-        return
-      }
 
       try {
         console.log(`nombre ${this.currentFile.name}`)
@@ -295,9 +382,12 @@ export default {
         data.append('image', this.currentFile)
         data.append('co_sucursal', this.usuarioSesion.co_sucursal)
         data.append('co_empresa', this.usuarioSesion.id_empresa)
-        data.append('cat_categoria', 1)
+        data.append('cat_categoria', this.cat_categoria.id)
         data.append('nombre', this.nombre)
         data.append('descripcion', this.descripcion)
+        data.append('basico', this.basico)
+        data.append('intermedio', this.intermedio)
+        data.append('avanzado', this.avanzado)
 
         data.append('genero', this.usuarioSesion.id)
 
@@ -308,6 +398,7 @@ export default {
         console.log(result)
 
         this.loadingUpload = false
+
         this.dialog = false
 
         await this.cargarCatalogo()
@@ -315,24 +406,75 @@ export default {
         console.log('ERROR al subir ' + e)
       }
     },
-    iniciarEliminar(item){
+    async iniciarModificar(item) {
+      this.seleccion = item
 
-      console.log("@iniciarEliminar");
+      await this.cargarCategorias()
 
-      this.seleccion = item;
+      this.urlPreviewImage = this.seleccion.url
 
-      this.dialogEliminar = true;
+      this.cat_categoria = {
+        id: this.seleccion.cat_categoria,
+        nombre: this.seleccion.categoria,
+      }
+
+      this.nombre = this.seleccion.nombre
+
+      this.descripcion = this.seleccion.descripcion
+
+      this.basico = this.seleccion.basico
+
+      this.intermedio = this.seleccion.intermedio
+
+      this.avanzado = this.seleccion.avanzado
+
+      this.operacion = 'EDIT'
+
+      this.dialog = true
     },
-    async confirmarEliminar(){
-      console.log("@confirmarEliminar");
+    async modificar(){
+      if(this.validar()){
+        return;
+      }
 
-      const result = await this.removeAsync(`${URL_API.EJERCICIOS}/${this.seleccion.uuid}`,{genero:this.usuarioSesion.id});
-      
-      this.dialogEliminar = false;
+      this.loadingUpload = true;
 
-      await this.cargarCatalogo();
-      
-    }
+      const result = await this.putAsync(`${URL_API.EJERCICIOS}/${this.seleccion.uuid}`,{
+        cat_categoria: this.cat_categoria.id,
+        nombre:this.nombre,
+        descripcion: this.descripcion,
+        basico: this.basico,
+        intermedio: this.intermedio,
+        avanzado: this.avanzado,
+        genero: this.usuarioSesion.id
+      });
+
+      this.loadingUpload = false;
+
+      this.dialog = false;
+
+      await this.cargarCatalogo()
+
+    },
+    iniciarEliminar(item) {
+      this.seleccion = item
+
+      this.dialogEliminar = true
+    },
+    async confirmarEliminar() {
+      console.log('@confirmarEliminar ')
+
+      console.log(`${URL_API.EJERCICIOS}/${this.seleccion.uuid}`)
+
+      const result = await this.removeAsync(
+        `${URL_API.EJERCICIOS}/${this.seleccion.uuid}`,
+        { genero: this.usuarioSesion.id },
+      )
+
+      this.dialogEliminar = false
+
+      await this.cargarCatalogo()
+    },
   },
 }
 </script>
@@ -346,6 +488,6 @@ export default {
 }
 */
 .show-btns {
-  color: "#296678" !important;
+  color: '#296678' !important;
 }
 </style>
