@@ -1,11 +1,10 @@
-import configEnv from '../../config/configEnv';
+import configEnv from '../../config/configEnv'
 
+const BASE = configEnv.BASE || 'http://localhost:5000'
+    //const BASE = process.env.URL_API || 'https://jtm-api.herokuapp.com'; //tesitng env
+    //const BASE = process.env.URL_API || 'https://api-prod.herokuapp.com';
 
-//const BASE = configEnv.BASE || "http://localhost:5000";
-const BASE = process.env.URL_API || 'https://jtm-api.herokuapp.com'; //tesitng env
-//const BASE = process.env.URL_API || 'https://api-prod.herokuapp.com';
-
-export const BRANCH = "2301-init";
+export const BRANCH = '2301-init'
 
 const URL = {
     LOGIN: BASE + '/auth/login',
@@ -15,4 +14,4 @@ const URL = {
     CATEGORIAS: BASE + '/categoria',
 }
 
-export default URL;
+export default URL

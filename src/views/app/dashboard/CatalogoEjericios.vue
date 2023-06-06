@@ -30,7 +30,7 @@
                             : 'https://res.cloudinary.com/dyw8zqyyt/image/upload/v1685734502/jtm-static/photo_1_ildswz.png'
                         "
                         max-height="150"
-                        :style="`${operacion == 'EDIT' ? 'opacity:0.4':''}`"
+                        :style="`${operacion == 'EDIT' ? 'opacity:0.4' : ''}`"
                         contain
                       ></v-img>
                     </label>
@@ -172,6 +172,12 @@
         </v-col>
       </v-row>
     </v-row>
+    <v-text-field v-model="criterioBuscar"  v-on:keyup.enter="buscarPorNombre()" placeholder="Buscar">
+      <v-icon slot="append" color="grey">
+        mdi-magnify
+      </v-icon>
+    </v-text-field>
+    <v-row></v-row>
 
     <v-container v-if="loading">
       <v-row>
@@ -289,12 +295,14 @@ export default {
       message: '',
       fileInfos: [],
       lista: [],
+      listaRespaldo:[],
       categorias: [],
       urlPreviewImage: null,
       loading: false,
       loadingUpload: false,
       search: null,
       operacion: 'INSERT',
+      criterioBuscar: '',
     }
   },
   mounted() {
@@ -333,6 +341,7 @@ export default {
         this.lista = await this.getAsync(
           `${URL_API.EJERCICIOS}/${this.usuarioSesion.co_sucursal}`,
         )
+        this.listaRespaldo = this.lista;
         this.loading = false
       }, 700)
     },
@@ -354,9 +363,7 @@ export default {
         this.errorMessajeNombre = ['Escribe el nombre']
       }
 
-      return this.errorFileInput || this.errorNombre || this.errorCategoria;
-
-        
+      return this.errorFileInput || this.errorNombre || this.errorCategoria
     },
     async subir() {
       console.log('@subir')
@@ -366,10 +373,9 @@ export default {
         this.errorMessageFileInput = ['Selecciona la imagen']
       }
 
-      if(this.validar()){
-        return;
+      if (this.validar()) {
+        return
       }
-
 
       try {
         console.log(`nombre ${this.currentFile.name}`)
@@ -432,29 +438,31 @@ export default {
 
       this.dialog = true
     },
-    async modificar(){
-      if(this.validar()){
-        return;
+    async modificar() {
+      if (this.validar()) {
+        return
       }
 
-      this.loadingUpload = true;
+      this.loadingUpload = true
 
-      const result = await this.putAsync(`${URL_API.EJERCICIOS}/${this.seleccion.uuid}`,{
-        cat_categoria: this.cat_categoria.id,
-        nombre:this.nombre,
-        descripcion: this.descripcion,
-        basico: this.basico,
-        intermedio: this.intermedio,
-        avanzado: this.avanzado,
-        genero: this.usuarioSesion.id
-      });
+      const result = await this.putAsync(
+        `${URL_API.EJERCICIOS}/${this.seleccion.uuid}`,
+        {
+          cat_categoria: this.cat_categoria.id,
+          nombre: this.nombre,
+          descripcion: this.descripcion,
+          basico: this.basico,
+          intermedio: this.intermedio,
+          avanzado: this.avanzado,
+          genero: this.usuarioSesion.id,
+        },
+      )
 
-      this.loadingUpload = false;
+      this.loadingUpload = false
 
-      this.dialog = false;
+      this.dialog = false
 
       await this.cargarCatalogo()
-
     },
     iniciarEliminar(item) {
       this.seleccion = item
@@ -474,6 +482,21 @@ export default {
       this.dialogEliminar = false
 
       await this.cargarCatalogo()
+    },
+    buscarPorNombre() {     
+      console.log("buscar "+this.criterioBuscar); 
+      if (this.criterioBuscar == '') {
+        this.lista = this.listaRespaldo;
+      } else {
+
+        this.lista = this.listaRespaldo
+          .filter(
+            e =>
+              e.nombre.toUpperCase().includes(this.criterioBuscar.toUpperCase())
+              || e.categoria.toUpperCase().includes(this.criterioBuscar.toUpperCase())
+          );
+
+      }
     },
   },
 }
