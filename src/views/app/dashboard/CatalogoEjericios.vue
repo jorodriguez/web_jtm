@@ -40,6 +40,7 @@
                       show-size
                       accept="image/*"
                       @change="selectFile"
+                      :value="currentFile"
                       truncate-length="50"
                       prepend-icon="mdi-image-area"
                       hide-details=""
@@ -350,11 +351,14 @@ export default {
     selectFile(file) {      
     //  console.log(file)
       console.log(file.size);
-            
-      const isLt2M = (file.size / 1024 / 1024) < 8;
+      
+      this.errorFileInput=false;    
 
-      if(isLt2M){
+      const imagenGrande = (file.size / 1024 / 1024) > 9;
+
+      if(imagenGrande){
         console.log("imagen grande");
+        this.currentFile = null;
         this.errorFileInput=true;
         this.errorMessageFileInput ='La imagen debe ser menos a 2MB';
         return;
