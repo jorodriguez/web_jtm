@@ -43,8 +43,8 @@
                       :value="currentFile"
                       truncate-length="50"
                       prepend-icon="mdi-image-area"
-                      hide-details=""
-                      required                      
+                      :hide-details="!errorFileInput"
+                      required                                            
                       :error="errorFileInput"
                       :error-messages="errorMessageFileInput"
                       :disabled="operacion == 'EDIT'"
@@ -304,6 +304,7 @@ export default {
       search: null,
       operacion: 'INSERT',
       criterioBuscar: '',
+      limiteMbImagen:9 //9mb
       //rulesFileInput:[  files => !files || !files.some(file => file.size > 2_097_152) || 'El la imagen tiene que ser menor a 2 MB!']
     }
   },
@@ -354,13 +355,13 @@ export default {
       
       this.errorFileInput=false;    
 
-      const imagenGrande = (file.size / 1024 / 1024) > 9;
+      const imagenGrande = (file.size / 1024 / 1024) > this.limiteMbImagen;
 
       if(imagenGrande){
         console.log("imagen grande");
         this.currentFile = null;
         this.errorFileInput=true;
-        this.errorMessageFileInput ='La imagen debe ser menos a 2MB';
+        this.errorMessageFileInput =`La imagen debe ser menor a ${this.limiteMbImagen} MB, selecciona otra imagen`;
         return;
       }
 
