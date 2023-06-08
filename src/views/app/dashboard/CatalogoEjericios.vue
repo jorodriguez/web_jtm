@@ -43,7 +43,7 @@
                       truncate-length="50"
                       prepend-icon="mdi-image-area"
                       hide-details=""
-                      required
+                      required                      
                       :error="errorFileInput"
                       :error-messages="errorMessageFileInput"
                       :disabled="operacion == 'EDIT'"
@@ -303,6 +303,7 @@ export default {
       search: null,
       operacion: 'INSERT',
       criterioBuscar: '',
+      //rulesFileInput:[  files => !files || !files.some(file => file.size > 2_097_152) || 'El la imagen tiene que ser menor a 2 MB!']
     }
   },
   mounted() {
@@ -346,9 +347,20 @@ export default {
       }, 700)
     },
 
-    selectFile(file) {
-      console.log(file)
-      this.progress = 0
+    selectFile(file) {      
+    //  console.log(file)
+      console.log(file.size);
+            
+      const isLt2M = (file.size / 1024 / 1024) < 8;
+
+      if(isLt2M){
+        console.log("imagen grande");
+        this.errorFileInput=true;
+        this.errorMessageFileInput ='La imagen debe ser menos a 2MB';
+        return;
+      }
+
+      this.progress = 0      
       this.currentFile = file
       this.urlPreviewImage = URL.createObjectURL(this.currentFile)
     },
