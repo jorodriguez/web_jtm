@@ -1,436 +1,138 @@
 <template>
   <div class="pt-4">
-  <h4>
-    Entrenamiento
-  </h4>
-
-<!--
+    <h4>
+      Entrenamiento
+    </h4>
 
     <v-row>
-      <v-col cols="12" md="6" lg="3" sm="6">
-        <analytic-one-card
-          main-icon-name="mdi-account-plus"
-          floating-button-icon-name="mdi-plus"
-          floating-button-icon-text-color="white--text"
-          floating-button-background-color="info"
-          main-icon-background-color-class="info lighten-5"
-          main-icon-text-color="info--text"
-          sub-heading-text="Cuentas"
-          heading-text="0"
-          bottom-button-text=""
-          bottom-button-icon="mdi-arrow-down-drop-circle-outline"
-          bottom-button-hover-class="hover:bg-primary"
-        />
-      </v-col>
-      <v-col cols="12" md="6" lg="3" sm="6">
-        <analytic-one-card
-          floating-button-icon-name="mdi-plus"
-          floating-button-icon-text-color="white--text"
-          floating-button-background-color="success"
-          main-icon-name="mdi-weight-lifter"
-          main-icon-background-color-class="success lighten-5"
-          main-icon-text-color="success--text"
-          sub-heading-text="Rutinas"
-          heading-text="0"
-          bottom-button-text="0%"
-          bottom-button-icon="mdi-arrow-down-drop-circle-outline"
-          bottom-button-hover-class="hover:bg-success"
-        />
-      </v-col>
-      <v-col cols="12" md="6" lg="3" sm="6">
-        <analytic-one-card
-          floating-button-icon-name="mdi-plus"
-          floating-button-icon-text-color="white--text"
-          floating-button-background-color="info"
-          main-icon-name="mdi-calendar"
-          main-icon-background-color-class="info lighten-5"
-          main-icon-text-color="info--text"
-          sub-heading-text="Eventos"
-          heading-text="0"
-          bottom-button-text="0%"
-          bottom-button-icon="mdi-arrow-down-drop-circle-outline"
-          bottom-button-hover-class="hover:bg-info"
-        />
-      </v-col>
-      <v-col cols="12" md="6" lg="3" sm="6">
-        <analytic-one-card          
-          main-icon-name="mdi-currency-usd"
-          main-icon-background-color-class="warning lighten-5"
-          main-icon-text-color="warning--text"
-          sub-heading-text="Cuotas mensuales"
-          heading-text="$0.00"
-          bottom-button-text="0%"
-          bottom-button-icon="mdi-arrow-down-drop-circle-outline"
-          bottom-button-hover-class="hover:bg-warning"
-        />
-      </v-col>
+    
     </v-row>
-        
 
     <v-row>
-      <v-col cols="12">
-        <base-card class>
-          <div class="d-flex align-center justify-space-between pr-2">
-            <v-card-title>Follower Growth</v-card-title>
-            <div>
-              <v-menu left bottom>
-                <template v-slot:activator="{ on }">
-                  <v-btn icon v-on="on">
-                    <v-icon>mdi-dots-horizontal</v-icon>
-                  </v-btn>
-                </template>
+      <v-col cols="12" md="6" lg="4" sm="6">
+        <base-card class="h-full">          
+          <v-card-text>
+            <v-toolbar color="indigo" dark>
+             
+              <v-toolbar-title>Inbox</v-toolbar-title>
 
-                <v-list>
-                  <v-list-item v-for="n in 4" :key="n" @click="() => {}">
-                    <v-list-item-title>Option {{ n }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </div>
-          </div>
-          <v-row>
-            <v-col cols="12" md="12" lg="5" class="d-flex">
-              <div class="d-flex justify-center flex-column w-full">
-                <div class="px-6 d-flex align-center">
-                  <div class="flex-grow-1">
-                    <h2 class="font-weight-bold display-2 ma-0">4,829</h2>
-                    <p class="mb-4 body-2">Gained Followers (last 360 days)</p>
-                  </div>
-                  <div>
-                    <div class="d-flex align-center mb-3">
-                      <v-sheet class="success lighten-5 px-1 mr-2 rounded">
-                        <v-icon class="success--text caption"
-                          >mdi-call-made</v-icon
-                        >
-                      </v-sheet>
-                      <p class="ma-0 heading-muted">
-                        You have a
-                        <span class="text-success mr-1">20% Growth</span>compare
-                        to last year
-                      </p>
-                    </div>
-                    <div class="d-flex align-center">
-                      <v-sheet class="warning lighten-5 px-1 mr-2 mr-2 rounded">
-                        <v-icon class="warning--text caption"
-                          >mdi-call-received</v-icon
-                        >
-                      </v-sheet>
-                      <p class="ma-0 heading-muted">
-                        You have a reached
-                        <span class="text-warning mr-1">10%</span>of your
-                        follower goal
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </v-col>
-            <v-col cols="12" md="12" lg="7">
-              <apexchart
-                type="line"
-                width="100%"
-                height="365"
-                :options="analyticOne.chartOptions"
-                :series="analyticOne.series"
-              />
-            </v-col>
-          </v-row>
+              <v-spacer />
+
+              <v-btn icon>
+                <v-icon>mdi-magnify</v-icon>
+              </v-btn>
+
+              <v-btn icon>
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
+            </v-toolbar>
+            <v-list>
+              <v-list-item v-for="item in listaEjercicios" :key="item.id">               
+               <list-card-two
+                                        :avatar="item.url"
+                                        :title="item.nombre"
+                                        :sub-title="item.descripcion"
+                                        primary-btn="View Profile "
+                                        secondary-btn="PROFILE"
+                                    />
+                <!--<v-list-item-avatar tile>
+                  <v-img :src="item.url" />
+                </v-list-item-avatar>
+                <v-list-item-content>
+                  <v-list-item-title v-text="item.nombre" />
+                </v-list-item-content>
+                <v-list-item-icon>
+                  <v-icon v-if="item.icon" color="danger">
+                    mdi-star
+                  </v-icon>
+                </v-list-item-icon>-->
+              </v-list-item>
+            </v-list>
+          </v-card-text>
         </base-card>
       </v-col>
+      <v-col cols="12" md="6" lg="4" sm="6">
+        <base-card class="h-full"></base-card>
+        </v-col>
+      <v-col cols="12" md="6" lg="4" sm="6"><base-card class="h-full"></base-card></v-col>
     </v-row>
-    <v-row>
-      <v-col cols="12">
-        <div class="d-flex pr-1 justify-space-between">
-          <div class="d-flex align-center">
-            <h5 class="mb-0 mr-2 font-weight-medium">Most</h5>
-            <a href="#" class="font-weight-medium">Recent Media</a>
-          </div>
-          <div>
-            <v-menu left bottom>
-              <template v-slot:activator="{ on }">
-                <v-btn icon v-on="on">
-                  <v-icon>mdi-dots-horizontal</v-icon>
-                </v-btn>
-              </template>
-
-              <v-list>
-                <v-list-item v-for="n in 4" :key="n" @click="() => {}">
-                  <v-list-item-title>Option {{ n }}</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
-          </div>
-        </div>
-      </v-col>
-
-      <v-col cols="12" md="6" lg="3" sm="6">
-        <base-card class="overflow-hidden">
-          <v-img cover src="@/assets/images/gallery/sq-15.jpg" />
-          <v-card-actions class="pa-4 d-flex justify-space-between">
-            <div class="d-flex align-center">
-              <v-icon class="body-1 mr-1">mdi-cards-heart</v-icon>
-              <v-card-subtitle class="pa-0 mr-2">2.3k</v-card-subtitle>
-              <v-icon class="body-1 mr-1">mdi-comment-text</v-icon>
-              <v-card-subtitle class="pa-0">900</v-card-subtitle>
-            </div>
-            <v-card-subtitle class="pa-0">23 days ago</v-card-subtitle>
-          </v-card-actions>
-        </base-card>
-      </v-col>
-      <v-col cols="12" md="6" lg="3" sm="6">
-        <base-card class="overflow-hidden">
-          <v-img cover src="@/assets/images/gallery/sq-16.jpg" />
-          <v-card-actions class="pa-4 d-flex justify-space-between">
-            <div class="d-flex align-center">
-              <v-icon class="body-1 mr-1">mdi-cards-heart</v-icon>
-              <v-card-subtitle class="pa-0 mr-2">2.3k</v-card-subtitle>
-              <v-icon class="body-1 mr-1">mdi-comment-text</v-icon>
-              <v-card-subtitle class="pa-0">900</v-card-subtitle>
-            </div>
-            <v-card-subtitle class="pa-0">23 days ago</v-card-subtitle>
-          </v-card-actions>
-        </base-card>
-      </v-col>
-      <v-col cols="12" md="6" lg="3" sm="6">
-        <base-card class="overflow-hidden">
-          <v-img cover src="@/assets/images/gallery/sq-11.jpg" />
-          <v-card-actions class="pa-4 d-flex justify-space-between">
-            <div class="d-flex align-center">
-              <v-icon class="body-1 mr-1">mdi-cards-heart</v-icon>
-              <v-card-subtitle class="pa-0 mr-2">2.3k</v-card-subtitle>
-              <v-icon class="body-1 mr-1">mdi-comment-text</v-icon>
-              <v-card-subtitle class="pa-0">900</v-card-subtitle>
-            </div>
-            <v-card-subtitle class="pa-0">23 days ago</v-card-subtitle>
-          </v-card-actions>
-        </base-card>
-      </v-col>
-      <v-col cols="12" md="6" lg="3" sm="6">
-        <base-card class="overflow-hidden">
-          <v-img cover src="@/assets/images/gallery/sq-13.jpg" />
-          <v-card-actions class="pa-4 d-flex justify-space-between">
-            <div class="d-flex align-center">
-              <v-icon class="body-1 mr-1">mdi-cards-heart</v-icon>
-              <v-card-subtitle class="pa-0 mr-2">2.3k</v-card-subtitle>
-              <v-icon class="body-1 mr-1">mdi-comment-text</v-icon>
-              <v-card-subtitle class="pa-0">900</v-card-subtitle>
-            </div>
-            <v-card-subtitle class="pa-0">23 days ago</v-card-subtitle>
-          </v-card-actions>
-        </base-card>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12" md="6" lg="3" sm="6">
-        <analytic-two-card
-          main-icon-name="mdi-account-multiple"
-          main-icon-background-color-class="primary lighten-5"
-          main-icon-text-color="primary--text"
-          sub-heading-text="Reach"
-          heading-text="30.2k"
-          bottom-button-text="0.4%"
-          bottom-button-icon="mdi-arrow-down-drop-circle-outline"
-          bottom-button-hover-class="hover:bg-primary"
-        />
-      </v-col>
-      <v-col cols="12" md="6" lg="3" sm="6">
-        <analytic-two-card
-          main-icon-name="mdi-hand-pointing-up"
-          main-icon-background-color-class="success lighten-5"
-          main-icon-text-color="success--text"
-          sub-heading-text="Engagement"
-          heading-text="20.3k"
-          bottom-button-text="10.4%"
-          bottom-button-icon="mdi-arrow-down-drop-circle-outline"
-          bottom-button-hover-class="hover:bg-success"
-        />
-      </v-col>
-      <v-col cols="12" md="6" lg="3" sm="6">
-        <analytic-two-card
-          main-icon-name="mdi-alert-plus-outline"
-          main-icon-background-color-class="info lighten-5"
-          main-icon-text-color="info--text"
-          sub-heading-text="Rate per Click"
-          heading-text="1.25K"
-          bottom-button-text="09.4%"
-          bottom-button-icon="mdi-arrow-down-drop-circle-outline"
-          bottom-button-hover-class="hover:bg-info"
-        />
-      </v-col>
-      <v-col cols="12" md="6" lg="3" sm="6">
-        <analytic-two-card
-          main-icon-name="mdi-alert-plus-outline"
-          main-icon-background-color-class="warning lighten-5"
-          main-icon-text-color="warning--text"
-          sub-heading-text="Average rate per cost"
-          heading-text="3.25K"
-          bottom-button-text="19.4%"
-          bottom-button-icon="mdi-arrow-down-drop-circle-outline"
-          bottom-button-hover-class="hover:bg-warning"
-        />
-      </v-col>
-      <v-col cols="12">
-        <base-card>
-          <div class="d-flex align-center justify-space-between pr-3">
-            <v-card-title>Reach Impressions history</v-card-title>
-            <div>
-              <v-menu left bottom>
-                <template v-slot:activator="{ on }">
-                  <v-btn icon v-on="on">
-                    <v-icon>mdi-dots-horizontal</v-icon>
-                  </v-btn>
-                </template>
-
-                <v-list>
-                  <v-list-item v-for="n in 4" :key="n" @click="() => {}">
-                    <v-list-item-title>Option {{ n }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </div>
-          </div>
-          <v-card-text>
-            <apexchart
-              type="area"
-              width="100%"
-              height="365"
-              :options="analyticTwo.chartOptions"
-              :series="analyticTwo.series"
-            />
-          </v-card-text>
-        </base-card>
-      </v-col>
-      <v-col cols="12" md="6">
-        <base-card>
-          <div class="d-flex align-center justify-space-between pr-3">
-            <v-card-title>Reach Impressions history</v-card-title>
-            <div>
-              <v-menu left bottom>
-                <template v-slot:activator="{ on }">
-                  <v-btn icon v-on="on">
-                    <v-icon>mdi-dots-horizontal</v-icon>
-                  </v-btn>
-                </template>
-
-                <v-list>
-                  <v-list-item v-for="n in 4" :key="n" @click="() => {}">
-                    <v-list-item-title>Option {{ n }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </div>
-          </div>
-          <v-card-text>
-            <apexchart
-              type="line"
-              width="100%"
-              height="365"
-              :options="analyticThree.chartOptions"
-              :series="analyticThree.series"
-            />
-          </v-card-text>
-        </base-card>
-      </v-col>
-      <v-col cols="12" md="6">
-        <base-card>
-          <div class="d-flex align-center justify-space-between pr-3">
-            <v-card-title>Comment History</v-card-title>
-            <div>
-              <v-menu left bottom>
-                <template v-slot:activator="{ on }">
-                  <v-btn icon v-on="on">
-                    <v-icon>mdi-dots-horizontal</v-icon>
-                  </v-btn>
-                </template>
-
-                <v-list>
-                  <v-list-item v-for="n in 4" :key="n" @click="() => {}">
-                    <v-list-item-title>Option {{ n }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </div>
-          </div>
-          <v-card-text>
-            <apexchart
-              type="line"
-              width="100%"
-              height="365"
-              :options="analyticFour.chartOptions"
-              :series="analyticFour.series"
-            />
-          </v-card-text>
-        </base-card>
-      </v-col>
-      <v-col cols="12">
-        <base-card>
-          <div class="d-flex align-center justify-space-between pr-3">
-            <v-card-title>Posting Habits</v-card-title>
-            <div>
-              <v-menu left bottom>
-                <template v-slot:activator="{ on }">
-                  <v-btn icon v-on="on">
-                    <v-icon>mdi-dots-horizontal</v-icon>
-                  </v-btn>
-                </template>
-
-                <v-list>
-                  <v-list-item v-for="n in 4" :key="n" @click="() => {}">
-                    <v-list-item-title>Option {{ n }}</v-list-item-title>
-                  </v-list-item>
-                </v-list>
-              </v-menu>
-            </div>
-          </div>
-          <v-card-text>
-            <apexchart
-              type="heatmap"
-              width="100%"
-              height="365"
-              :options="analyticFive.chartOptions"
-              :series="analyticFive.series"
-            />
-          </v-card-text>
-        </base-card>
-      </v-col>
-    </v-row>-->
   </div>
 </template>
 <script>
-import analyticOneCard from "@/components/card/AnalyticCardVersionOne";
-import analyticTwoCard from "@/components/card/AnalyticCardVersionTwo";
+import analyticOneCard from '@/components/card/AnalyticCardVersionOne'
+import analyticTwoCard from '@/components/card/AnalyticCardVersionTwo'
+import ListcardTwo from '@/components/card/listCard/ListCardTwo'
 
-import { getUsuarioSesion } from '../../../helper/Sesion';
+import { getUsuarioSesion } from '../../../helper/Sesion'
+import { operacionesApi } from '../../../helper/OperacionesApi'
+import URL_API from '../../../helper/Urls'
 
-import {
-  analyticOne,
-  analyticTwo,
-  analyticThree,
-  analyticFour,
-  analyticFive,
-} from "@/data/analytic2";
 export default {
-  name: "Analytic",
+  name: 'Analytic',
   metaInfo: {
     // title will be injected into parent titleTemplate
-    title: "Analytic",
+    title: 'Analytic',
   },
+  mixins: [operacionesApi],
   components: {
-    "analytic-one-card": analyticOneCard,
-    "analytic-two-card": analyticTwoCard,
+    'analytic-one-card': analyticOneCard,
+    'analytic-two-card': analyticTwoCard,
+     'list-card-two': ListcardTwo
   },
   data() {
     return {
-      usuarioSesion:{},
-      analyticOne,
-      analyticTwo,
-      analyticThree,
-      analyticFour,
-      analyticFive,
-    };
+      usuarioSesion: {},
+      tabs: null,
+      categorias:[],
+      listaEjercicios:[],
+      listaEjerciciosRespaldo:[],
+      loadingEjercicio:false,
+       itemsTwo: [
+            {
+                icon: true,
+                title: 'Jason Oner',
+                avatar: require('@/assets/images/faces/1.jpg')
+            },
+            {
+                title: 'Travis Howard',
+                avatar: require('@/assets/images/faces/2.jpg')
+            },
+            {
+                title: 'Ali Connors',
+                avatar: require('@/assets/images/faces/3.jpg')
+            },
+            {
+                title: 'Cindy Baker',
+                avatar: require('@/assets/images/faces/4.jpg')
+            }
+        ],
+    }
   },
-  mounted(){
-     this.usuarioSesion =  getUsuarioSesion();
+  mounted() {
+    this.usuarioSesion = getUsuarioSesion()
+    console.log('##### ENTENAMIENTOS ####')
+    this.usuarioSesion = getUsuarioSesion()
+    this.cargarCatalogo()
+  },   
+  methods: {
+    async iniciarCarga() {
+      
+      await this.cargarCategorias()
+    },
+    async cargarCategorias() {
+      this.categorias = await this.getAsync(`${URL_API.CATEGORIAS}`)
+    },
+    async cargarCatalogo() {
+      this.loadingEjercicio = true
+
+      //setTimeout(async () => {
+        this.listaEjercicios = await this.getAsync(
+          `${URL_API.EJERCICIOS}/${this.usuarioSesion.co_sucursal}`,
+        )
+        this.listaEjerciciosRespaldo = this.lista;
+        this.loadingEjercicio = false
+      //}, 700)
+    },
   }
-};
+}
 </script>
