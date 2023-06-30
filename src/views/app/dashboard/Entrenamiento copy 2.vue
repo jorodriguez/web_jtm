@@ -1,18 +1,21 @@
 <template>
   <div class="pt-4">
-    <h4>
-      Entrenamientos
-    </h4>
+    <div class="d-flex align-center">
+      <p class="font-weight-medium mr-3 mb-3">
+        E N T R E N A M I E N T O S
+      </p>
+      <v-divider />
+    </div>
 
     <v-row>informacion del usuario</v-row>
-    <v-row>
+    <!--<v-row>
       <v-col cols="12" sm="12" md="12" lg="12">
         <base-card class="h-full">
 
         </base-card>
       </v-col>
       
-    </v-row>
+    </v-row>-->
 
     <v-row>
       <v-col cols="12" md="6" lg="4" sm="6">
@@ -37,99 +40,53 @@
                 <transition-group appear name="fade-up" tag="div">
                   <v-data-iterator
                     key
-                    :items="listaEjercicios"
-                    :items-per-page.sync="itemsPerPage"
-                    :page="page"
-                    :search="search"
-                    :sort-by="sortBy.toLowerCase()"
-                    hide-default-footer
+                    :items="listaEjercicios"                    
+                    hide-default-footer                    
                   >
-                    <template v-slot:default="props">
-                      <span
-                        v-for="(item, index) in props.items"
-                        :key="index"
-                        v-if="!item.seleccionado"
-                      >
-                        <v-row>
-                          <v-col cols="12" sm="12" md="12" lg="12">
-                            <base-card class="h-full hover">
-                              <v-card-text
-                                class="d-flex justify-space-between pa-1"
-                              >
-                                <div class="d-flex align-center">
-                                  <img
-                                    class="mr-md mr-1"
-                                    width="50"
-                                    :src="item.url"
-                                  />
-                                  <div>
-                                    <p class="ma-0">
-                                      <a
-                                        href="#"
-                                        class="text--primary font-weight-medium mb-1"
-                                      >
-                                        {{ item.nombre }}
-                                        {{ item.seleccionado }}
-                                      </a>
-                                    </p>
-                                    <p class="text--disabled caption ma-0">
-                                      {{ item.descripcion }}
-                                    </p>
+                    <template v-slot:default="props">                      
+                        <div
+                          v-for="(item, index) in props.items"
+                          :key="index"
+                          :draggable="true"
+                          @dragstart="onDragStart(item, $event)"                                                     
+                          class="overflow-y-auto"
+                          max-height="400"
+                        >
+                        
+                          <v-row>
+                            <v-col cols="12" sm="12" md="12" lg="12">
+                              <base-card class="h-full hover">
+                                <v-card-text
+                                  class="d-flex justify-space-between pa-1"
+                                >
+                                  <div class="d-flex align-center">
+                                    <img
+                                      class="mr-md mr-1"
+                                      width="60"
+                                      :src="item.url"
+                                    />
+                                    <div>
+                                      <p class="ma-0">
+                                        <a
+                                          href="#"
+                                          class="text--primary font-weight-medium mb-1"
+                                        >
+                                          {{ item.nombre }}
+                                          {{ item.seleccionado }}
+                                        </a>
+                                      </p>
+                                      <p class="text--disabled caption ma-0">
+                                        {{ item.descripcion }}
+                                      </p>
+                                    </div>
                                   </div>
-                                </div>
-                                <div>
-                                  <v-btn
-                                    icon
-                                    dark
-                                    color="grey"
-                                    @click="() => agregarEjercicio(item)"
-                                  >
-                                    <v-icon dark>
-                                      mdi-plus
-                                    </v-icon>
-                                  </v-btn>
-                                </div>
-                              </v-card-text>
-                            </base-card>
-                          </v-col>
-                        </v-row>
-                      </span>
-                    </template>
-                    <template v-slot:footer>
-                      <v-row
-                        class="mt-2"
-                        align="center"
-                        justify="center"
-                        v-if="listaEjercicios.length > itemsPerPage"
-                      >
-                        <v-spacer />
-
-                        <span class="mr-4 grey--text">
-                          Page {{ page }} of {{ numberOfPages }}
-                        </span>
-                        <v-btn
-                          small
-                          fab
-                          dark
-                          outlined
-                          color="blue darken-3"
-                          class="mr-1"
-                          @click="formerPage"
-                        >
-                          <v-icon>mdi-chevron-left</v-icon>
-                        </v-btn>
-                        <v-btn
-                          small
-                          fab
-                          outlined
-                          dark
-                          color="blue darken-3"
-                          class="ml-1"
-                          @click="nextPage"
-                        >
-                          <v-icon>mdi-chevron-right</v-icon>
-                        </v-btn>
-                      </v-row>
+                                </v-card-text>
+                              </base-card>
+                            </v-col>
+                          </v-row>
+                          
+                        </div>
+                      
                     </template>
                   </v-data-iterator>
                 </transition-group>
@@ -155,72 +112,72 @@
 
             <v-row>
               <v-col md="12">
-                <transition-group appear name="fade-up" tag="div">
-                  <!-- :items-per-page.sync="itemsPerPageSelecion"
-                    :page="pageSeleccion"-->
-
-                  <v-data-iterator
-                    key
-                    :items="listaSeleccion"
-                    hide-default-footer
-                  >
-                    <template v-slot:default="props">
-                      <v-row>
-                        <v-col
-                          v-for="(item, index) in props.items"
-                          :key="index"
-                          cols="12"
-                          sm="12"
-                          md="12"
-                          lg="12"
-                        >
-                          <base-card class="h-full hover">
-                            <v-card-text
-                              class="d-flex justify-space-between pa-1"
-                            >
-                              <div class="d-flex align-center">
-                                <img
-                                  class="mr-md mr-1"
-                                  width="50"
-                                  :src="item.url"
-                                />
-                                <div>
-                                  <p class="ma-0">
-                                    <a
-                                      href="#"
-                                      class="text--primary font-weight-medium mb-1"
-                                    >
-                                      {{ item.nombre }}
-                                    </a>
-                                  </p>
-                                  <p class="text--disabled caption ma-0">
-                                    {{ item.descripcion }}
-                                  </p>
+                <div class="drop-area" @dragover.prevent @drop="onDrop($event)">
+                  <transition-group appear name="fade-up" tag="div">
+                    <!-- :items-per-page.sync="itemsPerPageSelecion"
+                   :page="pageSeleccion"-->
+                    <v-data-iterator
+                      key
+                      :items="listaSeleccion"
+                      hide-default-footer
+                    >
+                      <template v-slot:default="props">
+                        <v-row>
+                          <v-col
+                            v-for="(item, index) in props.items"
+                            :key="index"
+                            cols="12"
+                            sm="12"
+                            md="12"
+                            lg="12"
+                          >
+                            <base-card class="h-full hover">
+                              <v-card-text
+                                class="d-flex justify-space-between pa-1"
+                              >
+                                <div class="d-flex align-center">
+                                  <img
+                                    class="mr-md mr-1"
+                                    width="50"
+                                    :src="item.url"
+                                  />
+                                  <div>
+                                    <p class="ma-0">
+                                      <a
+                                        href="#"
+                                        class="text--primary font-weight-medium mb-1"
+                                      >
+                                        {{ item.nombre }}
+                                      </a>
+                                    </p>
+                                    <p class="text--disabled caption ma-0">
+                                      {{ item.descripcion }}
+                                    </p>
+                                  </div>
                                 </div>
-                              </div>
-                              <div>
-                                <v-btn
-                                  icon
-                                  dark
-                                  color="red"
-                                  @click="() => quitarEjercicio(item)"
-                                >
-                                  <v-icon dark>
-                                    mdi-plus
-                                  </v-icon>
-                                </v-btn>
-                              </div>
-                            </v-card-text>
-                          </base-card>
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-btn icon dark color="grey">
-                          <v-icon>mdi-plus</v-icon>
-                        </v-btn>
-                      </v-row>
-                    </template>
-                    <!--
+                                <div>
+                                  <v-btn
+                                    icon
+                                    dark
+                                    color="red"
+                                    @click="() => quitarEjercicio(item)"
+                                  >
+                                    <v-icon dark>
+                                      mdi-plus
+                                    </v-icon>
+                                  </v-btn>
+                                </div>
+                              </v-card-text>
+                            </base-card>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-btn icon dark color="grey">
+                            <v-icon>mdi-plus</v-icon>
+                          </v-btn>
+                        </v-row>
+                      </template>
+                      <!--
                     <template v-slot:footer>
                       <v-row class="mt-2" align="center" justify="center" v-if="listaSeleccion.length > itemsPerPageSelecion" >
                         <v-spacer />
@@ -252,9 +209,9 @@
                         </v-btn>
                       </v-row>
                     </template>
-                    -->
-                  </v-data-iterator>
-                </transition-group>
+                    --></v-data-iterator>
+                  </transition-group>
+                </div>
               </v-col>
             </v-row>
           </v-card-text>
@@ -404,6 +361,42 @@ export default {
     updateItemsPerPageSeleccion(number) {
       this.itemsPerPageSelecion = number
     },
+    onDragStart(item, event) {
+      console.log('onDrag')
+      console.log(item)
+      event.dataTransfer.setData('text/plain', JSON.stringify(item))
+    },
+    onDrop(event) {
+      console.log('onDrop')
+      const data = event.dataTransfer.getData('text/plain')
+      const item = JSON.parse(data)
+      this.listaSeleccion.push({ ...item })
+    },
   },
 }
 </script>
+
+<style>
+/*.container {
+  display: flex;
+}
+
+.item {
+  padding: 10px;
+  margin: 5px;
+  background-color: #f2f2f2;
+  cursor: move;
+}
+
+.drop-area {
+  padding: 20px;
+  margin-top: 20px;
+  background-color: #e0e0e0;
+  text-align: center;
+}*/
+
+.drop-area {
+  background-color: red !important;
+  min-height: 300px;
+}
+</style>
