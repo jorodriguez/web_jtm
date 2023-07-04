@@ -8,9 +8,17 @@
     </div>
 
     <v-row>informacion del usuario</v-row>
+    <!--<v-row>
+      <v-col cols="12" sm="12" md="12" lg="12">
+        <base-card class="h-full">
 
-    <v-row>
-      <v-col cols="4" md="4" lg="3" sm="12">
+        </base-card>
+      </v-col>
+      
+    </v-row>-->
+
+    <v-row >
+      <v-col cols="12" md="6" lg="4" sm="6">
         <base-card class="h-full">
           <v-card-text>
             <v-toolbar color="blue" dark dense>
@@ -31,7 +39,7 @@
               <v-col md="12">
                 <v-virtual-scroll
                   :items="listaEjercicios"
-                  :item-height="200"
+                  :item-height="100"
                   height="600"
                 >
                   <template v-slot:default="{ item }">
@@ -51,8 +59,8 @@
                             </v-card-text>
                             <v-img
                               cover
-                              max-height="100"
-                              min-height="100"
+                              max-height="150"
+                              min-height="150"
                               :src="item.url"
                             />
                             <v-divider class="mx-4" color="#91D8DF"></v-divider>
@@ -76,7 +84,7 @@
         </base-card>
       </v-col>
 
-      <v-col cols="9" md="8" lg="9" sm="12">
+      <v-col cols="12" md="6" lg="4" sm="6">
         <base-card class="h-full" :key="compnentRenderKey">
           <v-card-text>
             <v-toolbar color="" dark dense>
@@ -93,91 +101,66 @@
             </v-toolbar>
 
             <template v-for="(itemCircuito, cindex) in circuitos">
-              <v-row
-                :key="cindex"
-                class="drop-area"
-                @dragover.prevent
-                @drop="onDrop($event, cindex)"
-              >
-                <v-col cols="12">
-                  <h5>Circuito {{ cindex + 1 }}</h5>
-                  <draggable v-model="circuitos[cindex]" draggable=".item">
-                    <template v-for="(row, i) in circuitos[cindex]">
-                      <v-hover
-                        v-slot="{ hover }"
-                        open-delay="200"
-                        class="item"
-                        :key="i"
-                      >
-                        <v-col
-                          cols="12"
+              <v-row :key="cindex">
+                <v-col md="12">
+                  <div
+                    class="drop-area"
+                    @dragover.prevent
+                    @drop="onDrop($event, cindex)"
+                  >
+                    <h5>Circuito {{ cindex + 1 }}</h5>
+                    <draggable v-model="circuitos[cindex]" draggable=".item">
+                      <template v-for="(row, i) in circuitos[cindex]">
+                        <v-hover
+                          v-slot="{ hover }"
+                          open-delay="200"
+                          class="item"
                           :key="i"
-                          @click="() => verDetalleEjercicio(row)"
                         >
-                          <base-card>
-                            <v-row>
-                              <v-col cols="2">
-                                <v-avatar class="ml-3" size="130" tile>
-                                  <v-img :src="row.url"></v-img>
-                                </v-avatar>
-                              </v-col>
-                              <v-col cols="9 ml-4 mb-0">
-                                <v-card-title class="text-h6">
+                          <v-col
+                            cols="12"
+                            :key="i"
+                            @click="() => verDetalleEjercicio(row)"
+                          >
+                            <base-card class="overflow-hidden" color="white">
+                              <v-card-text
+                                class="pt-0 pl-2 pb-0 d-flex justify-center"
+                              >
+                                <small class="grey--text">
+                                  {{ row.categoria }}
+                                </small>
+                              </v-card-text>
+                              <v-img
+                                cover
+                                max-height="150"
+                                min-height="150"
+                                :src="row.url"
+                              />
+                              <v-divider
+                                class="mx-4"
+                                color="#91D8DF"
+                              ></v-divider>
+
+                              <v-card-actions
+                                class="pa-3 d-flex justify-space-between"
+                              >
+                                <v-card-subtitle class="pa-0">
                                   {{ row.nombre }}
-                                </v-card-title>
-
-                                <v-card-subtitle>
-                                  <small class="text--grey">
-                                    {{ row.descripcion }}
-                                  </small>
                                 </v-card-subtitle>
-
-                                <v-card-actions>
-                                  <v-form>
-                                    <v-container class="mb-0">
-                                      <v-row >
-                                        <v-text-field
-                                          v-model="row.repeticiones"
-                                          label="Repeticiones"
-                                          type="number"
-                                          style="width: 140px;"
-                                          height="40"
-                                          append-outer-icon="mdi-plus"
-                                          @click:append-outer="
-                                            increment(cindex, i)
-                                          "
-                                          prepend-icon="mdi-minus"
-                                          size="3"
-                                          @click:prepend="decrement(cindex, i)"
-                                        ></v-text-field>
-                                        <v-select
-                                          :items="items"
-                                          label="Standard"
-                                        ></v-select>
-                                        <v-textarea
-                                          filled
-                                          height="10"                                          
-                                          label="Instrucciones extras"
-                                          v-model="row.nota"
-                                        ></v-textarea>
-                                      </v-row>
-                                    </v-container>
-                                  </v-form>
-                                </v-card-actions>
-                              </v-col>
-                            </v-row>
-                          </base-card>
-                        </v-col>
-                      </v-hover>
-                    </template>
-                  </draggable>
+                              </v-card-actions>
+                            </base-card>
+                          </v-col>
+                        </v-hover>
+                      </template>
+                    </draggable>
+                  </div>
                 </v-col>
               </v-row>
             </template>
           </v-card-text>
         </base-card>
       </v-col>
-      <!-- <v-col cols="12" md="6" lg="4" sm="6">
+      <v-col cols="12" md="6" lg="4" sm="6">
         <v-card class="mx-auto" v-if="!ejercicioSeleccionado"></v-card>
 
         <v-card class="mx-auto" v-else>
@@ -198,9 +181,38 @@
               label="Instrucciones"
               v-model="ejercicioSeleccionado.nota"
             ></v-textarea>
-          </v-card-actions>        
+          </v-card-actions>
+
+          <!--<v-card-actions>
+            <v-btn color="orange lighten-2" text>
+              Agregar nota
+            </v-btn>
+
+            <v-spacer></v-spacer>
+            <v-btn icon @click="show = !show">
+              <v-icon>
+                {{ show ? 'mdi-chevron-up' : 'mdi-chevron-down' }}
+              </v-icon>
+            </v-btn>
+          </v-card-actions>
+
+          <v-expand-transition>
+            <div v-show="show">
+              <v-divider></v-divider>
+
+              <v-card-text>
+                I'm a thing. But, like most politicians, he promised more than
+                he could deliver. You won't have time for sleeping, soldier, not
+                with all the bed making you'll be doing. Then we'll go with that
+                data file! Hey, you add a one and two zeros to that or we walk!
+                You're going to do his laundry? I've got to find a way to
+                escape.
+              </v-card-text>
+            </div>
+          </v-expand-transition>
+          -->
         </v-card>
-      </v-col>-->
+      </v-col>
     </v-row>
   </div>
 </template>
@@ -390,13 +402,6 @@ export default {
       //this.circuitos[indexCircuito].push({ ...item })
 
       //this.listaSeleccion.push({ ...item })
-    },
-    increment(x, y) {
-      //this.foo = parseInt() + 1
-      this.circuitos[(x, y)] = this.circuitos[(x, y)] + 1
-    },
-    decrement(x, y) {
-      this.circuitos[(x, y)] = this.circuitos[(x, y)] - 1
     },
   },
 }

@@ -1,33 +1,21 @@
 import Vue from 'vue'
 
-export const setSession = (session) => {
-    console.log("@setSession " + session);
-    localStorage.setItem("usuario_sesion", JSON.stringify(session));
+
+export const guardarCircuito = (id, circuitoArray) => {
+    localStorage.setItem(id, JSON.stringify(circuitoArray));
 }
 
-export const setToken = (token) => {
-    console.log("@token " + token);
-    localStorage.setItem("token", token);
+export const getCircuito = (id) => {
+    let circuito = localStorage.getItem(id);
+    return circuito || [];
 }
 
-export const getToken = () => {
-    let token = localStorage.getItem("token");
-    return token || null;
-}
-
-export const getUsuarioSesion = () => {
-
-    let sesion = JSON.parse(localStorage.getItem("usuario_sesion"));
-    console.log('usuario en sesion ' + ((sesion && sesion.usuario) || ' XX SIN SESION XX'));
+export const getListaCircuitos = () => {
+    let sesion = JSON.parse(localStorage.getItem());
     return (sesion && sesion.usuario) || null;
 };
 
-export const getSesion = () => {
-    let sesion = JSON.parse(localStorage.getItem("usuario_sesion"));
-    return sesion || null;
-};
-
-export const clearSesion = () => {
+export const limpiarCircuito = () => {
     console.log("======== SESION OUT ============");
     localStorage.removeItem("usuario_sesion");
     localStorage.removeItem("token");
