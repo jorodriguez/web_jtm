@@ -1,26 +1,48 @@
 <template>
   <div class="pt-4">
-    <div class="d-flex align-center">
-      <p class="font-weight-medium mr-3 mb-3">
-        E N T R E N A M I E N T O S
-      </p>
-      <v-divider />
-    </div>
-
-    <v-row>informacion del usuario</v-row>
+    <v-row>
+      <v-col cols="4" md="4" lg="3" sm="12"></v-col>
+      <v-col>
+        <v-combobox
+          :items="listaUnidadRepeticion"
+          hide-selected
+          label="Atleta *"
+          small-chips
+          item-value="id"
+          item-text="nombre"
+          required
+        >
+          <template v-slot:no-data>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>
+                  No hay resultados
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
+        </v-combobox>
+      </v-col>
+    </v-row>
 
     <v-row>
       <v-col cols="4" md="4" lg="3" sm="12">
-        <base-card class="h-full">
+        <base-card
+          class="h-full"
+          color="grey"
+          style="position: fixed; top: 1; z-index: 999; width: 280px;"
+        >
           <v-card-text>
-            <v-toolbar color="blue" dark dense>
+            <v-toolbar color="#0493a3" dark dense>
               <v-toolbar-title></v-toolbar-title>
 
               <v-spacer />
 
-              <!--<v-btn icon>
-                <v-icon>mdi-magnify</v-icon>
-              </v-btn>-->
+              <v-text-field>              
+                <v-icon slot="prepend" dark >
+                  mdi-find
+                </v-icon>
+              </v-text-field>
 
               <v-btn icon>
                 <v-icon>mdi-dots-vertical</v-icon>
@@ -32,7 +54,7 @@
                 <v-virtual-scroll
                   :items="listaEjercicios"
                   :item-height="200"
-                  height="600"
+                  max-height="800"
                 >
                   <template v-slot:default="{ item }">
                     <div
@@ -79,28 +101,43 @@
       <v-col cols="9" md="8" lg="9" sm="12">
         <base-card class="h-full" :key="compnentRenderKey">
           <v-card-text>
-            <v-toolbar color="" dark dense>
+            Circuitos {{ circuitos ? circuitos.length : '' }}
+          </v-card-text>
+          <v-card-text>
+            <!--<v-toolbar
+              color="#0493a3"
+              src="@/assets/images/barra.png"
+              dark
+              dense
+            >
               <v-toolbar-title>
-                Circuitos {{ compnentRenderKey }}
+                Circuitos {{ circuitos ? circuitos.length : '' }}
               </v-toolbar-title>
 
               <v-spacer />
 
-              <v-btn icon>
-                <!--<v-icon>mdi-dots-vertical</v-icon>-->
+              <v-btn icon>                
                 <v-icon>mdi-plus</v-icon>
               </v-btn>
-            </v-toolbar>
+            </v-toolbar>-->
 
             <template v-for="(itemCircuito, cindex) in circuitos">
               <v-row
                 :key="cindex"
-                class="drop-area"
+                class="drop-area rounded-lg mb-2 mt-1"
                 @dragover.prevent
                 @drop="onDrop($event, cindex)"
               >
                 <v-col cols="12">
-                  <h5>Circuito {{ cindex + 1 }}</h5>
+                  <v-toolbar
+                    color="#0493a3"
+                    src="@/assets/images/barra.png"
+                    dark
+                    dense
+                  >
+                    <v-toolbar-title>Circuito {{ cindex + 1 }}</v-toolbar-title>
+                  </v-toolbar>
+
                   <draggable v-model="circuitos[cindex]" draggable=".item">
                     <template v-for="(row, i) in circuitos[cindex]">
                       <v-hover
@@ -117,49 +154,106 @@
                           <base-card>
                             <v-row>
                               <v-col cols="2">
-                                <v-avatar class="ml-3" size="130" tile>
+                                <v-avatar class="ml-3 pb-0" size="130" tile>
                                   <v-img :src="row.url"></v-img>
                                 </v-avatar>
                               </v-col>
-                              <v-col cols="9 ml-4 mb-0">
-                                <v-card-title class="text-h6">
-                                  {{ row.nombre }}
+                              <v-col cols="10" class="ml-0 mb-0 pb-0 pt-0">
+                                <v-card-title
+                                  class="text-h6 mb-0 pb-0 pt-1 d-flex justify-space-between"
+                                >
+                                  <span>{{ row.nombre }}</span>
+                                  <span>
+                                    <v-chip
+                                      x-small
+                                      color="white"
+                                      text-color="grey"
+                                    >
+                                      <v-icon left>
+                                        mdi-weight-lifter
+                                      </v-icon>
+                                      {{ row.categoria }}-
+                                      <span class="gray--text">
+                                        Circuito {{ cindex + 1 }}
+                                      </span>
+                                    </v-chip>
+                                  </span>
                                 </v-card-title>
 
-                                <v-card-subtitle>
+                                <!--<v-card-subtitle>
                                   <small class="text--grey">
                                     {{ row.descripcion }}
                                   </small>
-                                </v-card-subtitle>
+                                </v-card-subtitle>-->
 
                                 <v-card-actions>
                                   <v-form>
-                                    <v-container class="mb-0">
-                                      <v-row >
-                                        <v-text-field
-                                          v-model="row.repeticiones"
-                                          label="Repeticiones"
-                                          type="number"
-                                          style="width: 140px;"
-                                          height="40"
-                                          append-outer-icon="mdi-plus"
-                                          @click:append-outer="
-                                            increment(cindex, i)
-                                          "
-                                          prepend-icon="mdi-minus"
-                                          size="3"
-                                          @click:prepend="decrement(cindex, i)"
-                                        ></v-text-field>
-                                        <v-select
-                                          :items="items"
-                                          label="Standard"
-                                        ></v-select>
-                                        <v-textarea
-                                          filled
-                                          height="10"                                          
-                                          label="Instrucciones extras"
-                                          v-model="row.nota"
-                                        ></v-textarea>
+                                    <v-container
+                                      class="m-0 pb-0 pt-0"
+                                      style="margin-bottom: 0px !important;"
+                                    >
+                                      <v-row>
+                                        <v-col cols="4">
+                                          <v-text-field
+                                            v-model="row.repeticiones"
+                                            label="Repeticiones"
+                                            type="number"
+                                            width="20"
+                                            append-outer-icon="mdi-plus"
+                                            @click:append-outer="
+                                              increment(cindex, i)
+                                            "
+                                            prepend-icon="mdi-minus"
+                                            dense
+                                            size="3"
+                                            @click:prepend="
+                                              decrement(cindex, i)
+                                            "
+                                          ></v-text-field>
+                                        </v-col>
+                                        <v-col>
+                                          <v-chip-group
+                                            v-model="row.cat_unidad_repeticion"
+                                            active-class="teal darken-3 white--text"
+                                            column
+                                          >
+                                            <template
+                                              v-for="(i,
+                                              index) in listaUnidadRepeticion"
+                                            >
+                                              <v-chip
+                                                :value="i.id"
+                                                :key="index"
+                                              >
+                                                {{ i.nombre }}
+                                              </v-chip>
+                                            </template>
+                                          </v-chip-group>
+                                        </v-col>
+                                      </v-row>
+                                      <v-row class="d-flex justify-end">
+                                        <v-btn
+                                          icon
+                                          small
+                                          @click="row.show = !row.show"
+                                        >
+                                          <v-icon>
+                                            mdi-note-plus
+                                          </v-icon>
+                                        </v-btn>
+                                      </v-row>
+                                      <v-row v-show="row.show">
+                                        <v-expand-transition>
+                                          <v-textarea
+                                            filled
+                                            dense
+                                            focus
+                                            height="8"
+                                            label="Instrucciones extras"
+                                            class=""
+                                            v-model="row.nota"
+                                          ></v-textarea>
+                                        </v-expand-transition>
                                       </v-row>
                                     </v-container>
                                   </v-form>
@@ -177,30 +271,6 @@
           </v-card-text>
         </base-card>
       </v-col>
-      <!-- <v-col cols="12" md="6" lg="4" sm="6">
-        <v-card class="mx-auto" v-if="!ejercicioSeleccionado"></v-card>
-
-        <v-card class="mx-auto" v-else>
-          <v-img :src="ejercicioSeleccionado.url" max-height="400px"></v-img>
-
-          <v-card-title>
-            {{ ejercicioSeleccionado.nombre }}
-          </v-card-title>
-
-          <v-card-subtitle>
-            {{ ejercicioSeleccionado.descripcion }}
-          </v-card-subtitle>
-
-          <v-card-actions>
-            <v-textarea
-              filled
-              name="input-7-4"
-              label="Instrucciones"
-              v-model="ejercicioSeleccionado.nota"
-            ></v-textarea>
-          </v-card-actions>        
-        </v-card>
-      </v-col>-->
     </v-row>
   </div>
 </template>
@@ -232,6 +302,7 @@ export default {
     return {
       usuarioSesion: {},
       tabs: null,
+      listaUnidadRepeticion: [],
       categorias: [],
       listaEjercicios: [],
       listaEjerciciosRespaldo: [],
@@ -289,7 +360,13 @@ export default {
         `${URL_API.EJERCICIOS}/${this.usuarioSesion.co_sucursal}`,
       )
       this.listaEjerciciosRespaldo = this.lista
+
       this.loadingEjercicio = false
+
+      this.listaUnidadRepeticion = await this.getAsync(
+        `${URL_API.CATALOGOS}/unidad_repeticion`,
+      )
+
       //}, 700)
     },
     agregarEjercicio(row) {
@@ -422,7 +499,12 @@ export default {
 }*/
 
 .drop-area {
-  background-color: #e0e0e0 !important;
-  min-height: 300px;
+  background-color: #f4f4f4 !important;
+  min-height: 200px;
+  background-image: url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' stroke='%23333' stroke-width='1' stroke-dasharray='6%2c 14' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e");
+  /*background-image: linear-gradient(to right, #333 10%, rgba(255, 255, 255, 0) 0%);
+  background-position: top;
+  background-size: 10px 1px;
+  background-repeat: repeat-x;*/
 }
 </style>

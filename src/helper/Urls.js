@@ -12,6 +12,7 @@ const URL = {
     ALUMNOS_BASE: BASE + '/alumnos',
     EJERCICIOS: BASE + '/ejercicios',
     CATEGORIAS: BASE + '/categoria',
+    CATALOGOS: BASE + '/catalogos',
 }
 
 export default URL
