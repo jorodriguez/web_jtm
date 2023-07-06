@@ -1,91 +1,97 @@
 <template>
-  <div class="app-content-wrapper apps-wrapper --filemanager shadow-lg">
-    <div :class="{ open: isBlock }" class="app-overlay" @click="overlayApp" />
-    <div :class="{ open: isOpen }" class="app-sidebar">
-      <div class="app-sidebar-header white py-1">
-        <!--<v-btn class="rounded-lg py-5" tile block color="primary">
-          <v-icon left>mdi-plus</v-icon>
-          Agregar
-        </v-btn>-->
-        <v-row >
-          <v-col cols="12">
-            <v-text-field              
-              filled
-              dense
-              clearable
-              placeholder="Buscar"
-              type="text"              
-              v-model="criterioBuscar"  
-              v-on:keyup.enter="buscarPorNombre()" 
-              @click:clear="limpiarFiltro()"
-              hide-details
-              >
-              <template v-slot:append>
-                <v-fade-transition leave-absolute>
-                  <v-menu>
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn class="ma-0" color="blue-grey" icon dark  small v-bind="attrs" v-on="on">
-                        <v-icon left >
-                          mdi-dots-vertical
-                        </v-icon>
-                      </v-btn>
-                    </template>
-                    <v-card>
-                      <v-card-text class="pa-6">
-                       Categorías
-                        <v-list>
-                          <template v-for="(item, i) in categorias">
-                            <v-list-item
-                              :key="i"
-                              @click="() => filtrarCategoria(item.nombre)"
-                            >
-                              <v-list-item-avatar >
-                                <v-avatar  :color="`${item.contador == 0 ? 'blue-grey lighten-4':'teal lighten-2'}`" size="36">
-                                  <!--<v-img :src="item.icon" />-->
-                                  {{item.contador}}
-                                </v-avatar>
-                              </v-list-item-avatar>
-                              <v-list-item-content>
-                                <v-list-item-title>
-                                  {{ item.nombre }}
-                                </v-list-item-title>
-                              </v-list-item-content>
-                            </v-list-item>
-                          </template>
-                        </v-list>
-                      </v-card-text>
-                    </v-card>
-                  </v-menu>
-                </v-fade-transition>
-              </template>
-            </v-text-field>
-          </v-col>
-        </v-row>      
-      </div>
+  <div class="pt-4">
+    <v-row>
+      <v-col cols="4" md="4" lg="3" sm="12"></v-col>
+      <v-col>
+        <v-combobox
+          :items="listaUnidadRepeticion"
+          hide-selected
+          label="Atleta *"
+          small-chips
+          item-value="id"
+          item-text="nombre"
+          required
+        >
+          <template v-slot:no-data>
+            <v-list-item>
+              <v-list-item-content>
+                <v-list-item-title>
+                  No hay resultados
+                </v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
+        </v-combobox>
+      </v-col>
+    </v-row>
 
-      <vue-perfect-scrollbar
-        :settings="{ suppressScrollX: true, wheelPropagation: false }"
-        class="h-100 rtl-ps-none ps scroll"
-        style="height: 100%;"
-      >
-        <!-- style="position: sticky; top: 1; z-index: 999; width: 280px;"-->
-        <div class="app-sidebar-body mt-6">
-          <base-card class="h-full" color="blue-grey lighten-5">
-            <v-card-text>
-              <v-row>
-                <v-col md="12">
-                  <v-progress-circular
-                    indeterminate
-                    :value="40"
-                    color="lime"
-                    v-if="loadingEjercicio"
-                  ></v-progress-circular>
+    <v-row>
+      <v-col cols="4" md="4" lg="3" sm="12">
+      
+        <base-card
+          class="h-full"
+          color="grey"
+          style="position: sticky; top: 1; z-index: 999; width: 280px;"
+        >
+          <v-card-text>
+            <v-toolbar color="#0493a3" dark dense>
+              <v-toolbar-title></v-toolbar-title>
 
-                  <template v-for="(item, i) in listaEjercicios">
+              <v-spacer />
+
+              <v-text-field>
+                <v-icon slot="prepend" dark>
+                  mdi-find
+                </v-icon>
+              </v-text-field>
+
+              <v-menu bottom left>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn dark icon v-bind="attrs" v-on="on">
+                    <v-icon>mdi-dots-vertical</v-icon>
+                  </v-btn>
+                </template>
+
+                <v-list>
+                  <template v-for="(item, i) in categorias">
+                    <v-list-item
+                      :key="i"
+                      @click="() => filtrarCategoria(item.nombre)"
+                    >
+                      <v-list-item-avatar>
+                        <v-avatar color="indigo" size="36">
+                          <span class="white--text text-h5">{{item.contador}}</span>
+                        </v-avatar>
+                      </v-list-item-avatar>
+                      <v-list-item-content>
+                        <v-list-item-title>
+                          {{ item.nombre }}
+                        </v-list-item-title>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </template>
+                </v-list>
+              </v-menu>
+            </v-toolbar>
+
+            <v-row>
+              <v-col md="12">
+                <v-progress-circular
+                  indeterminate
+                  :value="40"
+                  color="lime"
+                  v-if="loadingEjercicio"
+                ></v-progress-circular>
+
+                <v-virtual-scroll
+                  :items="listaEjercicios"
+                  :item-height="200"
+                  max-height="800"
+                >
+                  <template v-slot:default="{ item }">
                     <div
                       :draggable="true"
                       @dragstart="onDragStart(item, $event)"
-                      :key="i"
                     >
                       <v-hover v-slot="{ hover }" open-delay="200" class="item">
                         <v-col cols="12">
@@ -118,86 +124,36 @@
                       </v-hover>
                     </div>
                   </template>
-                </v-col>
-              </v-row>
-            </v-card-text>
-          </base-card>
-        </div>
-      </vue-perfect-scrollbar>
-    </div>
-    <div class="app-content relative">
-      <div class="app-header white">
-        <div class="d-flex justify-space-between flex-wrap align-baseline">
-          <div class="">
-            <!-- app-icon class -->
-            <div
-              class="nested-sidebar-toggle d-md-none d-sm-block"
-              @click="appToggle"
-            >
-              <v-icon color="dark">mdi-menu-open</v-icon>
-            </div>
-             <v-autocomplete
-              v-model="atleta_seleccionado"              
-              :items="atletas"
-              filled
-              chips
-              color="blue-grey lighten-2"
-              label="Atleta"
-              item-text="nombre"
-              item-value="id"              
+                </v-virtual-scroll>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </base-card>
+      </v-col>
+
+      <v-col cols="9" md="8" lg="9" sm="12">
+        <base-card class="h-full" :key="compnentRenderKey">
+          <v-card-text>
+            Circuitos {{ circuitos ? circuitos.length : '' }}
+          </v-card-text>
+          <v-card-text>
+            <!--<v-toolbar
+              color="#0493a3"
+              src="@/assets/images/barra.png"
+              dark
               dense
-              solo
-
             >
-            <!-- @click:close="remove(data.item)"-->
-              <template v-slot:selection="data">              
-                <v-chip
-                  v-bind="data.attrs"
-                  :input-value="data.selected"
-                  close
-                  @click="data.select"                  
-                  
-                >
-                  <v-avatar left>
-                    <v-img :src="data.item.foto == null ? '@/assets/images/jtm/logojtm.png':data.item.foto "></v-img>
-                  </v-avatar>
-                  {{ data.item.nombre }}
-                </v-chip>
-              </template>
-              <template v-slot:item="data">                
-                <template >
-                  <v-list-item-avatar>
-                    <img :src="data.item.avatar">
-                  </v-list-item-avatar>
-                  <v-list-item-content>
-                    <v-list-item-title v-html="data.item.nombre"></v-list-item-title>                    
-                  </v-list-item-content>
-                </template>
-              </template>s
-            </v-autocomplete>
+              <v-toolbar-title>
+                Circuitos {{ circuitos ? circuitos.length : '' }}
+              </v-toolbar-title>
 
-          </div>
-          <div>
-            <v-btn icon color="primary">
-              <v-icon>mdi-account-check</v-icon>
-            </v-btn>
-            <v-btn icon color="primary">
-              <v-icon>mdi-trash-can</v-icon>
-            </v-btn>
-            <v-btn icon color="primary">
-              <v-icon>mdi-dots-vertical</v-icon>
-            </v-btn>
-          </div>
-        </div>
-      </div>
-      <vue-perfect-scrollbar
-        :settings="{ suppressScrollX: true, wheelPropagation: false }"
-        class="h-100 rtl-ps-none ps scroll"
-        style="height: 100%;"
-      >
-        <div class="app-body mt-10 px-8">
-        <base-card class="h-full" :key="compnentRenderKey">          
-          <v-card-text>        
+              <v-spacer />
+
+              <v-btn icon>                
+                <v-icon>mdi-plus</v-icon>
+              </v-btn>
+            </v-toolbar>-->
+
             <template v-for="(itemCircuito, cindex) in circuitos">
               <v-row
                 :key="cindex"
@@ -257,6 +213,11 @@
                                   </span>
                                 </v-card-title>
 
+                                <!--<v-card-subtitle>
+                                  <small class="text--grey">
+                                    {{ row.descripcion }}
+                                  </small>
+                                </v-card-subtitle>-->
 
                                 <v-card-actions>
                                   <v-form>
@@ -341,14 +302,12 @@
               </v-row>
             </template>
           </v-card-text>
-        </base-card>  
-        </div>
-      </vue-perfect-scrollbar>
-    </div>
+        </base-card>
+      </v-col>
+    </v-row>
   </div>
 </template>
 <script>
-import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import analyticOneCard from '@/components/card/AnalyticCardVersionOne'
 import analyticTwoCard from '@/components/card/AnalyticCardVersionTwo'
 import ListcardTwo from '@/components/card/listCard/ListCardTwo'
@@ -359,42 +318,42 @@ import { operacionesApi } from '../../../helper/OperacionesApi'
 import URL_API from '../../../helper/Urls'
 
 export default {
-  name: 'Circuitos',
-  metaInfo: {    
-    title: 'Circuitos',
+  name: 'Analytic',
+  metaInfo: {
+    // title will be injected into parent titleTemplate
+    title: 'Analytic',
   },
   mixins: [operacionesApi],
   components: {
+    'analytic-one-card': analyticOneCard,
+    'analytic-two-card': analyticTwoCard,
+    'list-card-two': ListcardTwo,
     draggable,
-    VuePerfectScrollbar,
   },
 
-  data: () => ({
-    isOpen: false,
-    isBlock: false,
-    usuarioSesion: {},
-    tabs: null,
-    listaUnidadRepeticion: [],
-    categorias: [],    
-    listaEjercicios: [],
-    listaEjerciciosRespaldo: [],
-    atletas: [],
-    loadingEjercicio: false,
-    itemsPerPage: 50,
-    itemsPerPageSelecion: 50,
-    page: 1,
-    pageSeleccion: 1,
-    listaSeleccion: [],
-    search: '',
-    filter: {},
-    sortBy: 'nombre',
-    ejercicioSeleccionado: null,
-    circuitos: [],
-    compnentRenderKey: 1,
-    criterioBuscar: '',
-    atleta_id:null,
-    atleta_seleccionado:null
-  }),
+  data() {
+    return {
+      usuarioSesion: {},
+      tabs: null,
+      listaUnidadRepeticion: [],
+      categorias: [],
+      listaEjercicios: [],
+      listaEjerciciosRespaldo: [],
+      loadingEjercicio: false,
+      itemsPerPage: 50,
+      itemsPerPageSelecion: 50,
+      page: 1,
+      pageSeleccion: 1,
+      listaSeleccion: [],
+      search: '',
+      filter: {},
+      sortBy: 'nombre',
+      ejercicioSeleccionado: null,
+      circuitos: [],
+      compnentRenderKey: 1,
+      criterioBuscar: '',
+    }
+  },
   mounted() {
     this.usuarioSesion = getUsuarioSesion()
     console.log('##### ENTENAMIENTOS ####')
@@ -406,15 +365,18 @@ export default {
     this.circuitos[2] = []
     this.circuitos[3] = []
   },
+  computed: {
+    numberOfPages() {
+      return Math.ceil(this.listaEjercicios.length / this.itemsPerPage)
+    },
+    filteredKeys() {
+      return this.keys.filter((key) => key !== 'nombre')
+    },
+    numberOfPagesSeleccion() {
+      return Math.ceil(this.listaSeleccion.length / this.itemsPerPageSelecion)
+    },
+  },
   methods: {
-    appToggle: function () {
-      this.isOpen = !this.isOpen
-      this.isBlock = !this.isBlock
-    },
-    overlayApp: function () {
-      this.isOpen = !this.isOpen
-      this.isBlock = !this.isBlock
-    },
     forceForRerender() {
       this.compnentRenderKey += 1
     },
@@ -434,17 +396,11 @@ export default {
 
       this.loadingEjercicio = false
 
-
       this.listaUnidadRepeticion = await this.getAsync(
         `${URL_API.CATALOGOS}/unidad_repeticion`,
       )
 
-      await this.cargarCategorias();
-
-      //cargar la lista de atletas
-
-    this.atletas = await this.getAsync(`${URL_API.USUARIOS}/${this.usuarioSesion.co_sucursal}/${this.usuarioSesion.id_empresa}`);
-
+      await this.cargarCategorias()
 
       //}, 700)
     },
@@ -555,18 +511,16 @@ export default {
       this.circuitos[(x, y)] = this.circuitos[(x, y)] - 1
     },
     filtrarCategoria(categoria) {
-      this.listaEjercicios = this.listaEjerciciosRespaldo.filter(
-        (e) => e.categoria.toUpperCase() == categoria.toUpperCase(),
-      )
-    },
-    limpiarFiltro(){
-            this.criterioBuscar = '';
-            this.buscarPorNombre();
+        
+        this.listaEjercicios = this.listaEjerciciosRespaldo.filter(
+          (e) =>            
+            e.categoria
+              .toUpperCase()== categoria.toUpperCase(),
+        )
+      
     },
     buscarPorNombre() {
-      
       console.log('buscar ' + this.criterioBuscar)
-
       if (this.criterioBuscar == '') {
         this.listaEjercicios = this.listaEjerciciosRespaldo
       } else {
@@ -584,113 +538,25 @@ export default {
   },
 }
 </script>
-<style lang="scss">
-.app-content-wrapper {
-  position: relative;
+
+<style>
+/*.container {
   display: flex;
-  overflow: hidden;
-  height: calc(100vh - 200px);
-
-  .app-overlay {
-    position: absolute;
-    content: '';
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background: rgba(0, 0, 0, 0.4);
-    display: none;
-    z-index: 2;
-    transition: all 0.3s ease-in;
-    @media only screen and (max-width: 959px) {
-      &.open {
-        display: block;
-        transition: all 0.3s ease-in;
-      }
-    }
-  }
-  .app-sidebar {
-    width: 280px;
-    position: relative;
-    transition: all 0.3s ease-in;
-    @media only screen and (max-width: 959px) {
-      position: absolute;
-      left: -340px;
-      z-index: 5;
-      height: calc(100vh - 120px);
-      transition: all 0.3s ease-in;
-      &.open {
-        left: 0;
-      }
-    }
-    .app-sidebar-header {
-      padding: 0.75rem 1.25rem;
-      margin-bottom: 0;
-      // border-bottom: 1px solid rgba(0, 0, 0, 0.125);
-      position: absolute;
-      top: 0;
-      width: 100%;
-      z-index: 1;
-    }
-    .app-sidebar-body {
-      // overflow-y: scroll;
-      // height: 100%;
-      padding-top: 3.375rem;
-      width: 280px;
-    }
-  }
-
-  .app-content {
-    width: calc(100% - 280px);
-    @media only screen and (max-width: 959px) {
-      width: 100%;
-    }
-    // margin-left: 30px;
-    .app-header {
-      padding: 0.75rem 1.25rem;
-      margin-bottom: 0;
-      border-bottom: 1px solid rgba(0, 0, 0, 0.125);
-      position: absolute;
-      top: 0;
-      width: 100%;
-      z-index: 1;
-    }
-    .app-body {
-      flex: 1 1 auto;
-      padding-top: 3.375rem;
-      // overflow-y: scroll;
-      height: calc(100% - 130px);
-    }
-    .app-footer {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      height: 130px;
-    }
-  }
-}
-.app-icon {
-  display: none;
-  @media only screen and (max-width: 959px) {
-    display: block;
-  }
-}
-.eg-filemanager {
-  background-color: #fff;
-}
-.filemanager-content {
-  grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
 }
 
-.apps-wrapper {
-  &.--filemanager {
-    .nested-sidebar-toggle {
-      @media (min-width: 959px) {
-        display: none;
-      }
-    }
-  }
+.item {
+  padding: 10px;
+  margin: 5px;
+  background-color: #f2f2f2;
+  cursor: move;
 }
+
+.drop-area {
+  padding: 20px;
+  margin-top: 20px;
+  background-color: #e0e0e0;
+  text-align: center;
+}*/
 
 .drop-area {
   background-color: #f4f4f4 !important;

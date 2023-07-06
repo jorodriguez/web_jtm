@@ -13,6 +13,7 @@ const URL = {
     EJERCICIOS: BASE + '/ejercicios',
     CATEGORIAS: BASE + '/categoria',
     CATALOGOS: BASE + '/catalogos',
+    USUARIOS: BASE + '/usuario',
 }
 
 export default URL
