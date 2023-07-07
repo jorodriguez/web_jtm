@@ -267,20 +267,19 @@
                                       <v-row>
                                         <v-col cols="4">
                                           <v-text-field
+                                            :ref="`ref-repeticiones_${row.id}`"
                                             v-model="row.repeticiones"
                                             label="Repeticiones"
                                             type="number"
+                                            min="1"
                                             width="20"
+                                            class="counter"                                            
                                             append-outer-icon="mdi-plus"
-                                            @click:append-outer="
-                                              increment(cindex, i)
-                                            "
+                                            @click:append-outer="increment(`ref-repeticiones_${row.id}`,cindex)"
                                             prepend-icon="mdi-minus"
                                             dense
                                             size="3"
-                                            @click:prepend="
-                                              decrement(cindex, i)
-                                            "
+                                            @click:prepend="decrement(`ref-repeticiones_${row.id}`)"
                                           ></v-text-field>
                                         </v-col>
                                         <v-col>
@@ -407,6 +406,7 @@ export default {
     this.circuitos[3] = []
   },
   methods: {
+
     appToggle: function () {
       this.isOpen = !this.isOpen
       this.isBlock = !this.isBlock
@@ -414,6 +414,16 @@ export default {
     overlayApp: function () {
       this.isOpen = !this.isOpen
       this.isBlock = !this.isBlock
+    },
+    increment(ref,index){        
+      
+        console.log("INCREMENT "+ref);  
+        ths       
+
+    },
+    decrement(ref){        
+        console.log("DECREMENT "+ref);
+        this.$refs[ref].stepDown();        
     },
     forceForRerender() {
       this.compnentRenderKey += 1
