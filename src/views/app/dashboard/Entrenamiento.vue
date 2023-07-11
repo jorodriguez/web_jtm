@@ -266,21 +266,22 @@
                                     >
                                       <v-row>
                                         <v-col cols="4">
-                                          <v-text-field
-                                            :ref="`ref-repeticiones_${row.id}`"
+                                          <v-text-field                 
                                             v-model="row.repeticiones"
                                             label="Repeticiones"
                                             type="number"
                                             min="1"
                                             width="20"
-                                            class="counter"                                            
-                                            append-outer-icon="mdi-plus"
-                                            @click:append-outer="increment(`ref-repeticiones_${row.id}`,cindex)"
+                                            class="counter"                                                        
+                                            append-outer-icon="mdi-plus"                                   
                                             prepend-icon="mdi-minus"
                                             dense
-                                            size="3"
-                                            @click:prepend="decrement(`ref-repeticiones_${row.id}`)"
-                                          ></v-text-field>
+                                            size="3"                                            
+                                          >
+                                           <template v-slot:append-outer>
+                                                  <v-icon  @click="increment()">    mdi-eye   </v-icon>
+                                            </template>
+                                          </v-text-field>
                                         </v-col>
                                         <v-col>
                                           <v-chip-group
@@ -415,15 +416,15 @@ export default {
       this.isOpen = !this.isOpen
       this.isBlock = !this.isBlock
     },
-    increment(ref,index){        
-      
-        console.log("INCREMENT "+ref);  
-        ths       
+    
+    increment(){        
+        console.log(" CLIC ");
+        //console.log(this.$refs);        
 
     },
-    decrement(ref){        
+    decrement(){        
         console.log("DECREMENT "+ref);
-        this.$refs[ref].stepDown();        
+        //this.$refs[ref].stepDown();        
     },
     forceForRerender() {
       this.compnentRenderKey += 1
