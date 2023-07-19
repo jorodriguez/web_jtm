@@ -3,46 +3,53 @@
     <div :class="{ open: isBlock }" class="app-overlay" @click="overlayApp" />
     <div :class="{ open: isOpen }" class="app-sidebar">
       <div class="app-sidebar-header white py-1">
-        <!--<v-btn class="rounded-lg py-5" tile block color="primary">
-          <v-icon left>mdi-plus</v-icon>
-          Agregar
-        </v-btn>-->
-        <v-row >
+        <v-row>
           <v-col cols="12">
-            <v-text-field              
+            <v-text-field
               filled
               dense
               clearable
               placeholder="Buscar"
-              type="text"              
-              v-model="criterioBuscar"  
-              v-on:keyup.enter="buscarPorNombre()" 
-              @click:clear="limpiarFiltro()"
+              type="text"
+              v-model="criterioBuscar"
               hide-details
-              >
+              @click:clear="criterioBuscar = ''"
+            >
               <template v-slot:append>
                 <v-fade-transition leave-absolute>
                   <v-menu>
                     <template v-slot:activator="{ on, attrs }">
-                      <v-btn class="ma-0" color="blue-grey" icon dark  small v-bind="attrs" v-on="on">
-                        <v-icon left >
-                          mdi-dots-vertical
-                        </v-icon>
+                      <v-btn
+                        class="ma-0"
+                        color="blue-grey"
+                        icon
+                        dark
+                        small
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        <v-icon left> mdi-dots-vertical </v-icon>
                       </v-btn>
                     </template>
                     <v-card>
                       <v-card-text class="pa-6">
-                       Categorías
+                        Categorías
                         <v-list>
                           <template v-for="(item, i) in categorias">
                             <v-list-item
-                              :key="i"
+                              v-if="item.contador > 0"
                               @click="() => filtrarCategoria(item.nombre)"
                             >
-                              <v-list-item-avatar >
-                                <v-avatar  :color="`${item.contador == 0 ? 'blue-grey lighten-4':'teal lighten-2'}`" size="36">
-                                  <!--<v-img :src="item.icon" />-->
-                                  {{item.contador}}
+                              <v-list-item-avatar>
+                                <v-avatar
+                                  :color="`${
+                                    item.contador == 0
+                                      ? 'blue-grey lighten-4'
+                                      : 'teal lighten-2'
+                                  }`"
+                                  size="36"
+                                >
+                                  {{ item.contador }}
                                 </v-avatar>
                               </v-list-item-avatar>
                               <v-list-item-content>
@@ -60,67 +67,21 @@
               </template>
             </v-text-field>
           </v-col>
-        </v-row>      
+        </v-row>
       </div>
 
       <vue-perfect-scrollbar
         :settings="{ suppressScrollX: true, wheelPropagation: false }"
         class="h-100 rtl-ps-none ps scroll"
-        style="height: 100%;"
+        style="height: 100%"
       >
-        <!-- style="position: sticky; top: 1; z-index: 999; width: 280px;"-->
         <div class="app-sidebar-body mt-6">
           <base-card class="h-full" color="blue-grey lighten-5">
-            <v-card-text>
-              <v-row>
-                <v-col md="12">
-                  <v-progress-circular
-                    indeterminate
-                    :value="40"
-                    color="lime"
-                    v-if="loadingEjercicio"
-                  ></v-progress-circular>
-
-                  <template v-for="(item, i) in listaEjercicios">
-                    <div
-                      :draggable="true"
-                      @dragstart="onDragStart(item, $event)"
-                      :key="i"
-                    >
-                      <v-hover v-slot="{ hover }" open-delay="200" class="item">
-                        <v-col cols="12">
-                          <base-card class="overflow-hidden" color="white">
-                            <v-card-text
-                              class="pt-0 pl-2 pb-0 d-flex justify-center"
-                            >
-                              <small class="grey--text">
-                                {{ item.categoria }}
-                              </small>
-                            </v-card-text>
-                            <v-img
-                              cover
-                              max-height="100"
-                              min-height="100"
-                              :src="item.url"
-                            />
-
-                            <v-divider class="mx-4" color="#91D8DF"></v-divider>
-
-                            <v-card-actions
-                              class="pa-3 d-flex justify-space-between"
-                            >
-                              <v-card-subtitle class="pa-0">
-                                {{ item.nombre }}
-                              </v-card-subtitle>
-                            </v-card-actions>
-                          </base-card>
-                        </v-col>
-                      </v-hover>
-                    </div>
-                  </template>
-                </v-col>
-              </v-row>
-            </v-card-text>
+            <list-items
+              :lista-ejercicios="listExercises"
+              :list-exist="listClone"
+              @dragItem="addNewItem"
+            ></list-items>
           </base-card>
         </div>
       </vue-perfect-scrollbar>
@@ -136,46 +97,52 @@
             >
               <v-icon color="dark">mdi-menu-open</v-icon>
             </div>
-             <v-autocomplete
-              v-model="atleta_seleccionado"              
+            <v-autocomplete
+              v-model="atleta_seleccionado"
               :items="atletas"
               filled
               chips
               color="blue-grey lighten-2"
               label="Atleta"
               item-text="nombre"
-              item-value="id"              
+              item-value="id"
               dense
               solo
-
             >
-            <!-- @click:close="remove(data.item)"-->
-              <template v-slot:selection="data">              
+              <!-- @click:close="remove(data.item)"-->
+              <template v-slot:selection="data">
                 <v-chip
                   v-bind="data.attrs"
                   :input-value="data.selected"
                   close
-                  @click="data.select"                  
-                  
+                  @click="data.select"
                 >
                   <v-avatar left>
-                    <v-img :src="data.item.foto == null ? '@/assets/images/jtm/logojtm.png':data.item.foto "></v-img>
+                    <v-img
+                      :src="
+                        data.item.foto == null
+                          ? '@/assets/images/jtm/logojtm.png'
+                          : data.item.foto
+                      "
+                    ></v-img>
                   </v-avatar>
                   {{ data.item.nombre }}
                 </v-chip>
               </template>
-              <template v-slot:item="data">                
-                <template >
+              <template v-slot:item="data">
+                <template>
                   <v-list-item-avatar>
-                    <img :src="data.item.avatar">
+                    <img :src="data.item.avatar" />
                   </v-list-item-avatar>
                   <v-list-item-content>
-                    <v-list-item-title v-html="data.item.nombre"></v-list-item-title>                    
+                    <!-- <v-list-item-title v-html="data.item.nombre"></v-list-item-title>                     -->
+                    <v-list-item-title
+                      v-html="data.item.nombre"
+                    ></v-list-item-title>
                   </v-list-item-content>
-                </template>
-              </template>s
+                </template> </template
+              >s
             </v-autocomplete>
-
           </div>
           <div>
             <v-btn icon color="primary">
@@ -192,190 +159,223 @@
       </div>
       <vue-perfect-scrollbar
         :settings="{ suppressScrollX: true, wheelPropagation: false }"
-        class="h-100 rtl-ps-none ps scroll"
-        style="height: 100%;"
+        class="h-100 rtl-ps-none custom-scroll ps scroll"
+        style="height: 100%"
       >
         <div class="app-body mt-10 px-8">
-        <base-card class="h-full" :key="compnentRenderKey">          
-          <v-card-text>        
-            <template v-for="(itemCircuito, cindex) in circuitos">
-              <v-row
-                :key="cindex"
-                class="drop-area rounded-lg mb-2 mt-1"
-                @dragover.prevent
-                @drop="onDrop($event, cindex)"
-              >
-                <v-col cols="12">
-                  <v-toolbar
-                    color="#0493a3"
-                    src="@/assets/images/barra.png"
-                    dark
-                    dense
-                  >
-                    <v-toolbar-title>Circuito {{ cindex + 1 }}</v-toolbar-title>
-                  </v-toolbar>
+          <div class="listCircuitos">
+            <h6>Circuitos</h6>
+            <div class="circuito">
+              <!-- <v-icon :class="selectedCircuito.position == 1 ? '' : 'btnCursor'" @click.prevent="beforeCircuito">  </v-icon> -->
+              <v-btn class="mx-2" fab small>
+                <v-icon class="btnCursor" @click.prevent="beforeCircuito">
+                  mdi-arrow-left
+                </v-icon>
+              </v-btn>
 
-                  <draggable v-model="circuitos[cindex]" draggable=".item">
-                    <template v-for="(row, i) in circuitos[cindex]">
-                      <v-hover
-                        v-slot="{ hover }"
-                        open-delay="200"
-                        class="item"
-                        :key="i"
+              <div class="container-btn">
+                <v-btn
+                  v-for="(item, index) in circuitos"
+                  :key="index"
+                  class="mx-2"
+                  fab
+                  dark
+                  small
+                  :style="
+                    item.active
+                      ? 'background-color:#0093a2'
+                      : 'background-color:gray'
+                  "
+                  @click="currentCircuito(item)"
+                >
+                  <!-- {{ index + 1 > 5 && index + 1 < 12 ? "..." : index + 1 }} -->
+                  {{ index + 1 }}
+                </v-btn>
+              </div>
+
+              <v-btn class="mx-2" fab small>
+                <v-icon class="btnCursor" @click.prevent="addNewCircuito">
+                  mdi-plus
+                </v-icon>
+              </v-btn>
+              <v-btn class="mx-2" fab small>
+                <v-icon class="btnCursor" @click.prevent="afterCircuito">
+                  mdi-arrow-right
+                </v-icon>
+              </v-btn>
+              <!-- <v-icon class="btnCursor" @click.prevent="afterCircuito">  </v-icon> -->
+            </div>
+          </div>
+          <v-toolbar color="#0493a3" src="@/assets/images/barra.png" dark dense>
+            <v-toolbar-title
+              >Circuito {{ selectedCircuito.position ?? 1 }}</v-toolbar-title
+            >
+          </v-toolbar>
+
+          <draggable
+            :list="listClone"
+            group="exercises"
+            @change="changeCircuito"
+            :key="compnentRenderKey"
+            :style="listEmpty ? 'height: 600px' : ''"
+          >
+            <template v-for="(row, i) in listClone">
+              <v-hover v-slot="{ hover }" open-delay="500" class="item">
+                <v-col
+                  cols="12"
+                  :key="i"
+                  @click="() => verDetalleEjercicio(row)"
+                >
+                  <base-card>
+                    <v-row>
+                      <v-col
+                        cols="2"
+                        class="d-flex flex-row justy-center align-center"
                       >
-                        <v-col
-                          cols="12"
-                          :key="i"
-                          @click="() => verDetalleEjercicio(row)"
+                        <img class="ml-3 p-0" :src="row.url" />
+                      </v-col>
+                      <v-col cols="10" class="ml-0 mb-0 pb-0 pt-0">
+                        <v-card-title
+                          class="text-h6 mb-0 pb-0 pt-1 d-flex justify-space-between"
                         >
-                          <base-card>
-                            <v-row>
-                              <v-col cols="2">
-                                <v-avatar class="ml-3 pb-0" size="130" tile>
-                                  <v-img :src="row.url"></v-img>
-                                </v-avatar>
-                              </v-col>
-                              <v-col cols="10" class="ml-0 mb-0 pb-0 pt-0">
-                                <v-card-title
-                                  class="text-h6 mb-0 pb-0 pt-1 d-flex justify-space-between"
-                                >
-                                  <span>{{ row.nombre }}</span>
-                                  <span>
-                                    <v-chip
-                                      x-small
-                                      color="white"
-                                      text-color="grey"
-                                    >
-                                      <v-icon left>
-                                        mdi-weight-lifter
-                                      </v-icon>
-                                      {{ row.categoria }}-
-                                      <span class="gray--text">
-                                        Circuito {{ cindex + 1 }}
-                                      </span>
-                                    </v-chip>
-                                  </span>
-                                </v-card-title>
+                          <span>{{ row.nombre }}</span>
+                          <span>
+                            <v-chip x-small color="white" text-color="grey">
+                              <v-icon left> mdi-weight-lifter </v-icon>
+                              {{ row.categoria }}-
+                              <span class="gray--text">
+                                Circuito {{ selectedCircuito.position }}
+                              </span>
+                            </v-chip>
+                          </span>
+                        </v-card-title>
 
-
-                                <v-card-actions>
-                                  <v-form>
-                                    <v-container
-                                      class="m-0 pb-0 pt-0"
-                                      style="margin-bottom: 0px !important;"
+                        <v-card-actions>
+                          <v-form>
+                            <v-container
+                              class="m-0 pb-0 pt-0"
+                              style="margin-bottom: 0px !important"
+                            >
+                              <v-row>
+                                <v-col cols="3" class="d-flex flex-row">
+                                  <v-icon @click="decrement(row)">
+                                    mdi-minus
+                                  </v-icon>
+                                  <v-text-field
+                                    v-model="row.repeticiones"
+                                    label="Repeticiones"
+                                    type="number"
+                                    min="1"
+                                    dense
+                                    :disabled="true"
+                                  >
+                                  </v-text-field>
+                                  <v-icon @click="increment(row)">
+                                    mdi-plus
+                                  </v-icon>
+                                </v-col>
+                                <v-col>
+                                  <v-chip-group
+                                    v-model="row.cat_unidad_repeticion"
+                                    active-class="teal darken-3 white--text"
+                                    column
+                                    @change="selectUnidadRepeticion(row)"
+                                  >
+                                    <template
+                                      v-for="(
+                                        i, index
+                                      ) in listaUnidadRepeticion"
                                     >
-                                      <v-row>
-                                        <v-col cols="4">
-                                          <v-text-field                 
-                                            v-model="row.repeticiones"
-                                            label="Repeticiones"
-                                            type="number"
-                                            min="1"
-                                            width="20"
-                                            class="counter"                                                        
-                                            append-outer-icon="mdi-plus"                                   
-                                            prepend-icon="mdi-minus"
-                                            dense
-                                            size="3"                                            
-                                          >
-                                           <template v-slot:append-outer>
-                                                  <v-icon  @click="increment()">    mdi-eye   </v-icon>
-                                            </template>
-                                          </v-text-field>
-                                        </v-col>
-                                        <v-col>
-                                          <v-chip-group
-                                            v-model="row.cat_unidad_repeticion"
-                                            active-class="teal darken-3 white--text"
-                                            column
-                                          >
-                                            <template
-                                              v-for="(i,
-                                              index) in listaUnidadRepeticion"
-                                            >
-                                              <v-chip
-                                                :value="i.id"
-                                                :key="index"
-                                              >
-                                                {{ i.nombre }}
-                                              </v-chip>
-                                            </template>
-                                          </v-chip-group>
-                                        </v-col>
-                                      </v-row>
-                                      <v-row class="d-flex justify-end">
-                                        <v-btn
-                                          icon
-                                          small
-                                          @click="row.show = !row.show"
-                                        >
-                                          <v-icon>
-                                            mdi-note-plus
-                                          </v-icon>
-                                        </v-btn>
-                                      </v-row>
-                                      <v-row v-show="row.show">
-                                        <v-expand-transition>
-                                          <v-textarea
-                                            filled
-                                            dense
-                                            focus
-                                            height="8"
-                                            label="Instrucciones extras"
-                                            class=""
-                                            v-model="row.nota"
-                                          ></v-textarea>
-                                        </v-expand-transition>
-                                      </v-row>
-                                    </v-container>
-                                  </v-form>
-                                </v-card-actions>
-                              </v-col>
-                            </v-row>
-                          </base-card>
-                        </v-col>
-                      </v-hover>
-                    </template>
-                  </draggable>
+                                      <v-chip
+                                        :value="i.id"
+                                        :key="index"
+                                        :disabled="
+                                          i.id === row.cat_unidad_repeticion
+                                        "
+                                      >
+                                        {{ i.nombre }}
+                                      </v-chip>
+                                    </template>
+                                  </v-chip-group>
+                                </v-col>
+                              </v-row>
+                              <v-row class="d-flex justify-end">
+                                <v-btn icon small @click="row.show = !row.show">
+                                  <v-icon v-if="!row.show">
+                                    mdi-note-plus
+                                  </v-icon>
+                                  <v-icon v-else> mdi-note-minus </v-icon>
+                                </v-btn>
+                              </v-row>
+                              <v-row v-show="row.show">
+                                <v-expand-transition>
+                                  <v-textarea
+                                    filled
+                                    dense
+                                    focus
+                                    height="auto"
+                                    label="Instrucciones extras"
+                                    class=""
+                                    no-resize
+                                    v-model="row.nota"
+									@blur="addInstructions"
+                                  ></v-textarea>
+                                </v-expand-transition>
+                              </v-row>
+                            </v-container>
+                          </v-form>
+                        </v-card-actions>
+                      </v-col>
+                    </v-row>
+                  </base-card>
                 </v-col>
-              </v-row>
+              </v-hover>
             </template>
-          </v-card-text>
-        </base-card>  
+          </draggable>
         </div>
       </vue-perfect-scrollbar>
     </div>
   </div>
 </template>
 <script>
-import VuePerfectScrollbar from 'vue-perfect-scrollbar'
-import analyticOneCard from '@/components/card/AnalyticCardVersionOne'
-import analyticTwoCard from '@/components/card/AnalyticCardVersionTwo'
-import ListcardTwo from '@/components/card/listCard/ListCardTwo'
-import draggable from 'vuedraggable'
+import VuePerfectScrollbar from "vue-perfect-scrollbar";
+import analyticOneCard from "@/components/card/AnalyticCardVersionOne";
+import analyticTwoCard from "@/components/card/AnalyticCardVersionTwo";
+import ListcardTwo from "@/components/card/listCard/ListCardTwo";
+import draggable from "vuedraggable";
+import listItems from "../../../components/entrenamientos/listItems.vue";
 
-import { getUsuarioSesion } from '../../../helper/Sesion'
-import { operacionesApi } from '../../../helper/OperacionesApi'
-import URL_API from '../../../helper/Urls'
+import { getUsuarioSesion } from "../../../helper/Sesion";
+import { operacionesApi } from "../../../helper/OperacionesApi";
+import URL_API from "../../../helper/Urls";
 
 export default {
-  name: 'Circuitos',
-  metaInfo: {    
-    title: 'Circuitos',
+  name: "Circuitos",
+  metaInfo: {
+    title: "Circuitos",
   },
   mixins: [operacionesApi],
   components: {
     draggable,
     VuePerfectScrollbar,
+    listItems,
   },
 
   data: () => ({
+    numbers: [1, 2, 3, /* ...otros números... */ 15, 16],
+    maxNumber: 15, // Número máximo para comprimir los números
+    selectedCircuito: {
+      exercises: [],
+      position: 1,
+    },
+    newItem: null,
+    listClone: [],
     isOpen: false,
     isBlock: false,
     usuarioSesion: {},
     tabs: null,
     listaUnidadRepeticion: [],
-    categorias: [],    
+    categorias: [],
     listaEjercicios: [],
     listaEjerciciosRespaldo: [],
     atletas: [],
@@ -385,215 +385,302 @@ export default {
     page: 1,
     pageSeleccion: 1,
     listaSeleccion: [],
-    search: '',
+    search: "",
     filter: {},
-    sortBy: 'nombre',
+    sortBy: "nombre",
     ejercicioSeleccionado: null,
-    circuitos: [],
+    circuitos: [
+      {
+        position: 1,
+        active: true,
+        exercises: [],
+      },
+      {
+        position: 2,
+        active: false,
+        exercises: [],
+      },
+      {
+        position: 3,
+        active: false,
+        exercises: [],
+      },
+      {
+        position: 4,
+        active: false,
+        exercises: [],
+      },
+    ],
     compnentRenderKey: 1,
-    criterioBuscar: '',
-    atleta_id:null,
-    atleta_seleccionado:null
+    criterioBuscar: "",
+    atleta_id: null,
+    atleta_seleccionado: null,
   }),
   mounted() {
-    this.usuarioSesion = getUsuarioSesion()
-    console.log('##### ENTENAMIENTOS ####')
-    this.usuarioSesion = getUsuarioSesion()
-    this.cargarCatalogo()
+    this.usuarioSesion = getUsuarioSesion();
+    console.log("##### ENTENAMIENTOS ####");
+    this.usuarioSesion = getUsuarioSesion();
+    this.cargarCatalogo();
 
-    this.circuitos[0] = []
-    this.circuitos[1] = []
-    this.circuitos[2] = []
-    this.circuitos[3] = []
+    // this.circuitos[0] = [];
+    // this.circuitos[1] = [];
+    // this.circuitos[2] = [];
+    // this.circuitos[3] = [];
+
+    this.selectedCircuito = this.circuitos[0];
   },
   methods: {
+	addInstructions(){
+		this.circuitos[this.selectedCircuito.position - 1].exercises = [
+        ...this.listClone,
+      ];
+	},
+    selectUnidadRepeticion(row) {
+      //restablecer valores
+      this.listaEjercicios = this.listaEjercicios.map((item) => {
+        return {
+          ...item,
+          cat_unidad_repeticion: 1,
+        };
+      });
 
+      //Asignar el elemento a la lista
+      this.circuitos[this.selectedCircuito.position - 1].exercises.map(
+        (item) => {
+          if (item.id === row.id) {
+            return {
+              ...row,
+            };
+          } else {
+            return {
+              ...item,
+            };
+          }
+        }
+      );
+    },
+    currentCircuito(item) {
+      this.selectedCircuito = item;
+      this.listClone = [...this.selectedCircuito.exercises];
+
+	  //Cambiar valor a elemento activo
+      this.circuitos = this.circuitos.map((elemnt) => {
+        if (elemnt.position == item.position) {
+          return {
+            ...elemnt,
+            active: true,
+          };
+        } else {
+          return {
+            ...elemnt,
+            active: false,
+          };
+        }
+      });
+    },
+    addNewCircuito() {
+      const newCircuito = {
+        position: this.circuitos.length + 1,
+        exercises: [],
+      };
+
+      this.circuitos.push(newCircuito);
+    },
+	changeCircuito(){
+		this.circuitos[this.selectedCircuito.position - 1].exercises = [
+        ...this.listClone,
+      ];
+	},
+    addNewItem(item) {
+		const index = this.listClone.findIndex(element => element.id === item.id);
+
+		if (index !== -1) {
+			const item = this.listClone[index]
+			item.repeticiones++
+		}
+    },
+    beforeCircuito() {
+      if (this.selectedCircuito.position == 1) {
+        return;
+      }
+
+      let current = this.selectedCircuito.position;
+      current--;
+      this.selectedCircuito = this.circuitos[current - 1];
+
+      this.circuitos = this.circuitos.map((item, index) => {
+        if (index + 1 === this.selectedCircuito.position) {
+          return {
+            ...item,
+            active: true,
+          };
+        } else {
+          return {
+            ...item,
+            active: false,
+          };
+        }
+      });
+      this.listClone = [...this.selectedCircuito.exercises];
+      this.compnentRenderKey++;
+    },
+    afterCircuito() {
+      if (
+        this.selectedCircuito.position ==
+        this.circuitos[this.circuitos.length - 1].position
+      ) {
+        return;
+      }
+
+      let current = this.selectedCircuito.position;
+      current++;
+      this.selectedCircuito = this.circuitos[current - 1];
+
+      this.circuitos = this.circuitos.map((item, index) => {
+        if (index + 1 === this.selectedCircuito.position) {
+          return {
+            ...item,
+            active: true,
+          };
+        } else {
+          return {
+            ...item,
+            active: false,
+          };
+        }
+      });
+
+      this.selectedCircuito.active = true;
+      this.listClone = [...this.selectedCircuito.exercises];
+
+      this.compnentRenderKey++;
+    },
     appToggle: function () {
-      this.isOpen = !this.isOpen
-      this.isBlock = !this.isBlock
+      this.isOpen = !this.isOpen;
+      this.isBlock = !this.isBlock;
     },
     overlayApp: function () {
-      this.isOpen = !this.isOpen
-      this.isBlock = !this.isBlock
-    },
-    
-    increment(){        
-        console.log(" CLIC ");
-        //console.log(this.$refs);        
-
-    },
-    decrement(){        
-        console.log("DECREMENT "+ref);
-        //this.$refs[ref].stepDown();        
+      this.isOpen = !this.isOpen;
+      this.isBlock = !this.isBlock;
     },
     forceForRerender() {
-      this.compnentRenderKey += 1
+      this.compnentRenderKey += 1;
     },
     async iniciarCarga() {
-      await this.cargarCategorias()
+      await this.cargarCategorias();
     },
     async cargarCategorias() {
-      this.categorias = await this.getAsync(`${URL_API.CATEGORIAS}`)
+      this.categorias = await this.getAsync(`${URL_API.CATEGORIAS}`);
     },
     async cargarCatalogo() {
-      this.loadingEjercicio = true
+      this.loadingEjercicio = true;
       //setTimeout(async () => {
       this.listaEjercicios = await this.getAsync(
-        `${URL_API.EJERCICIOS}/${this.usuarioSesion.co_sucursal}`,
-      )
-      this.listaEjerciciosRespaldo = this.listaEjercicios
+        `${URL_API.EJERCICIOS}/${this.usuarioSesion.co_sucursal}`
+      );
+      this.listaEjerciciosRespaldo = this.listaEjercicios;
 
-      this.loadingEjercicio = false
-
+      this.loadingEjercicio = false;
 
       this.listaUnidadRepeticion = await this.getAsync(
-        `${URL_API.CATALOGOS}/unidad_repeticion`,
-      )
+        `${URL_API.CATALOGOS}/unidad_repeticion`
+      );
+
+      console.log(this.listaUnidadRepeticion, "repeticion");
 
       await this.cargarCategorias();
 
       //cargar la lista de atletas
 
-    this.atletas = await this.getAsync(`${URL_API.USUARIOS}/${this.usuarioSesion.co_sucursal}/${this.usuarioSesion.id_empresa}`);
-
+      this.atletas = await this.getAsync(
+        `${URL_API.USUARIOS}/${this.usuarioSesion.co_sucursal}/${this.usuarioSesion.id_empresa}`
+      );
 
       //}, 700)
     },
-    agregarEjercicio(row) {
-      console.log('Agregar ejercicio ' + row.nombre)
-
-      if (this.validarAgregarEjercicio(row)) {
-        console.log('ya existe')
-        return
-      }
-
-      row.seleccionado = true
-
-      this.listaSeleccion.push(row)
-
-      this.marcarSeleccionEjercicio(row, true)
-
-      this.forceForRerender()
-    },
-    quitarEjercicio(row) {
-      //this.listaEjercicios.remo
-
-      const index = this.listaSeleccion.indexOf(row)
-
-      const x = this.listaSeleccion.splice(index, 1)
-
-      this.marcarSeleccionEjercicio(row, false)
-
-      this.forceForRerender()
-    },
-    validarAgregarEjercicio(row) {
-      const index = this.listaSeleccion.indexOf(row)
-
-      return index != -1
-    },
-    marcarSeleccionEjercicio(row, seleccion) {
-      const index = this.listaEjercicios.indexOf(row)
-
-      console.log(this.listaEjercicios[index])
-
-      this.listaEjercicios[index].seleccionado = seleccion
-    },
     verDetalleEjercicio(row) {
-      this.ejercicioSeleccionado = row
-    },
-    /***************************/
+      this.ejercicioSeleccionado = row;
 
-    /*  metodos de paginacion */
-    /***************************/
+      console.log(row, "probando row selected");
+    },
+    increment(row) {
+      let numRepeticiones = row.repeticiones;
+      numRepeticiones++;
 
-    nextPage() {
-      if (this.page + 1 <= this.numberOfPages) this.page += 1
-    },
-    formerPage() {
-      if (this.page - 1 >= 1) this.page -= 1
-    },
-    updateItemsPerPage(number) {
-      this.itemsPerPage = number
-    },
+      this.listClone = this.listClone.map((item) => {
+        if (item.id === row.id) {
+          return {
+            ...row,
+            repeticiones: numRepeticiones,
+          };
+        } else {
+          return {
+            ...item,
+          };
+        }
+      });
 
-    nextPageSeleccion() {
-      if (this.pageSeleccion + 1 <= this.numberOfPagesSeleccion)
-        this.pageSeleccion += 1
+      this.circuitos[this.selectedCircuito.position - 1].exercises = [
+        ...this.listClone,
+      ];
     },
-    formerPageSeleccion() {
-      if (this.pageSeleccion - 1 >= 1) this.pageSeleccion -= 1
-    },
-    updateItemsPerPageSeleccion(number) {
-      this.itemsPerPageSelecion = number
-    },
-    onDragStart(item, event) {
-      console.log('onDrag')
-      console.log(item)
-      event.dataTransfer.setData('text/plain', JSON.stringify(item))
-    },
-    onDrop(event, indexCircuito) {
-      console.log('onDrop INDEX ' + indexCircuito)
-      const data = event.dataTransfer.getData('text/plain')
-      const item = JSON.parse(data)
-      console.log(item)
-
-      //let circuito  = this.circuitos[indexCircuito];
-
-      if (!this.circuitos[indexCircuito]) {
-        console.log('Se crea el array')
-        this.circuitos[indexCircuito] = new Array()
+    decrement(row) {
+      if (row.repeticiones <= 1) {
+        return;
       }
+      //row.repeticiones--;
+      let numRepeticiones = row.repeticiones;
+      numRepeticiones--;
 
-      this.circuitos[indexCircuito].push({ ...item })
+      this.listClone = this.listClone.map((item) => {
+        if (item.id === row.id) {
+          return {
+            ...row,
+            repeticiones: numRepeticiones,
+          };
+        } else {
+          return {
+            ...item,
+          };
+        }
+      });
 
-      console.log(JSON.stringify(this.circuitos[indexCircuito]))
-
-      this.forceForRerender()
-
-      //circuito.push({ ...item });
-
-      //this.circuitos[indexCircuito] = circuito;
-
-      //this.circuitos[indexCircuito].push({ ...item })
-
-      //this.listaSeleccion.push({ ...item })
-    },
-    increment(x, y) {
-      //this.foo = parseInt() + 1
-      this.circuitos[(x, y)] = this.circuitos[(x, y)] + 1
-    },
-    decrement(x, y) {
-      this.circuitos[(x, y)] = this.circuitos[(x, y)] - 1
+      this.circuitos[this.selectedCircuito.position - 1].exercises = [
+        ...this.listClone,
+      ];
     },
     filtrarCategoria(categoria) {
       this.listaEjercicios = this.listaEjerciciosRespaldo.filter(
-        (e) => e.categoria.toUpperCase() == categoria.toUpperCase(),
-      )
-    },
-    limpiarFiltro(){
-            this.criterioBuscar = '';
-            this.buscarPorNombre();
-    },
-    buscarPorNombre() {
-      
-      console.log('buscar ' + this.criterioBuscar)
-
-      if (this.criterioBuscar == '') {
-        this.listaEjercicios = this.listaEjerciciosRespaldo
-      } else {
-        this.listaEjercicios = this.listaEjerciciosRespaldo.filter(
-          (e) =>
-            e.nombre
-              .toUpperCase()
-              .includes(this.criterioBuscar.toUpperCase()) ||
-            e.categoria
-              .toUpperCase()
-              .includes(this.criterioBuscar.toUpperCase()),
-        )
-      }
+        (e) => e.categoria.toUpperCase() == categoria.toUpperCase()
+      ); 
     },
   },
-}
+  computed: {
+    listEmpty() {
+      return this.listClone.length === 0;
+    },
+    listExercises() {
+      let exercises = [];
+
+      if (this.criterioBuscar !== "") {
+        exercises = this.listaEjercicios.filter((item) => {
+          return item.nombre
+            .toLowerCase()
+            .includes(this.criterioBuscar.toLowerCase());
+        });
+      } else {
+        exercises = this.listaEjercicios;
+      }
+
+      return exercises.map(item => {
+		return {
+			...item,
+			repeticiones:0
+		}
+	  });
+    },
+  },
+};
 </script>
 <style lang="scss">
 .app-content-wrapper {
@@ -604,7 +691,7 @@ export default {
 
   .app-overlay {
     position: absolute;
-    content: '';
+    content: "";
     width: 100%;
     height: 100%;
     top: 0;
@@ -711,5 +798,51 @@ export default {
   background-position: top;
   background-size: 10px 1px;
   background-repeat: repeat-x;*/
+}
+
+.listCircuitos {
+  background-color: white;
+  padding: 0.3rem;
+  margin: 10px 0;
+  height: 100px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+.listCircuitos .circuito {
+  display: flex;
+  flex-direction: row;
+  justify-items: center;
+  align-content: space-between;
+  margin: 0px;
+}
+
+.btnCursor {
+  cursor: pointer;
+}
+
+.custom-scroll.ps {
+  border: 1px dashed gray; /* Estilo del borde */
+}
+
+.container-btn {
+  max-width: 500px;
+  width: auto;
+  overflow-y: auto;
+  white-space: nowrap;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  text-align: center;
 }
 </style>
