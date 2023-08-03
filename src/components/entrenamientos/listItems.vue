@@ -4,7 +4,8 @@
       :list="listaEjercicios"
       :group="{ name: 'exercises', pull: 'clone', put: true }"
       :sort="false"
-      @end="onDragStart"
+      @start="onDragStart"
+      @end="ondragEnd"
       :move="checkMove"
     >
       <div v-for="(item, i) in listaEjercicios" :key="i" class="listItems">
@@ -66,6 +67,11 @@ export default {
     listExist: {
       type:Array,
       default:[]
+    },
+    selectAtleta: {
+      type: Object | null,
+      required: true,
+      default: null
     }
   },
   components: {
@@ -75,19 +81,25 @@ export default {
     return {};
   },
   methods: {
-    onDragStart(evnt) {
+    ondragEnd(evnt) {
       //console.log(evnt, 'probando')
       const index = evnt.oldIndex;
 
-      const item = this.listaEjercicios[index];
+      const item = {
+        ...this.listaEjercicios[index],
+        repeticiones:0
+      };
 
       this.$emit("dragItem", item);
+    },
+    onDragStart() {
+      this.$emit('move')
     },
     checkMove: function (evt) {
       const listId = this.listExist.map(item => {
         return item.id
       })
-      return !listId.includes(evt.draggedContext.element.id);
+      return !listId.includes(evt.draggedContext.element.id) && this.selectAtleta != null;
     },
   },
 };

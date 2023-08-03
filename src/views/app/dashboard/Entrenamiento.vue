@@ -80,25 +80,24 @@
             <list-items
               :lista-ejercicios="listExercises"
               :list-exist="listClone"
+              :select-atleta="atleta_seleccionado"
               @dragItem="addNewItem"
+              @move="moveItem"
             ></list-items>
           </base-card>
         </div>
       </vue-perfect-scrollbar>
     </div>
     <div class="app-content relative">
-      <div class="app-header white">
-        <div class="d-flex justify-space-between flex-wrap align-baseline">
-          <div class="">
+      <div class="app-header white mt-2 app-header-size">
+        <div class="children-header-app">
+          <div class="nested-sidebar-toggle d-md-none d-sm-block mb-4">
+            <v-icon color="dark" @click="appToggle">mdi-menu-open</v-icon>
+          </div>
+          <div class="d-flex flex-row">
             <!-- app-icon class -->
-            <div
-              class="nested-sidebar-toggle d-md-none d-sm-block"
-              @click="appToggle"
-            >
-              <v-icon color="dark">mdi-menu-open</v-icon>
-            </div>
             <v-autocomplete
-              v-model="atleta_seleccionado"
+              v-model="idAtleta"
               :items="atletas"
               filled
               chips
@@ -108,13 +107,13 @@
               item-value="id"
               dense
               solo
+              @change="selectAtleta"
             >
               <!-- @click:close="remove(data.item)"-->
               <template v-slot:selection="data">
                 <v-chip
                   v-bind="data.attrs"
                   :input-value="data.selected"
-                  close
                   @click="data.select"
                 >
                   <v-avatar left>
@@ -143,8 +142,15 @@
                 </template> </template
               >s
             </v-autocomplete>
+            <!-- <div class="d-flex flex-row justify-center ml-5">
+              <v-text-field
+                  hint="This field uses counter prop"
+                  label="Regular"
+                  outlined
+                ></v-text-field>
+            </div> -->
           </div>
-          <div>
+          <!-- <div>
             <v-btn icon color="primary">
               <v-icon>mdi-account-check</v-icon>
             </v-btn>
@@ -154,15 +160,15 @@
             <v-btn icon color="primary">
               <v-icon>mdi-dots-vertical</v-icon>
             </v-btn>
-          </div>
+          </div> -->
         </div>
       </div>
       <vue-perfect-scrollbar
         :settings="{ suppressScrollX: true, wheelPropagation: false }"
         class="h-100 rtl-ps-none custom-scroll ps scroll"
-        style="height: 100%"
+        style="height: 90%"
       >
-        <div class="app-body mt-10 px-8">
+        <div class="app-body body-app">
           <div class="listCircuitos">
             <h6>Circuitos</h6>
             <div class="circuito">
@@ -213,6 +219,7 @@
           </v-toolbar>
 
           <draggable
+            not="itemUnidad"
             :list="listClone"
             group="exercises"
             @change="changeCircuito"
@@ -221,20 +228,17 @@
           >
             <template v-for="(row, i) in listClone">
               <v-hover v-slot="{ hover }" open-delay="500" class="item">
-                <v-col
-                  cols="12"
-                  :key="i"
-                  @click="() => verDetalleEjercicio(row)"
-                >
+                <v-col cols="12" :key="i">
                   <base-card>
                     <v-row>
                       <v-col
-                        cols="2"
+                        cols="12"
+                        xl="2"
                         class="d-flex flex-row justy-center align-center"
                       >
                         <img class="ml-3 p-0" :src="row.url" />
                       </v-col>
-                      <v-col cols="10" class="ml-0 mb-0 pb-0 pt-0">
+                      <v-col cols="12" xl="10" class="ml-0 mb-0 pb-0 pt-0">
                         <v-card-title
                           class="text-h6 mb-0 pb-0 pt-1 d-flex justify-space-between"
                         >
@@ -257,24 +261,22 @@
                               style="margin-bottom: 0px !important"
                             >
                               <v-row>
-                                <v-col cols="3" class="d-flex flex-row">
-                                  <v-icon @click="decrement(row)">
+                                <v-col cols="6" xl="4" class="btnsDecreIncre">
+                                  <v-icon
+                                    id="btnMinus"
+                                    @click="decrement(row)"
+                                    class="btnMinus"
+                                  >
                                     mdi-minus
                                   </v-icon>
-                                  <v-text-field
-                                    v-model="row.repeticiones"
-                                    label="Repeticiones"
-                                    type="number"
-                                    min="1"
-                                    dense
-                                    :disabled="true"
-                                  >
-                                  </v-text-field>
-                                  <v-icon @click="increment(row)">
+                                  <div class="numRepeticiones">
+                                    <p>{{ row.repeticiones }}</p>
+                                  </div>
+                                  <v-icon id="btnPlus" @click="increment(row)">
                                     mdi-plus
                                   </v-icon>
                                 </v-col>
-                                <v-col>
+                                <v-col class="listUnidad">
                                   <v-chip-group
                                     v-model="row.cat_unidad_repeticion"
                                     active-class="teal darken-3 white--text"
@@ -292,6 +294,7 @@
                                         :disabled="
                                           i.id === row.cat_unidad_repeticion
                                         "
+                                        class="itemUnidad"
                                       >
                                         {{ i.nombre }}
                                       </v-chip>
@@ -318,7 +321,7 @@
                                     class=""
                                     no-resize
                                     v-model="row.nota"
-									@blur="addInstructions"
+                                    @blur="addInstructions"
                                   ></v-textarea>
                                 </v-expand-transition>
                               </v-row>
@@ -334,6 +337,46 @@
           </draggable>
         </div>
       </vue-perfect-scrollbar>
+      <div style="border-radius: 0.2rem; padding: 0.2rem; width: 100%">
+        <div class="d-flex flex-row justify-end mt-2">
+          <v-alert v-if="notify.show" :type="notify.type" style="width: 100%">
+            {{ notify.message }}
+          </v-alert>
+          <v-btn
+            v-if="existRutina"
+            class="ml-2"
+            depressed
+            color="#0093a2"
+            style="color: white"
+            @click.prevent="createRutina"
+          >
+            Nueva Rutina
+          </v-btn>
+          <v-btn
+            v-if="!existRutina"
+            class="ml-2"
+            depressed
+            :loading="loading"
+            color="#0093a2"
+            style="color: white"
+            @click.prevent="saveCircuitos"
+          >
+            Guardar
+          </v-btn>
+          <v-btn
+            v-else
+            class="ml-2"
+            depressed
+            :loading="loading"
+            color="#0093a2"
+            style="color: white"
+            @click.prevent="actualizarCircuitos"
+          >
+            Guardar
+          </v-btn>
+          <!-- <v-btn depressed> Normal </v-btn> -->
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -344,11 +387,15 @@ import analyticTwoCard from "@/components/card/AnalyticCardVersionTwo";
 import ListcardTwo from "@/components/card/listCard/ListCardTwo";
 import draggable from "vuedraggable";
 import listItems from "../../../components/entrenamientos/listItems.vue";
+import { getWeek } from "../../../helper";
 
 import { getUsuarioSesion } from "../../../helper/Sesion";
 import { operacionesApi } from "../../../helper/OperacionesApi";
 import URL_API from "../../../helper/Urls";
-
+import {
+  getCircuitosUser,
+  saveCircuitos as circuitosSave,
+} from "../../../helper/composables/circuitos";
 export default {
   name: "Circuitos",
   metaInfo: {
@@ -380,6 +427,7 @@ export default {
     listaEjerciciosRespaldo: [],
     atletas: [],
     loadingEjercicio: false,
+    loading: false,
     itemsPerPage: 50,
     itemsPerPageSelecion: 50,
     page: 1,
@@ -415,6 +463,13 @@ export default {
     criterioBuscar: "",
     atleta_id: null,
     atleta_seleccionado: null,
+    idAtleta: null,
+    fetchData: null,
+    notify: {
+      message: "",
+      type: "",
+      show: false,
+    },
   }),
   mounted() {
     this.usuarioSesion = getUsuarioSesion();
@@ -430,11 +485,138 @@ export default {
     this.selectedCircuito = this.circuitos[0];
   },
   methods: {
-	addInstructions(){
-		this.circuitos[this.selectedCircuito.position - 1].exercises = [
+    moveItem() {
+      if (screen.width < 400) {
+        this.isOpen = !this.isOpen;
+        this.isBlock = !this.isBlock;
+      }
+    },
+    async selectAtleta() {
+      this.atleta_seleccionado = this.atletas.find(
+        (item) => item.id == this.idAtleta
+      );
+
+      const { data } = await getCircuitosUser(this.idAtleta);
+
+      this.fetchData = data[0];
+
+      if (this.fetchData) {
+        if (this.fetchData.circuitos.length > 0) {
+          this.circuitos = this.fetchData.circuitos.map((item, index) => {
+            return {
+              ...item,
+              position: index + 1,
+              active: index == 0 ? true : false,
+              exercises: item.detalle_circuito.map((e) => {
+                const { repeticion: repeticiones } = e;
+                return {
+                  ...e,
+                  ...this.listExercises.find((i) => i.id == e.cat_ejercicios),
+                  repeticiones,
+                };
+              }),
+            };
+          });
+
+          this.listClone = this.circuitos[0].exercises;
+
+          console.log(this.circuitos, 'probando los circuitos')
+        }
+      } else {
+        this.listClone = [];
+        this.circuitos = [
+          {
+            position: 1,
+            active: true,
+            exercises: [],
+          },
+          {
+            position: 2,
+            active: false,
+            exercises: [],
+          },
+          {
+            position: 3,
+            active: false,
+            exercises: [],
+          },
+          {
+            position: 4,
+            active: false,
+            exercises: [],
+          },
+        ];
+      }
+    },
+    async saveCircuitos() {
+      //console.log(this.circuitos, "probando los circuitos a guardar");
+
+      this.loading = true;
+      const circuitos = [];
+      this.circuitos.filter((item) => {
+        if (item.exercises.length > 0) {
+          circuitos.push(item.exercises);
+        }
+      });
+      const { co_sucursal, co_empresa } = this.atleta_seleccionado;
+      const today = new Date();
+      const numero_semana = getWeek(today);
+      const rutina = {
+        rutina: {
+          numero_semana,
+          nombre: `Rutina del ${today.getDate()}-${
+            today.getMonth() + 1
+          }-${today.getFullYear()}`,
+          atleta: this.idAtleta,
+          circuitos,
+          co_empresa,
+          co_sucursal,
+        },
+      };
+
+      try {
+        const res = await circuitosSave(JSON.stringify(rutina));
+        if (res.success) {
+          this.notify.message = "Los circuitos se han guardado correctamente";
+          this.notify.type = "success";
+          this.notify.show = true;
+
+          setTimeout(() => {
+            this.notify.show = false;
+          }, 2000);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+
+      this.loading = false;
+    },
+    async actualizarCircuitos() {
+      this.loading = true;
+      let circuitos = [];
+      const { co_sucursal, co_empresa } = this.atleta_seleccionado;
+      circuitos = this.circuitos.map((item) => {
+        return {
+            id:item.id,
+            genero: this.idAtleta,
+            detalle_circuito:item.exercises,
+            op_rutina:item.op_rutina,
+            co_empresa,
+            co_sucursal,
+        };
+      });
+
+      const senData = {
+        circuitos
+      }
+
+      console.log(JSON.stringify(senData))
+    },
+    addInstructions() {
+      this.circuitos[this.selectedCircuito.position - 1].exercises = [
         ...this.listClone,
       ];
-	},
+    },
     selectUnidadRepeticion(row) {
       //restablecer valores
       this.listaEjercicios = this.listaEjercicios.map((item) => {
@@ -460,10 +642,21 @@ export default {
       );
     },
     currentCircuito(item) {
+      this.listClone = [];
       this.selectedCircuito = item;
+
+      console.log(this.selectedCircuito, "select circuito");
+
       this.listClone = [...this.selectedCircuito.exercises];
 
-	  //Cambiar valor a elemento activo
+      this.listaEjercicios = this.listaEjercicios.map((element) => {
+        return {
+          ...element,
+          repeticiones: 0,
+        };
+      });
+
+      //Cambiar valor a elemento activo
       this.circuitos = this.circuitos.map((elemnt) => {
         if (elemnt.position == item.position) {
           return {
@@ -486,23 +679,35 @@ export default {
 
       this.circuitos.push(newCircuito);
     },
-	changeCircuito(){
-		this.circuitos[this.selectedCircuito.position - 1].exercises = [
+    changeCircuito() {
+      this.circuitos[this.selectedCircuito.position - 1].exercises = [
         ...this.listClone,
       ];
-	},
+    },
     addNewItem(item) {
-		const index = this.listClone.findIndex(element => element.id === item.id);
+      console.log(this.listClone, "probando el list");
+      if (this.listClone.length > 0) {
+        const index = this.listClone.findIndex(
+          (element) => element.id === item.id
+        );
 
-		if (index !== -1) {
-			const item = this.listClone[index]
-			item.repeticiones++
-		}
+        if (index !== -1) {
+          const item = this.listClone[index];
+          item.repeticiones++;
+        }
+      }
     },
     beforeCircuito() {
       if (this.selectedCircuito.position == 1) {
         return;
       }
+
+      this.listaEjercicios = this.listaEjercicios.map((element) => {
+        return {
+          ...element,
+          repeticiones: 0,
+        };
+      });
 
       let current = this.selectedCircuito.position;
       current--;
@@ -531,6 +736,13 @@ export default {
       ) {
         return;
       }
+
+      this.listaEjercicios = this.listaEjercicios.map((element) => {
+        return {
+          ...element,
+          repeticiones: 0,
+        };
+      });
 
       let current = this.selectedCircuito.position;
       current++;
@@ -585,8 +797,6 @@ export default {
       this.listaUnidadRepeticion = await this.getAsync(
         `${URL_API.CATALOGOS}/unidad_repeticion`
       );
-
-      console.log(this.listaUnidadRepeticion, "repeticion");
 
       await this.cargarCategorias();
 
@@ -652,7 +862,7 @@ export default {
     filtrarCategoria(categoria) {
       this.listaEjercicios = this.listaEjerciciosRespaldo.filter(
         (e) => e.categoria.toUpperCase() == categoria.toUpperCase()
-      ); 
+      );
     },
   },
   computed: {
@@ -672,12 +882,15 @@ export default {
         exercises = this.listaEjercicios;
       }
 
-      return exercises.map(item => {
-		return {
-			...item,
-			repeticiones:0
-		}
-	  });
+      return exercises.map((item) => {
+        return {
+          ...item,
+          repeticiones: 0,
+        };
+      });
+    },
+    existRutina() {
+      return this.fetchData;
     },
   },
 };
@@ -800,40 +1013,12 @@ export default {
   background-repeat: repeat-x;*/
 }
 
-.listCircuitos {
-  background-color: white;
-  padding: 0.3rem;
-  margin: 10px 0;
-  height: 100px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  justify-content: center;
-  align-items: center;
-}
-
-.listCircuitos .circuito {
-  display: flex;
-  flex-direction: row;
-  justify-items: center;
-  align-content: space-between;
-  margin: 0px;
-}
-
 .btnCursor {
   cursor: pointer;
 }
 
 .custom-scroll.ps {
   border: 1px dashed gray; /* Estilo del borde */
-}
-
-.container-btn {
-  max-width: 500px;
-  width: auto;
-  overflow-y: auto;
-  white-space: nowrap;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
