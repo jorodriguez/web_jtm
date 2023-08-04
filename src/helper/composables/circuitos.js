@@ -30,7 +30,40 @@ const saveCircuitos = async (rutina) => {
   }
 }
 
+const updateRutina = async (rutinaId, circuitos) => {
+  try {
+    const res = await fetch(`${URL.CIRCUITOSUPDATERUTINA}/${rutinaId}`, {
+      method: 'POST',
+      body: circuitos,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    const data = res.json()
+
+    return data
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const disableRutina = async (rutinaId) => {
+  try {
+    const res = await fetch(`${URL.CIRCUITOSDISABLERUTINA}/${rutinaId}`, {
+      method: 'POST',
+    })
+
+    const data = res.json()
+
+    return data
+  } catch (error) {
+    console.log(error)
+  }
+}
 export {
   getCircuitosUser,
   saveCircuitos,
+  updateRutina,
+  disableRutina,
 }

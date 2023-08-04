@@ -19,6 +19,8 @@ CATALOGOS: BASE + '/catalogos',
 USUARIOS: BASE + '/usuario',
 CIRCUITOSUSER: BASE + '/circuitos/rutinas/',
 CIRCUITOSSAVE: BASE + '/circuitos',
+CIRCUITOSUPDATERUTINA: BASE + '/circuitos/rutinas/update',
+CIRCUITOSDISABLERUTINA: BASE + '/circuitos/rutinas/disable',
 }
 
 export default URL

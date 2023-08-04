@@ -139,8 +139,8 @@
                       v-html="data.item.nombre"
                     ></v-list-item-title>
                   </v-list-item-content>
-                </template> </template
-              >s
+                </template>
+              </template>
             </v-autocomplete>
             <!-- <div class="d-flex flex-row justify-center ml-5">
               <v-text-field
@@ -234,11 +234,17 @@
                       <v-col
                         cols="12"
                         xl="2"
+                        lg="2"
                         class="d-flex flex-row justy-center align-center"
                       >
                         <img class="ml-3 p-0" :src="row.url" />
                       </v-col>
-                      <v-col cols="12" xl="10" class="ml-0 mb-0 pb-0 pt-0">
+                      <v-col
+                        cols="12"
+                        xl="10"
+                        lg="10"
+                        class="ml-0 mb-0 pb-0 pt-0"
+                      >
                         <v-card-title
                           class="text-h6 mb-0 pb-0 pt-1 d-flex justify-space-between"
                         >
@@ -261,7 +267,12 @@
                               style="margin-bottom: 0px !important"
                             >
                               <v-row>
-                                <v-col cols="6" xl="4" class="btnsDecreIncre">
+                                <v-col
+                                  cols="6"
+                                  xl="4"
+                                  lg="4"
+                                  class="btnsDecreIncre"
+                                >
                                   <v-icon
                                     id="btnMinus"
                                     @click="decrement(row)"
@@ -339,21 +350,37 @@
       </vue-perfect-scrollbar>
       <div style="border-radius: 0.2rem; padding: 0.2rem; width: 100%">
         <div class="d-flex flex-row justify-end mt-2">
-          <v-alert v-if="notify.show" :type="notify.type" style="width: 100%">
-            {{ notify.message }}
-          </v-alert>
+          <div
+            style="
+              position: absolute;
+              z-index: 1;
+              width: 100%;
+              border-radius: 10rem;
+            "
+          >
+            <v-alert v-if="notify.show" :type="notify.type" dense prominent>
+              <p
+                class="d-flex flex-row justify-start align-center"
+                style="margin: 0px !important"
+              >
+                {{ notify.message }}
+              </p>
+            </v-alert>
+          </div>
           <v-btn
-            v-if="existRutina"
+            v-if="existRutina || isUpdateRutina"
             class="ml-2"
             depressed
+            :disabled="loading"
+            :loading="loadingRutina"
             color="#0093a2"
             style="color: white"
-            @click.prevent="createRutina"
+            @click.prevent="dialogDisablerutina = true"
           >
             Nueva Rutina
           </v-btn>
           <v-btn
-            v-if="!existRutina"
+            v-if="!existRutina && !isUpdateRutina"
             class="ml-2"
             depressed
             :loading="loading"
@@ -367,16 +394,38 @@
             v-else
             class="ml-2"
             depressed
+            :disabled="loadingRutina"
             :loading="loading"
             color="#0093a2"
             style="color: white"
             @click.prevent="actualizarCircuitos"
           >
-            Guardar
+            Actualizar Rutina
           </v-btn>
           <!-- <v-btn depressed> Normal </v-btn> -->
         </div>
       </div>
+      <v-dialog v-model="dialogDisablerutina" persistent max-width="290">
+        <v-card>
+          <v-card-title class="text-h6">
+            Estas Seguro que quieres crear una nueva rutina?
+          </v-card-title>
+          <!-- <v-card-text
+            >Let Google help apps determine location. This means sending
+            anonymous location data to Google, even when no apps are
+            running.</v-card-text
+          > -->
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" text @click="dialog = false">
+              No
+            </v-btn>
+            <v-btn color="green darken-1" text @click="addRutina">
+              Si
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </div>
   </div>
 </template>
@@ -395,6 +444,8 @@ import URL_API from "../../../helper/Urls";
 import {
   getCircuitosUser,
   saveCircuitos as circuitosSave,
+  updateRutina,
+  disableRutina,
 } from "../../../helper/composables/circuitos";
 export default {
   name: "Circuitos",
@@ -470,6 +521,9 @@ export default {
       type: "",
       show: false,
     },
+    isUpdateRutina: false,
+    dialogDisablerutina: false,
+    loadingRutina: false,
   }),
   mounted() {
     this.usuarioSesion = getUsuarioSesion();
@@ -498,29 +552,45 @@ export default {
 
       const { data } = await getCircuitosUser(this.idAtleta);
 
+      this.selectedCircuito = {
+        exercises: [],
+        position: 1,
+      };
+
       this.fetchData = data[0];
 
-      if (this.fetchData) {
+      console.log(this.fetchData, "probando fetch");
+
+      if (this.fetchData && this.fetchData.circuitos) {
         if (this.fetchData.circuitos.length > 0) {
           this.circuitos = this.fetchData.circuitos.map((item, index) => {
             return {
               ...item,
+
               position: index + 1,
               active: index == 0 ? true : false,
-              exercises: item.detalle_circuito.map((e) => {
-                const { repeticion: repeticiones } = e;
-                return {
-                  ...e,
-                  ...this.listExercises.find((i) => i.id == e.cat_ejercicios),
-                  repeticiones,
-                };
-              }),
+              exercises: !item.detalle_circuito
+                ? []
+                : item.detalle_circuito.map((e) => {
+                    const { repeticion: repeticiones, cat_unidad_repeticion, nota } =
+                      e;
+                    return {
+                      ...e,
+                      ...this.listExercises.find(
+                        (i) => i.id == e.cat_ejercicios
+                      ),
+                      id_detalle_circuito: e.id,
+                      repeticiones,
+                      cat_unidad_repeticion,
+                      nota
+                    };
+                  }),
             };
           });
 
           this.listClone = this.circuitos[0].exercises;
 
-          console.log(this.circuitos, 'probando los circuitos')
+          console.log(this.circuitos, "probando los circuitos");
         }
       } else {
         this.listClone = [];
@@ -577,9 +647,35 @@ export default {
       try {
         const res = await circuitosSave(JSON.stringify(rutina));
         if (res.success) {
+          const { data } = res;
           this.notify.message = "Los circuitos se han guardado correctamente";
           this.notify.type = "success";
           this.notify.show = true;
+
+          this.isUpdateRutina = true;
+
+          this.circuitos = data.circuitos.map((item, index) => {
+            return {
+              ...item,
+
+              position: index + 1,
+              active: index == 0 ? true : false,
+              exercises: item.detalle_circuito.map((e) => {
+                const { repeticion: repeticiones, cat_unidad_repeticion, nota } = e;
+                return {
+                  ...e,
+                  ...this.listExercises.find((i) => i.id == e.cat_ejercicios),
+                  id_detalle_circuito: e.id,
+                  repeticiones,
+                  cat_unidad_repeticion,
+                  nota,
+                  show:false
+                };
+              }),
+            };
+          });
+
+          this.listClone = this.circuitos[0].exercises;
 
           setTimeout(() => {
             this.notify.show = false;
@@ -594,23 +690,117 @@ export default {
     async actualizarCircuitos() {
       this.loading = true;
       let circuitos = [];
+      const [circuito] = this.circuitos;
+      const { op_rutina = 56 } = circuito;
       const { co_sucursal, co_empresa } = this.atleta_seleccionado;
       circuitos = this.circuitos.map((item) => {
         return {
-            id:item.id,
-            genero: this.idAtleta,
-            detalle_circuito:item.exercises,
-            op_rutina:item.op_rutina,
-            co_empresa,
-            co_sucursal,
+          id: item.id,
+          genero: this.idAtleta,
+          detalle_circuito: item.exercises,
+          op_rutina,
+          co_empresa,
+          co_sucursal,
         };
       });
-
+      // const [circuito] = circuitos;
+      // const {op_rutina} = circuito;
       const senData = {
-        circuitos
+        circuitos,
+      };
+
+      try {
+        const res = await updateRutina(op_rutina, JSON.stringify(senData));
+        console.log(res, "probando respuesta update");
+        if (res.success) {
+          const { data } = res;
+          this.notify.message =
+            "Los circuitos se han actualizado correctamente";
+          this.notify.type = "success";
+          this.notify.show = true;
+
+          this.circuitos = data.circuitos.map((item, index) => {
+            return {
+              ...item,
+
+              position: index + 1,
+              active: index == 0 ? true : false,
+              exercises: item.detalle_circuito.map((e) => {
+                const { repeticion: repeticiones, cat_unidad_repeticion, nota } = e;
+                return {
+                  ...e,
+                  ...this.listExercises.find((i) => i.id == e.cat_ejercicios),
+                  id_detalle_circuito: e.id,
+                  repeticiones,
+                  cat_unidad_repeticion,
+                  nota,
+                  show:false
+
+                };
+              }),
+            };
+          });
+          this.selectedCircuito = this.circuitos[0];
+          this.listClone = this.selectedCircuito.exercises;
+
+          setTimeout(() => {
+            this.notify.show = false;
+          }, 2000);
+        }
+      } catch (error) {
+        console.log(error);
       }
 
-      console.log(JSON.stringify(senData))
+      this.loading = false;
+    },
+    async addRutina() {
+      this.loadingRutina = true;
+      this.dialogDisablerutina = false;
+      const [circuito] = this.circuitos;
+      const { op_rutina } = circuito;
+      try {
+        const res = await disableRutina(op_rutina ?? 0);
+        if (res.success) {
+          this.fetchData = null;
+          this.isUpdateRutina = false;
+          this.notify.message = "Nueva Rutina Agregada";
+          this.notify.type = "success";
+          this.notify.show = true;
+          this.circuitos = [
+            {
+              position: 1,
+              active: true,
+              exercises: [],
+            },
+            {
+              position: 2,
+              active: false,
+              exercises: [],
+            },
+            {
+              position: 3,
+              active: false,
+              exercises: [],
+            },
+            {
+              position: 4,
+              active: false,
+              exercises: [],
+            },
+          ];
+
+          this.selectedCircuito = this.circuitos[0];
+          this.listClone = [];
+
+          setTimeout(() => {
+            this.notify.show = false;
+            this.notify.message =''
+            this.notify.type =''
+          }, 2000);
+        }
+      } catch (error) {}
+
+      this.loadingRutina = false;
     },
     addInstructions() {
       this.circuitos[this.selectedCircuito.position - 1].exercises = [
@@ -618,15 +808,8 @@ export default {
       ];
     },
     selectUnidadRepeticion(row) {
-      //restablecer valores
-      this.listaEjercicios = this.listaEjercicios.map((item) => {
-        return {
-          ...item,
-          cat_unidad_repeticion: 1,
-        };
-      });
-
       //Asignar el elemento a la lista
+      console.log(row, "probando row");
       this.circuitos[this.selectedCircuito.position - 1].exercises.map(
         (item) => {
           if (item.id === row.id) {
@@ -640,6 +823,8 @@ export default {
           }
         }
       );
+
+      console.log(this.circuitos[0], "probando");
     },
     currentCircuito(item) {
       this.listClone = [];
@@ -1029,5 +1214,13 @@ input[type="number"]::-webkit-outer-spin-button {
 
 input[type="number"] {
   text-align: center;
+}
+
+.v-alert {
+  display: block;
+  font-size: 16px;
+  padding: 0px;
+  position: relative;
+  transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
 }
 </style>
